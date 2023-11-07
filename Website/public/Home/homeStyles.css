@@ -1,0 +1,17 @@
+#header{
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.grid{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: auto auto;
+
+}
+.grid button{
+    height: 50px;
+    width: 180px;
+    margin: 2px;
+    font-size: 14pt;
+}
