@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "delete-data": "node dev-data/data/import-dev-data --delete",
+    "import-data": "node dev-data/data/import-dev-data --import"
+
   },
   "author": "Oleksii Tishonko",
   "license": "ISC",

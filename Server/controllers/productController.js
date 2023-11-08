@@ -1,5 +1,6 @@
 const {json} = require('express');
 const Product = require('./../models/productModel');
+const path = require('path');
 
 
 exports.getAllProducts = async (req, res) =>{
@@ -88,4 +89,28 @@ exports.createProduct = async (req, res) => {
             message: err,
         });
     }
+}
+
+exports.getProductImage = async (req, res) => {
+    try{
+        res.set({'Content-type': 'image/jpg'});
+        res.setHeader('Content-type', 'image/jpg');
+
+        const imageId = req.params.id;
+        let ImagePath = `${__dirname}/../public/image/products/${imageId}/photo.jpg`;
+
+        ImagePath = path.normalize(ImagePath);
+
+        console.log("path: " + ImagePath);
+
+        res.sendFile(ImagePath);
+    }
+    catch(err){
+        console.log(err);
+        res.status(404).json({
+            status: 'failed to get image for product',
+            message: err,
+        });
+    }
+
 }

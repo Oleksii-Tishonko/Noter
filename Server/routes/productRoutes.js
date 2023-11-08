@@ -14,7 +14,8 @@ router.route('/:id')
     .patch(productsController.updateProduct)
     .delete(productsController.deleteProduct);
 
-
+router.route('/photo/:id')
+    .get(productsController.getProductImage);
 
 
 
