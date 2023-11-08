@@ -1,0 +1,38 @@
+#header{
+    text-align: center;
+    background-color: #0d3b66;
+    border: 1px solid;
+    padding: 3px;
+    color: rgb(226, 226, 226);
+}
+.results-list{
+    display: grid;
+    gap: 9px;
+    grid-template-columns: 170px 170px 170px 170px;
+}
+
+.item {
+    border: 1px solid gray;
+    text-align: center;
+    width: 170px;
+    
+}
+.item-image-holder{
+    text-align: center;
+    background-color: lightgray;
+    width: 100%;
+}
+.item-image-holder #itemImage{
+    text-align: center;
+    margin: 10px;
+}
+.itemPrice{
+    font-size: 18pt;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.itemName{
+    font-size: 14pt;
+    margin: 2px;
+}
