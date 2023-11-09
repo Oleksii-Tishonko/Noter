@@ -1,12 +1,13 @@
 export class Item{
     get itemPattern(){return `
     <div class="item">
-        <div class="item-image-holder"><img src = "./../Images/img3.jpg" id="itemImage" width="130px" height="173"></img></div>
-        <div class="item-data-holder">
-            <div class= "itemName">Apple iPad 2018 32GB - WiFi Only</div>
+        <!-- onclick="location.href='https://stackoverflow.com/'" -->
+            <a href="https://stackoverflow.com/" class="itemLink"><div class="item-image-holder"><img src = "./../Images/img1.jpg" id="itemImage" width="150px" height="173"></img></div></a>
+            <div class="item-data-holder">
+                <div class="nameContainer"><a href="https://stackoverflow.com/" class="itemLink"><span class= "itemName">Apple iPad 2018 32GB - WiFi Only</span></a></div>
 
-            <div class="itemPrice">190$</div>
-        </div>
+                <div class="itemPrice">200$</div>
+            </div>
     </div>`};
     element;
     set itemPattern(value){
@@ -24,6 +25,7 @@ export class Item{
         this.setName(itemData.name);
         this.setImage(`http://localhost:3050/api/v1/products/photo/${itemData.imageCover}`)
         //http://127.0.0.1:3050/api/v1/products/photo/1
+        this.setLink("https://coolors.co/");
     }
     createItem(){
         let el = document.createElement('div');
@@ -37,5 +39,11 @@ export class Item{
     setImage(url){
         const image = this.element.querySelector('#itemImage');
         image.src = url;
+    }
+    setLink(url){
+        const links = this.element.querySelectorAll('.itemLink');
+        for(let i = 0; i < links.length; i++){
+            links[i].href = url;
+        }
     }
 }

@@ -101,7 +101,7 @@ exports.getProductImage = async (req, res) => {
 
         ImagePath = path.normalize(ImagePath);
 
-        console.log("path: " + ImagePath);
+        // console.log("path: " + ImagePath);
 
         res.sendFile(ImagePath);
     }

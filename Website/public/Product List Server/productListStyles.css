@@ -17,11 +17,19 @@
     width: 170px;
     
 }
+.itemLink{
+    text-decoration: none;
+    /* color: black; */
+}
 .item-image-holder{
     text-align: center;
     background-color: lightgray;
     width: 100%;
+    /* cursor: pointer; */
 }
+/* .item-image-holder:hover{
+    background-color: white;
+} */
 .item-image-holder #itemImage{
     text-align: center;
     margin: 10px;
@@ -33,6 +41,14 @@
 }
 
 .itemName{
+    /* text-align: left !important; */
     font-size: 14pt;
-    margin: 2px;
+    /* margin: 2px; */
+    color: black !important;
+}
+.item .item-data-holder{
+    text-align: left;
+}
+.nameContainer{
+    margin-left: 5px;
 }
