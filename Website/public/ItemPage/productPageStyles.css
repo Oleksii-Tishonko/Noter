@@ -1,0 +1,150 @@
+#mainHeader{
+
+}
+.aboutProduct{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.aboutProductLeft{
+    text-align: center;
+    width: 100%;
+    /* background-color: lightcyan; */
+}
+
+.productPreview{
+    display: grid;
+    grid-template-columns: 15% 75%;
+}
+.productImage{
+    /* display: block;  */
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.imageBar{
+    text-align: center;
+    margin-top: 10px;
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: column;
+    row-gap: 19px;
+    align-items: center;
+}
+
+.aboutProductRight{
+    width: 100%;
+    text-align: right;
+    margin-left: auto;
+    /* background-color: lightblue; */
+}
+.productName{
+    font-family: sans-serif;
+    text-align: left;
+    font-size: 17pt;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.reviews{
+    display: flex;
+}
+.reviewsLink{
+    margin-left: 7px;
+}
+
+.rating{
+    text-align: left;
+    margin-left: 10px;
+    /* background-color: black; */
+}
+.productActions{
+    margin-top: 10px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(201, 201, 201, 0.68);
+    border-radius: 8px;
+    box-sizing: border-box;
+    
+}
+.sellerSection{
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgb(201, 201, 201, 0.68);
+}
+.seller{
+    margin: 13px;
+}
+.sellerLink{
+
+}
+.sellerText{
+    font-size: 16px;
+}
+.sellerName{
+    font-size: 19.5px;
+    margin-left: 2px;
+}
+
+.getProductSection{
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+.priceBox{
+    margin: 12px;
+    margin-top: 15px;
+}
+.price{
+    font-size: 24px;
+    letter-spacing: 0.33px;
+    word-spacing: -2px;
+}
+.addToCart{
+    border: none;
+    background-color: #00aa4a;
+    margin-left: 30px;
+    width: 100px;
+    vertical-align: middle;
+    height: 34px;
+    border-radius: 8px;
+}
+.buyProduct{
+    border: none;
+    background-color: #00aa4a;
+    margin-left: 10px;
+    width: 100px;
+    vertical-align: middle;
+    height: 34px;
+    border-radius: 8px;
+}
+
+
+th,td {
+  border: 1px solid rgb(197, 197, 197);
+  text-align: center;
+  padding: 10px;
+}
+table {
+  border-collapse: collapse;
+}
+
+.specs{
+    margin: 10px;
+}
+
+.specs table{
+    margin: 10px;
+    
+}
+.specs table th{
+    width: 100px
+}
+
+.specs table td{
+    width: 250px
+}
+.specs #header{
+    font-size: 18pt;
+    text-align: center;
+}
