@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema(
             required: [true, 'Product must have a name!'],
             // unique: true,
             maxlength: 40,
-            minlength: 5,
+            minlength: 7,
         },
         ratingsAverage:{
             type: Number,
@@ -34,12 +34,12 @@ const productSchema = new mongoose.Schema(
         description:{
             type: String,
             trim: true,
-            required: [true, 'A product must have a decription'],
+            required: [true, 'A product must have a decription.'],
         },
         imageCover:{
             //image id
             type: String,
-            required: [true, 'A product must have an image'],
+            required: [true, 'A product must have an image.'],
         },
         images:{
             //image id
@@ -50,6 +50,29 @@ const productSchema = new mongoose.Schema(
             default: Date.now(),
             select: false,
         },
+        specifications:{
+            type: Map,
+            of: String,
+            required: [true, 'A product must have specifications.'],
+
+        },
+        reviews:{
+            header:{
+                type: String,
+                // required: true,
+            },
+
+            text:{
+                type: String,
+                required: true,
+            },
+            pros:{
+                type: String,
+            },
+            cons:{
+                type: String,
+            }
+        }
 
     }
 )

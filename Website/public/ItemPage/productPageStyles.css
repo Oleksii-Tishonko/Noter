@@ -129,22 +129,98 @@ table {
   border-collapse: collapse;
 }
 
-.specs{
-    margin: 10px;
+.summary{
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-.specs table{
+.summaryHeader{
+    font-size: 19px;
     margin: 10px;
     
 }
+.summaryText{
+
+}
+
+.moduleSeparator{
+    width: 100%;
+    margin: 5px;
+    
+    border-bottom: 0.1px solid rgba(144, 144, 144, 0.867);
+}
+
+.specs{
+    text-align: center;
+    margin-top: 40px;
+    margin-right: 20px;
+}
+
+.specs table{
+    text-align: left;
+    width: 100%;
+    
+}
 .specs table th{
-    width: 100px
+    width: 40%;
+    text-align: left;
 }
 
 .specs table td{
-    width: 250px
+    width: 60%;
+    text-align: left;
 }
 .specs #header{
     font-size: 18pt;
     text-align: center;
 }
+.specsLink{
+    text-align: left;
+    margin: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+.description{
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+.decriptionHeader{
+    margin: 10px;
+    font-size: 16pt;
+}
+.descriptionText{
+    font-size: 14pt;
+}
+.reviewsSection{
+    margin: 10px;
+    margin-top: 20px;
+}
+.reviewsHeader{
+    font-size: 18pt;
+    margin-bottom: 10px;
+}
+.review{
+    padding: 10px;
+    border: solid rgba(105, 104, 104, 0.212);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+.review .header{
+    font-size: 15pt;
+    margin-bottom: 3px;
+}
+.review .name{
+
+}
+.review .date{
+    font-size: 10pt;
+    margin-bottom: 3px;
+}
+.review .rating{
+    text-align: left;
+    margin-left: 0; /*replace it*/
+    /* background-color: black; */
+    margin-bottom: 8px;
+}
+
