@@ -1,9 +1,31 @@
 import ProductsList from "../ProductsList/ProductsList";
 import useFetch from "../../Scripts/useFetch";
 import './ProductResultsStyles.css';
+import globals from './../../../globals'
+import { useEffect } from "react";
 
 const SearchProducts = () => {
-    const {data: products, isPending, error} = useFetch('http://localhost:3050/api/v1/products', '.data.products');
+    let { data, isPending, error } = {};
+    let products = [];
+
+    if(!globals.ProductsLoaded || globals.ProductsLoaded.length === 0){
+        ({ data, isPending, error } = useFetch(`${globals.DATABASE}/api/v1/products`, '.data.products'));
+        products = data;
+    }
+    else{
+        console.log(globals.ProductsLoaded);
+        console.log(globals.ProductsLoaded.length);
+        products = globals.ProductsLoaded;
+        isPending = false;
+        error = false;
+    }
+    
+    useEffect(() => {
+        console.log('use Effect');
+        console.log(products);
+        globals.ProductsLoaded = products;
+        
+    }, [products])
 
     return (  
         <div>

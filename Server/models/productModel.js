@@ -64,7 +64,8 @@ const productSchema = new mongoose.Schema(
 
             text:{
                 type: String,
-                required: true,
+                required: false, //change this
+                
             },
             pros:{
                 type: String,
@@ -72,7 +73,13 @@ const productSchema = new mongoose.Schema(
             cons:{
                 type: String,
             }
-        }
+        },
+        seller:{
+            type: String,
+        },
+        sellerId:{
+            type: String,
+        },
 
     }
 )
