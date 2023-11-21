@@ -3,7 +3,14 @@ export let ProductsLoaded = [];
 
 const globals = {
     DATABASE,
-    ProductsLoaded,
+    get ProductsLoaded(){
+        return JSON.parse(JSON.stringify(ProductsLoaded));
+    },
+    set ProductsLoaded(value){
+        ProductsLoaded = JSON.parse(JSON.stringify(value));
+    }
+
+
 }
 
 export default globals;

@@ -1,16 +1,10 @@
-import ProductPreview from "./ProductPreview/ProductPreview";
-
-
-import ActionPanel from "./ActionPanel/ActionPanel";
-import Specifications from "./Specifications/Specifications";
-import Description from "./Description/Description";
-import Reviews from "./Reviews/Reviews";
 import { useParams } from "react-router-dom";
 import globals from "../../../globals";
 import useFetch from "../../Scripts/useFetch";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ProductPage = () => {  
+
   const {id} = useParams();
   console.log(globals.ProductsLoaded);
   let {product, isPending, error} = {product: null, isPending: true, error: null};
@@ -41,6 +35,15 @@ const ProductPage = () => {
 
   return (
     <div className="ProductPage">
+
+      <div className="navbar">
+        <a><div className="selected">About</div></a>
+        <Link to={`/products/${product._id}/specifications`}><div>Specifications</div></Link>
+        <Link to={`/products/${product._id}/reviews`}><div>Reviews</div></Link>
+        <Link to={`/products/${product._id}/questions`}><div>Questions</div></Link>
+    </div>
+    <div class="backToResults"><Link to='/'>{"< Back to results"}</Link></div>
+
       <div className="aboutProduct">
         <div className="aboutProductLeft">
          <ProductPreview product={product}/>
@@ -66,3 +69,145 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
+
+
+//Components
+
+const ProductPreview = ({product}) => {
+  const database = globals.DATABASE;
+
+  const photosLink = `${database}/api/v1/products/photo`
+
+  return (  
+    <div className="productPreview">
+        <div className="imageBar">
+          {product.images.map((imageId) => 
+          (<img key={imageId} src = {`${photosLink}/${imageId}`} width="39px" height="45px"/>))}
+          {/* <img src={img4} width="39px" />
+          <img src={img3} width="33.4px" />
+          <img src={img4} width="39px" /> */}
+        </div>
+        <img
+          className="productImage"
+          src={`${photosLink}/${product.imageCover}`}
+          height="300px"
+        />
+    </div>
+  );
+}
+
+import starImg from './../../Images/Yellow_Star.svg';
+const ActionPanel = ({product}) => {
+  return (
+    <div className="ActionPanel">
+      <h2 className="productName">{product.name}</h2>
+      <div className="reviews">
+        <div className="rating">
+          <img src={starImg} width="17px" />
+          <img src={starImg} width="17px" />
+          <img src={starImg} width="17px" />
+          <img src={starImg} width="17px" />
+          <img src={starImg} width="17px" />
+        </div>
+        <a className="reviewsLink">148 reviews</a>
+      </div>
+      <div className="productActions">
+        <div className="sellerSection">
+          <a className="sellerLink">
+            <div className="seller">
+              <a className="sellerText">Seller: </a>
+              <a className="sellerName">Noter</a>
+            </div>
+          </a>
+        </div>
+        <div className="getProductSection">
+          <div className="priceBox">
+            <a className="price">{`${product.price} $`}</a>
+          </div>
+          <button className="addToCart">Add To Cart</button>
+          <button className="buyProduct">Buy now</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Specifications = ({product}) => {
+  console.log(product.specifications);
+  
+  return (
+    <div className="specs">
+      <p id="header">Specifications</p>
+      <table className="listOfSpecs">
+        {Object.entries(product.specifications).map(([property, value]) => (
+        <tr key={property}>
+          <th>{property}</th>
+          <td>{value}</td>
+        </tr>
+      ))}
+        
+        {/* <tr>
+          <th>Model</th>
+          <td>Galaxy A32 5G</td>
+        </tr> */}
+        
+      </table>
+      <div className="specsLink">More...</div>
+    </div>
+  );
+};
+
+const Description = ({product}) => {
+  return (
+    <div className="description">
+      <div className="decriptionHeader">Description</div>
+      <div className="descriptionText">{product.description}</div>
+    </div>
+  );
+};
+
+const Reviews = () => {
+    return (  
+        <div className="reviewsSection">
+        <div className="reviewsHeader">Customer reviews</div>
+        <div className="review">
+          <div className="name">Mr. Anderson</div>
+          <div className="date">November 13, 2023</div>
+          <div className="rating">
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+          </div>
+          <div className="header">Would definitely buy again</div>
+          <div className="text">
+            For a refurbished item this unit is very good. I bought two for my
+            granddaughters. Paid $14.48 each as compared to the price of new
+            ones. Children are both 4 years old, so if they break them no harm
+            no foul.
+          </div>
+        </div>
+
+        <div className="review">
+          <div className="name">TooYoungTooSimple</div>
+          <div className="date">November 15, 2023</div>
+          <div className="rating">
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+            <img src={starImg} width="14.4px" />
+          </div>
+          <div className="header">Great phone for the price</div>
+          <div className="text">
+            Not much bigger than my last phone, but way faster! Good price as I
+            got it on sale. Has great features I'm still learning. Some really
+            nice accessories too. Overall very pleased with his purchase Thx
+            Noter!
+          </div>
+        </div>
+      </div>
+    );
+}

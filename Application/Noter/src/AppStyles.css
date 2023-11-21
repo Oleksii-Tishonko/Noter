@@ -157,6 +157,7 @@ table {
     text-align: center;
     margin-top: 40px;
     margin-right: 20px;
+    width: 100%;
 }
 
 .specs table{
@@ -227,3 +228,34 @@ table {
     margin-bottom: 8px;
 }
 
+.navbar{
+    height: 20px;
+    background-color: #00A046;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.navbar a{
+    text-decoration: none;
+}
+.navbar a div {
+    color: white;
+}
+
+.navbar .selected{
+    cursor: pointer;
+}
+
+.backToResults a{
+    color: rgb(98, 97, 97);
+    text-decoration: none;
+}
+
+.filters{
+    background-color: rgba(129, 129, 234, 0.921);
+    height: 30px;
+    width: 80px;
+    font-size: 18px;
+}

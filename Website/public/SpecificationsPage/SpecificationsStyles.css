@@ -1,0 +1,53 @@
+.navbar{
+    height: 20px;
+    background-color: #00A046;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.navbar a{
+    text-decoration: none;
+}
+.navbar a div {
+    color: white;
+}
+
+.navbar .selected{
+    
+}
+
+.specs{
+    text-align: center;
+    margin-top: 40px;
+    margin-right: 20px;
+}
+
+.specs table{
+    text-align: left;
+    width: 100%;
+    
+}
+.specs table th{
+    width: 40%;
+    text-align: left;
+}
+
+.specs table td{
+    width: 60%;
+    text-align: left;
+}
+.specs #header{
+    font-size: 18pt;
+    text-align: center;
+}
+
+th,td {
+  border: 1px solid rgb(197, 197, 197);
+  text-align: center;
+  padding: 10px;
+}
+table {
+  border-collapse: collapse;
+}

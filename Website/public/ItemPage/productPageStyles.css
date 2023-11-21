@@ -224,3 +224,28 @@ table {
     margin-bottom: 8px;
 }
 
+.navbar{
+    height: 20px;
+    background-color: #00A046;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.navbar a{
+    text-decoration: none;
+}
+.navbar a div {
+    color: white;
+}
+
+.navbar .selected{
+    
+}
+
+.backToResults a{
+    color: rgb(98, 97, 97);
+    text-decoration: none;
+}
+

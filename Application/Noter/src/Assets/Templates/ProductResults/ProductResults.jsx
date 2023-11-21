@@ -4,9 +4,12 @@ import './ProductResultsStyles.css';
 import globals from './../../../globals'
 import { useEffect } from "react";
 
+
+
 const SearchProducts = () => {
     let { data, isPending, error } = {};
     let products = [];
+    
 
     if(!globals.ProductsLoaded || globals.ProductsLoaded.length === 0){
         ({ data, isPending, error } = useFetch(`${globals.DATABASE}/api/v1/products`, '.data.products'));
@@ -23,7 +26,7 @@ const SearchProducts = () => {
     useEffect(() => {
         console.log('use Effect');
         console.log(products);
-        globals.ProductsLoaded = products;
+        globals.ProductsLoaded = JSON.parse(JSON.stringify(products));
         
     }, [products])
 
