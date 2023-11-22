@@ -7,6 +7,7 @@ import ReviewsPage from "./Assets/Templates/ReviewsPage/ReviewsPage";
 import QuestionsPage from "./Assets/Templates/QuestionsPage/QuestionsPage";
 
 function App() {
+
   return (
     <Router>
       <Routes>

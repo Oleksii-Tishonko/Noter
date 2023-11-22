@@ -1,43 +1,53 @@
 import ProductsList from "../ProductsList/ProductsList";
-import useFetch from "../../Scripts/useFetch";
-import './ProductResultsStyles.css';
-import globals from './../../../globals'
-import { useEffect } from "react";
-
-
+import "./ProductResultsStyles.css";
+import globals from "./../../../globals";
+import { useEffect, useLayoutEffect, useState } from "react";
+import cache from "../../../Сache/cache";
 
 const SearchProducts = () => {
-    let { data, isPending, error } = {};
-    let products = [];
-    
+   const [products, setProducts] = useState(null);
+   const [isPending, setIsPending] = useState(true);
+   const [error, setError] = useState(null);
 
-    if(!globals.ProductsLoaded || globals.ProductsLoaded.length === 0){
-        ({ data, isPending, error } = useFetch(`${globals.DATABASE}/api/v1/products`, '.data.products'));
-        products = data;
-    }
-    else{
-        console.log(globals.ProductsLoaded);
-        console.log(globals.ProductsLoaded.length);
-        products = globals.ProductsLoaded;
-        isPending = false;
-        error = false;
-    }
-    
-    useEffect(() => {
-        console.log('use Effect');
-        console.log(products);
-        globals.ProductsLoaded = JSON.parse(JSON.stringify(products));
-        
-    }, [products])
+   // if(!isPending && !products) LoadData();
 
-    return (  
-        <div>
-            <h1 id = "header">Noter Shop</h1>
-            {isPending && <div>Loading...</div>}
-            {error && <div className="error">error: {error}</div>}
-            {products && <ProductsList products={products}/>}
-        </div>
-    );
-}
- 
+   console.log(cache.ProductsLoaded);
+
+   //Start
+   useLayoutEffect(() => {
+      LoadData();
+   }, []);
+
+   return (
+      <div>
+         <h1 id="header">Noter Shop</h1>
+         {isPending && <div>Loading...</div>}
+         {error && <div className="error">error: {error}</div>}
+         {products && <ProductsList products={products} />}
+      </div>
+   );
+
+   function LoadData() {
+      //checking if data exists in memory
+      if (cache.ProductsLoaded && cache.ProductsLoaded.length !== 0) {
+         setIsPending(false);
+         setError(false);
+         setProducts(cache.ProductsLoaded);
+      }
+      //loading data from server
+      else {
+         setIsPending(true);
+         cache.LoadingManager.Products.Load(OnDataLoaded);
+      }
+   }
+
+   function OnDataLoaded(data, status, err) {
+      if (status === "OK") {
+         setProducts(data);
+      }
+      setError(err);
+      setIsPending(false);
+   }
+};
+
 export default SearchProducts;

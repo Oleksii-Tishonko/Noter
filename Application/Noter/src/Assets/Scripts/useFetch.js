@@ -22,6 +22,7 @@ const useFetch = (url, pathToData=null) => {
                 }
 
                 setData(data);
+                // isPending = false
                 setIsPending(false);
                 setError(null);
             })
@@ -35,9 +36,10 @@ const useFetch = (url, pathToData=null) => {
                 }
             })
         }, 1000);
-        return () => abortController.abort();
-    }, [url])
 
+        //only runs when user changes page that used this hook
+        return () => {abortController.abort();}; 
+    }, [url])
     return {data, isPending, error};
 }
 

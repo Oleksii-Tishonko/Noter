@@ -1,92 +1,113 @@
 import { Link, useParams } from "react-router-dom";
 import globals from "../../../globals";
 import useFetch from "../../Scripts/useFetch";
+import { useEffect, useState, useLayoutEffect } from "react";
+import cache from "../../../Сache/cache";
 
 const Specifications = () => {
-    const {id} = useParams();
+   const { id } = useParams();
 
-    let specifications;
-    let {product, isPending, error} = {specifications: null, isPending: true, error: null};
+   const [specifications, setSpecifications] = useState(null);
+   const [isPending, setIsPending] = useState(true);
+   const [error, setError] = useState(null);
 
-    if(globals.ProductsLoaded && globals.ProductsLoaded.length !== 0){
-        console.log('products loaded');
-        console.log(globals.ProductsLoaded);
-        const productsFiltered = globals.ProductsLoaded.filter(product => {
-        return product._id === id;
-        });
+   //Start
+   useLayoutEffect(() => {
+      LoadData(id);
+   }, []);
 
-        if(productsFiltered.length > 0) {
-            isPending = false;
-            error = false;
+   if (isPending) {
+      return <div>Loading...</div>;
+   }
+   if (error) {
+      return <div className="error">Error: {error}</div>;
+   }
 
-            specifications = productsFiltered[0].specifications;
-        }
+   return (
+      <div className="SpecificationsPage">
+         <div className="navbar">
+            <Link to={`/products/${id}`}>
+               <div>About</div>
+            </Link>
+            <a>
+               <div className="selected">Specifications</div>
+            </a>
+            <Link to={`/products/${id}/reviews`}>
+               <div>Reviews</div>
+            </Link>
+            <Link to={`/products/${id}/questions`}>
+               <div>Questions</div>
+            </Link>
+         </div>
+         <div className="specs">
+            <p id="header">Specifications</p>
+            <table className="listOfSpecs">
+               {Object.entries(specifications).map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
+               {/* To make a normal page */}
+               {Object.entries(specifications).map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
+               {Object.entries(specifications).map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
+               {Object.entries(specifications).map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
+               {Object.entries(specifications).map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
+            </table>
+         </div>
+      </div>
+   );
 
-        
-    }
-    else{
-        console.log('products not loaded');
-        let data;
-        ({data, isPending, error} = useFetch(`${globals.DATABASE}/api/v1/products/${id}`, '.data.product'));
-        product = data;
-    }
+   function LoadData(id) {
+      let dataLoaded = false;
+      //checking if data exists in memory
+      
+      if(cache.CurrentProduct){
+         setSpecifications(cache.CurrentProduct.specifications);
+         setIsPending(false);
+         setError(false);
 
-    if(isPending){
-        return <div>Loading...</div>
-    }
-    if(error){
-        return <div className="error">Error: {error}</div>
-    }
+         dataLoaded = true;
+      }
+      //loading data from server
+      if (!dataLoaded) {
+         console.log("loading from server");
+         setIsPending(true);
+         const loader = cache.LoadingManager.Product;
+         loader.id = id;
+         loader.Load(OnDataLoaded);
+      }
+   }
 
-    if(product) specifications = product.specifications;
+   function OnDataLoaded(data, status, err) {
+      if (status === "OK") {
+         setSpecifications(data.specifications);
+      }
+      setError(err);
+      setIsPending(false);
 
-    return (
-        <div className="SpecificationsPage">
-        <div className="navbar">
-        <Link to={`/products/${id}`}><div>About</div></Link>
-        <a><div className="selected">Specifications</div></a>
-        <Link to={`/products/${id}/reviews`}><div>Reviews</div></Link>
-        <Link to={`/products/${id}/questions`}><div>Questions</div></Link>
-    </div>
-    <div className="specs">
-        <p id="header">Specifications</p>
-      <table className="listOfSpecs">
-        {Object.entries(specifications).map(([property, value]) => (
-        <tr key={property}>
-          <th>{property}</th>
-          <td>{value}</td>
-        </tr>
-      ))}
-      {/* To make a normal page */}
-      {Object.entries(specifications).map(([property, value]) => (
-        <tr key={property}>
-          <th>{property}</th>
-          <td>{value}</td>
-        </tr>
-      ))}
-      {Object.entries(specifications).map(([property, value]) => (
-        <tr key={property}>
-          <th>{property}</th>
-          <td>{value}</td>
-        </tr>
-      ))}
-      {Object.entries(specifications).map(([property, value]) => (
-        <tr key={property}>
-          <th>{property}</th>
-          <td>{value}</td>
-        </tr>
-      ))}
-      {Object.entries(specifications).map(([property, value]) => (
-        <tr key={property}>
-          <th>{property}</th>
-          <td>{value}</td>
-        </tr>
-      ))}
-      </table>
-    </div>
-            
-        </div>
-    );
-}
- 
+      cache.LoadingManager.Products.Load();
+   }
+};
+
 export default Specifications;
