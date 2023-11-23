@@ -68,10 +68,7 @@ const ProductPage = () => {
          </div>
          {/*--AboutProduct End--*/}
 
-         <div className="summary">
-            {/* <div className="summaryHeader">Summary</div> */}
-            <div className="summaryText">{product.summary}</div>
-         </div>
+         <Summary product={product}/>
 
          <div className="moduleSeparator"></div>
          <Specifications product={product} />
@@ -197,6 +194,15 @@ const ActionPanel = ({ product }) => {
       </div>
    );
 };
+
+const Summary = ({product}) =>{
+   return(
+      <div className="summary">
+         {/* <div className="summaryHeader">Summary</div> */}
+         <div className="summaryText">{product.summary}</div>
+      </div>
+   )
+}
 
 const Specifications = ({ product }) => {
    console.log(product.specifications);
