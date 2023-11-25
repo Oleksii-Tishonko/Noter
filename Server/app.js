@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const globalErrorHandler = require('./controllers/errorController');
+const AppError = require('./utils/appError');
+const productRouter = require('./routes/productRoutes');
 
 const app = express();
-
-const productRouter = require('./routes/productRoutes');
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
@@ -20,11 +21,9 @@ app.use('/api/v1/test', (req, res) => {
 app.use('/api/v1/products', productRouter);
 
 app.all('*', (req, res, next)=>{
-    const err = new Error(`Can't find ${req.originalUrl} on this server!`);
-    err.status = 'fail';
-    err.statusCode = 404;
-
-    next(err);
+    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;

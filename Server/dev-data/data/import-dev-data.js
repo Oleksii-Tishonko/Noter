@@ -38,7 +38,7 @@ const product2 = new Product({
         "Back-Facing Camera":"48 MP",
         "Colour":"Black",
         "Contained Battery Type":"7",
-        "Front-Facing Camera":"13 MP",
+        "Front-Facing Camera":"18 MP",
     },
 });
 const product3 = new Product({
@@ -50,10 +50,10 @@ const product3 = new Product({
     images: ['3', '2', '3', '4'],
     specifications: {
         "Model": "Galaxy A32 5G",
-        "Back-Facing Camera":"48 MP",
+        "Back-Facing Camera":"46 MP",
         "Colour":"Black",
         "Contained Battery Type":"7",
-        "Front-Facing Camera":"13 MP",
+        "Front-Facing Camera":"18 MP",
     },
 });
 const product4 = new Product({
@@ -65,7 +65,7 @@ const product4 = new Product({
     images: ['4', '2', '3', '4'],
     specifications: {
         "Model": "Galaxy A32 5G",
-        "Back-Facing Camera":"48 MP",
+        "Back-Facing Camera":"46 MP",
         "Colour":"Black",
         "Contained Battery Type":"7",
         "Front-Facing Camera":"13 MP",
@@ -80,7 +80,7 @@ const product5 = new Product({
     images: ['5', '2', '3', '4'],
     specifications: {
         "Model": "Galaxy A32 5G",
-        "Back-Facing Camera":"48 MP",
+        "Back-Facing Camera":"46 MP",
         "Colour":"Black",
         "Contained Battery Type":"7",
         "Front-Facing Camera":"13 MP",
@@ -113,7 +113,7 @@ const product7 = new Product({
         "Back-Facing Camera":"48 MP",
         "Colour":"Black",
         "Contained Battery Type":"7",
-        "Front-Facing Camera":"13 MP",
+        "Front-Facing Camera":"18 MP",
     },
 });
 const product8 = new Product({

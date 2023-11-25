@@ -26,16 +26,16 @@ const Specifications = () => {
    return (
       <div className="SpecificationsPage">
          <div className="navbar">
-            <Link to={`/products/${id}`}>
+            <Link to={`/product/${id}`}>
                <div>About</div>
             </Link>
             <a>
                <div className="selected">Specifications</div>
             </a>
-            <Link to={`/products/${id}/reviews`}>
+            <Link to={`/product/${id}/reviews`}>
                <div>Reviews</div>
             </Link>
-            <Link to={`/products/${id}/questions`}>
+            <Link to={`/product/${id}/questions`}>
                <div>Questions</div>
             </Link>
          </div>

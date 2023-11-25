@@ -9,9 +9,9 @@ const QuestionsPage = () => {
     <div class="QuestionsPage">
 
         <div class="navbar">
-        <Link to={`/products/${id}`}><div>About</div></Link>
-        <Link to={`/products/${id}/specifications`}><div>Specifications</div></Link>
-        <Link to={`/products/${id}/reviews`}><div>Reviews</div></Link>
+        <Link to={`/product/${id}`}><div>About</div></Link>
+        <Link to={`/product/${id}/specifications`}><div>Specifications</div></Link>
+        <Link to={`/product/${id}/reviews`}><div>Reviews</div></Link>
         <a className='selected'><div>Questions</div></a>
     </div>
 

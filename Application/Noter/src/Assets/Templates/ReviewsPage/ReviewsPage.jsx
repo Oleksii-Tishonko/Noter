@@ -9,10 +9,10 @@ const ReviewsPage = () => {
     <div class="ReviewsPage">
 
         <div class="navbar">
-        <Link to={`/products/${id}`}><div>About</div></Link>
-        <Link to={`/products/${id}/specifications`}><div>Specifications</div></Link>
+        <Link to={`/product/${id}`}><div>About</div></Link>
+        <Link to={`/product/${id}/specifications`}><div>Specifications</div></Link>
         <a className='selected'><div>Reviews</div></a>
-        <Link to={`/products/${id}/questions`}><div>Questions</div></Link>
+        <Link to={`/product/${id}/questions`}><div>Questions</div></Link>
     </div>
 
     <button class="filters">Filters</button>

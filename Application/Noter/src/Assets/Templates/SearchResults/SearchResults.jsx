@@ -1,13 +1,19 @@
 import "./SearchResultsStyles.css";
 import { useLayoutEffect, useState } from "react";
 import cache from "../../../Сache/cache";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import searchIcon from "./../../Images/search.svg";
 
 const SearchResults = () => {
    const [products, setProducts] = useState(null);
    const [isPending, setIsPending] = useState(true);
    const [error, setError] = useState(null);
+
+   const {params} = useParams();
+   // console.log('params');
+   // console.log(params);
+   // if(params) console.log('params: true');
+   // else console.log('params: false');
 
    // if(!isPending && !products) LoadData();
 
@@ -67,7 +73,7 @@ const SearchResults = () => {
 
    function LoadData() {
       //checking if data exists in memory
-      if (cache.ProductsLoaded && cache.ProductsLoaded.length !== 0) {
+      if (!params && cache.ProductsLoaded && cache.ProductsLoaded.length !== 0) {
          setIsPending(false);
          setError(false);
          setProducts(cache.ProductsLoaded);
@@ -75,7 +81,9 @@ const SearchResults = () => {
       //loading data from server
       else {
          setIsPending(true);
-         cache.LoadingManager.Products.Load(OnDataLoaded);
+         let loader = cache.LoadingManager.Products;
+         if(params) loader.params = params;
+         loader.Load(OnDataLoaded);
       }
    }
 
@@ -91,7 +99,7 @@ const SearchResults = () => {
 export default SearchResults;
 
 const Product = ({ product }) => {
-   const linkToProduct = `/products/${product._id}`;
+   const linkToProduct = `/product/${product._id}`;
    return (
       <div className="item">
          <Link to={linkToProduct} className="itemLink">

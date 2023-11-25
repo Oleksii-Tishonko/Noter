@@ -50,6 +50,7 @@ class LoadableObject {
    //data;
    // error;
    callback;
+   params;
 
    // set _isPending(value){
    //     this.isPending = value;
@@ -67,9 +68,16 @@ class LoadableObject {
       if (!this.requestPath)
          throw Error("An object must have a request string");
 
+      let request = this.requestPath;
+      if(this.params) request = `${request}?${this.params}`
+      console.log('request');
+      console.log(request);
+      console.log('params');
+      console.log(this.params);
+
       const restAPI = new RestAPI();
       restAPI.ReadData(
-         this.requestPath,
+         request,
          this.extractDataPath,
          (data, status, err) => this.OnDataLoaded(data, status, err),
       );

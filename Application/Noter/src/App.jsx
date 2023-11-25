@@ -11,13 +11,12 @@ function App() {
       <Router>
          <Routes>
             <Route exact path="/" element={<SearchResults />} />
-            <Route path="/products/:id" element={<ProductPage />} />
-            <Route
-               path="/products/:id/specifications"
-               element={<Specifications />}
-            />
-            <Route path="/products/:id/reviews" element={<ReviewsPage />} />
-            <Route path="/products/:id/questions" element={<QuestionsPage />} />
+            <Route path = '/products' element={<SearchResults/>}/>
+            <Route path = '/products/:params' element={<SearchResults/>}/>
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/product/:id/specifications"element={<Specifications />}/>
+            <Route path="/product/:id/reviews" element={<ReviewsPage />} />
+            <Route path="/product/:id/questions" element={<QuestionsPage />} />
          </Routes>
       </Router>
       // <div>

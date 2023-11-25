@@ -78,6 +78,10 @@
 .filtersTab .option{
     margin-bottom: 3px;
     font-size: 12pt;
+    margin-right: 4px;
+}
+.filtersTab .option .optionName{
+    display: block;
 }
 .filtersTab .option .optionName::before{
     font-family: Material Symbols Outlined;
@@ -88,10 +92,12 @@
     display: inline-block;
     font-size: 13pt;
     margin-right: 1px;
+    padding-left: 3px;
 }
 
 .filtersTab .option .optionName:hover{
     background-color: lightgray;
+    /* border-radius: 4%; */
 }
 
 /* 

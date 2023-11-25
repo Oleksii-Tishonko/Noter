@@ -43,13 +43,13 @@ const ProductPage = () => {
             <a>
                <div className="selected">About</div>
             </a>
-            <Link to={`/products/${product._id}/specifications`}>
+            <Link to={`/product/${product._id}/specifications`}>
                <div>Specifications</div>
             </Link>
-            <Link to={`/products/${product._id}/reviews`}>
+            <Link to={`/product/${product._id}/reviews`}>
                <div>Reviews</div>
             </Link>
-            <Link to={`/products/${product._id}/questions`}>
+            <Link to={`/product/${product._id}/questions`}>
                <div>Questions</div>
             </Link>
          </div>
