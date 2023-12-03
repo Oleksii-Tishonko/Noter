@@ -7,14 +7,16 @@ import ReviewsPage from "./Assets/Templates/ReviewsPage/ReviewsPage";
 import QuestionsPage from "./Assets/Templates/QuestionsPage/QuestionsPage";
 
 function App() {
+
    return (
       <Router>
          <Routes>
             <Route exact path="/" element={<SearchResults />} />
-            <Route path = '/products' element={<SearchResults/>}/>
-            <Route path = '/products/:params' element={<SearchResults/>}/>
+            <Route path="/:params" element={<SearchResults />} />
+            <Route path="/products" element={<SearchResults />} />
+            <Route path="/products/:params" element={<SearchResults />} />
             <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/product/:id/specifications"element={<Specifications />}/>
+            <Route path="/product/:id/specifications" element={<Specifications />} />
             <Route path="/product/:id/reviews" element={<ReviewsPage />} />
             <Route path="/product/:id/questions" element={<QuestionsPage />} />
          </Routes>

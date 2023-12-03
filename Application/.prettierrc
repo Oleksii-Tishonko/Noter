@@ -1,3 +1,6 @@
 {
-  "tabWidth": 3
+  "tabWidth": 3,
+  "useTabs": false,
+  "proseWrap": "never",
+  "printWidth": 10000
 }

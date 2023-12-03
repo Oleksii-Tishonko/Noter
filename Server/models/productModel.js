@@ -56,34 +56,21 @@ const productSchema = new mongoose.Schema(
             required: [true, 'A product must have specifications.'],
 
         },
-        reviews:{
-            header:{
-                type: String,
-                // required: true,
-            },
-
-            text:{
-                type: String,
-                required: false, //change this
-                
-            },
-            pros:{
-                type: String,
-            },
-            cons:{
-                type: String,
-            }
-        },
         seller:{
             type: String,
         },
         sellerId:{
             type: String,
         },
+        category:{
+            type: mongoose.Schema.ObjectId,
+            ref: 'Category',
+            required: [true, 'Product must belong to a category'],
+        }
 
     }
 )
-
+//reviews
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

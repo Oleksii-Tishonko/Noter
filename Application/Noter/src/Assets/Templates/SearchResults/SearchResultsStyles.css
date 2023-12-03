@@ -83,9 +83,21 @@
 .filtersTab .option .optionName{
     display: block;
 }
-.filtersTab .option .optionName::before{
+.filtersTab .option #notSelected::before{
     font-family: Material Symbols Outlined;
     content: "check_box_outline_blank";
+
+    vertical-align: bottom;
+    color: rgba(0, 0, 0, 0.952);
+    display: inline-block;
+    font-size: 13pt;
+    margin-right: 1px;
+    padding-left: 3px;
+}
+
+.filtersTab .option #selected::before{
+    font-family: Material Symbols Outlined;
+    content: "check_box";
 
     vertical-align: bottom;
     color: rgba(0, 0, 0, 0.952);

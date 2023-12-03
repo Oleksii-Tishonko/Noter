@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import globals from "../../../globals";
-import useFetch from "../../Scripts/useFetch";
 import { Link } from "react-router-dom";
 import { useState, useLayoutEffect } from "react";
 

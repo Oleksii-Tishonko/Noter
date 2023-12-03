@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 let ProductsLoaded = null;
 let CurrentProduct = null;
+let CategoryLoaded = null;
 
 const cache = {
    get ProductsLoaded() {
@@ -23,6 +24,12 @@ const cache = {
    set CurrentProduct(value) {
       CurrentProduct = getCopyOfObject(value);
    },
+   get CategoryLoaded() {
+      return getCopyOfObject(CategoryLoaded);
+   },
+   set CategoryLoaded(value) {
+      CategoryLoaded = getCopyOfObject(value);
+   },
    get LoadingManager() {
       return new LoadingManager();
    },
@@ -37,6 +44,7 @@ export default cache;
 class LoadingManager {
    Product = new Product();
    Products = new Products();
+   Category = new Category();
 
    constructor() {
       console.log("creating loading manager");
@@ -148,6 +156,24 @@ class Product extends LoadableObject {
    }
    setLoadedObject(data) {
       if (data) cache.CurrentProduct = data;
+      console.log("setter");
+      console.log(data);
+      console.log(cache.CurrentProduct);
+   }
+}
+class Category extends LoadableObject {
+   extractDataPath = ".data.category";
+   id;
+
+   get requestPath() {
+      if (!this.id) throw Error("Category must have an id to be loaded");
+      return `${globals.DATABASE}/api/v1/category/${this.id}`;
+   }
+   constructor() {
+      super();
+   }
+   setLoadedObject(data) {
+      if (data) cache.CategoryLoaded = data;
       console.log("setter");
       console.log(data);
       console.log(cache.CurrentProduct);

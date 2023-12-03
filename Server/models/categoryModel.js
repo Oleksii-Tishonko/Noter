@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const filterSchema = new mongoose.Schema({
+    name: String,
+    variants: [String],
+});
+
 const categorySchema = new mongoose.Schema(
     {
         name:{
@@ -8,11 +13,16 @@ const categorySchema = new mongoose.Schema(
             required: [true, 'A category must have a name'],
         },
         filters: {
-            type: [String],
-            required: [true, 'A category must have a filters']
-        },
-        products:{
-            type: [mongoose.Schema.Types.ObjectId],
-        }
+            type: [{
+                name: String,
+                variants: [String],
+            }],
+        required: [true, 'A category must have filters'],
+    },
     }
 )
+
+//products
+const Category = mongoose.model('Category', categorySchema);
+
+module.exports = Category;

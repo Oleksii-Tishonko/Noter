@@ -3,6 +3,7 @@ const cors = require('cors');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const productRouter = require('./routes/productRoutes');
+const categoryRouter = require('./routes/categoryRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/v1/test', (req, res) => {
 });
 
 app.use('/api/v1/products', productRouter);
+app.use('/api/v1/category', categoryRouter);
 
 app.all('*', (req, res, next)=>{
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
