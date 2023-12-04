@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const reviewSchema = mongoose.Schema({
     header:{
         type: String,
-        // required: true,
     },
 
     text:{
         type: String,
-        required: false, //change this
+        required: true, 
                 
     },
     pros:{
@@ -25,7 +24,11 @@ const reviewSchema = mongoose.Schema({
     user:{
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        required: [true, 'Review must belong to a user'],
+        // required: [true, 'Review must belong to a user'], --changed to false for development 
     }
     
 })
+
+const Review = mongoose.model('Review', reviewSchema);
+
+module.exports = Review;

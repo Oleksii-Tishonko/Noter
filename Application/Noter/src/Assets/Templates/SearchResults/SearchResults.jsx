@@ -22,15 +22,8 @@ const SearchResults = () => {
    console.log(params);
    pageParams = params;
 
-   // console.log('checkCurrentFilters');
-   // checkCurrentFilters();
-
    // console.log('params');
    // console.log(params);
-   // if(params) console.log('params: true');
-   // else console.log('params: false');
-
-   // if(!isPending && !products) LoadData();
 
    console.log(cache.ProductsLoaded);
 
@@ -182,12 +175,6 @@ function checkCurrentFilters(){
    });
    
    return true;
-
-   // filters.forEach(filter => {
-   //    const filterData = filter.split("=");
-   //    console.log(filterData);
-   //    addFilter(filterData[0], filterData[1]);
-   // });
 }
 
 export default SearchResults;
