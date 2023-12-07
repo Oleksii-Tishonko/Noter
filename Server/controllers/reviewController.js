@@ -3,7 +3,14 @@ const Review = require('../models/reviewModel');
 const AppError = require('../utils/appError');
 
 exports.getAllReviews = catchAsync (async(req, res, next) => {
-  const reviews = await Review.find();
+  const productId = req.params.productId;
+  if(!productId) {
+    return next(new AppError('This route (get all reviews) requires a product id!', 404));
+  }
+
+  const filter = {product: productId};
+
+  const reviews = await Review.find(filter);
   res.status(200).json({
     status: 'success',
     data: {
@@ -13,6 +20,7 @@ exports.getAllReviews = catchAsync (async(req, res, next) => {
 });
 
 exports.createReview = catchAsync (async(req, res, next) => {
+
   const newReview = await Review.create(req.body);
   res.status(201).json({
     status: 'success',

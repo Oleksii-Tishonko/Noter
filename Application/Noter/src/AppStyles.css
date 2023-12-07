@@ -227,6 +227,19 @@ table {
     /* background-color: black; */
     margin-bottom: 8px;
 }
+.ReviewsPage .noReviews{
+    text-align: center;
+    margin-top: 4vw;
+}
+.ReviewsPage .noReviews .header{
+    font-size: 25pt;
+    margin-bottom: 10px;
+}
+.ReviewsPage .noReviews .text{
+    font-size: 17pt;
+    margin-bottom: 10px;
+}
+
 
 .navbar{
     height: 20px;

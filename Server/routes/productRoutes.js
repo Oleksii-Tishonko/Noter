@@ -1,7 +1,8 @@
 const express = require('express');
 const productsController = require('./../controllers/productController')
+const reviewRouter = require('./../routes/reviewRoutes');
 
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
 router
     .route('/')
@@ -16,6 +17,8 @@ router.route('/:id')
 
 router.route('/photo/:id')
     .get(productsController.getProductImage);
+
+router.use('/:productId/reviews', reviewRouter);
 
 
 

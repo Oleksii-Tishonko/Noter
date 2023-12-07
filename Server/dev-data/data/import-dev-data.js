@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Product = require('./../../models/productModel');
+const Review = require('./../../models/reviewModel');
 
 dotenv.config({path: './config.env'});
 
@@ -148,11 +149,35 @@ const product8 = new Product({
     },
 });
 
+const review1 = new Review({
+    header: "Great product!",
+    text: "I love this product!",
+    product: product1._id,
+});
+const review2 = new Review({
+    header: "Would definitely buy again",
+    text: "For a refurbished item this unit is very good. I bought two for my granddaughters. Paid $14.48 each as compared to the price of new ones. Children are both 4 years old, so if they break them no harm no foul.",
+    product: product1._id,
+});
+const review3 = new Review({
+    header: "Great phone for the price",
+    text: "Not much bigger than my last phone, but way faster! Good price as I got it on sale. Has great features I'm still learning. Some really nice accessories too. Overall very pleased with his purchase Thx Noter!",
+    product: product1._id,
+});
+const review4 = new Review({
+    header: "Easy phones",
+    text: "The Noter package arrived quickly and was as ordered. The four handset phone system works well in our home. Good sound. Ergonomic. We have had good success with similar Panasonic phones in the past and are hopeful that these will be equally good.",
+    product: product1._id,
+});
+
+const reviews = [review1, review2, review3, review4];
+
 const products = [product1, product2, product3, product4, product5, product6, product7, product8];
 
 const importData = async () => {
     try{
       await Product.create(products);
+      await Review.create(reviews);
       console.log('Data successfully loaded.');
     } catch (err) {
         console.log(err);
@@ -164,6 +189,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Product.deleteMany();
+    await Review.deleteMany();
     console.log('All data deleted!');
   } catch (err) {
     console.log(err);

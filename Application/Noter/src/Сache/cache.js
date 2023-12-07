@@ -5,6 +5,7 @@ import { useEffect } from "react";
 let ProductsLoaded = null;
 let CurrentProduct = null;
 let CategoryLoaded = null;
+let ReviewsLoaded = null;
 
 const cache = {
    get ProductsLoaded() {
@@ -33,6 +34,12 @@ const cache = {
    get LoadingManager() {
       return new LoadingManager();
    },
+   get ReviewsLoaded() {
+      return getCopyOfObject(ReviewsLoaded);
+   },
+   set ReviewsLoaded(value) {
+      ReviewsLoaded = getCopyOfObject(value);
+   },
 };
 
 function getCopyOfObject(obj) {
@@ -45,6 +52,7 @@ class LoadingManager {
    Product = new Product();
    Products = new Products();
    Category = new Category();
+   Reviews = new Reviews();
 
    constructor() {
       console.log("creating loading manager");
@@ -132,7 +140,6 @@ class Products extends LoadableObject {
       if (data) cache.ProductsLoaded = data;
       console.log("setter");
       console.log(data);
-      console.log(cache.ProductsLoaded);
    }
 
    constructor() {
@@ -158,7 +165,6 @@ class Product extends LoadableObject {
       if (data) cache.CurrentProduct = data;
       console.log("setter");
       console.log(data);
-      console.log(cache.CurrentProduct);
    }
 }
 class Category extends LoadableObject {
@@ -176,7 +182,23 @@ class Category extends LoadableObject {
       if (data) cache.CategoryLoaded = data;
       console.log("setter");
       console.log(data);
-      console.log(cache.CurrentProduct);
+   }
+}
+class Reviews extends LoadableObject {
+   extractDataPath = ".data.reviews";
+   productId;
+
+   get requestPath() {
+      if (!this.productId) throw Error("Reviews must have an id to be loaded");
+      return `${globals.DATABASE}/api/v1/products/${this.productId}/reviews`;
+   }
+   constructor() {
+      super();
+   }
+   setLoadedObject(data) {
+      if (data) cache.ReviewsLoaded = data;
+      console.log("setter");
+      console.log(data);
    }
 }
 
