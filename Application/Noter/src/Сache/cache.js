@@ -1,11 +1,39 @@
 import useFetch from "../Assets/Scripts/useFetch";
 import globals from "../globals";
 import { useEffect } from "react";
+import cloneDeep from "lodash/cloneDeep";
+
+class ReviewsObject {
+   productId;
+   count;
+   pages;
+   constructor() {
+      this.pages = [];
+   }
+
+   setCount(results) {
+      const limit = 2;
+      this.count = Math.floor((results + limit - 1) / limit);
+   }
+   isPageLoaded(page) {
+      return this.pages[page] ? true : false;
+   }
+   isPageExist(page) {
+      return page <= this.count;
+   }
+   updateProduct(productId){
+      if(this.productId === productId) return;
+      this.count = 0;
+      this.pages = [];
+      this.productId = productId;
+   }
+}
+
 
 let ProductsLoaded = null;
 let CurrentProduct = null;
 let CategoryLoaded = null;
-let ReviewsLoaded = null;
+let ReviewsLoaded = new ReviewsObject();
 
 const cache = {
    get ProductsLoaded() {
@@ -43,7 +71,7 @@ const cache = {
 };
 
 function getCopyOfObject(obj) {
-   return JSON.parse(JSON.stringify(obj));
+   return cloneDeep(obj);
 }
 
 export default cache;
@@ -185,20 +213,43 @@ class Category extends LoadableObject {
    }
 }
 class Reviews extends LoadableObject {
-   extractDataPath = ".data.reviews";
-   productId;
+   extractDataPath = ".";
+   _productId;
+   get productId() {
+      return this._productId;
+   }
+   set productId(value) {
+      this._productId = value;
+
+      // update product id in cache
+      const reviews = cache.ReviewsLoaded;
+      reviews.updateProduct(value);
+      cache.ReviewsLoaded = reviews;
+   }
+   page;
 
    get requestPath() {
-      if (!this.productId) throw Error("Reviews must have an id to be loaded");
-      return `${globals.DATABASE}/api/v1/products/${this.productId}/reviews`;
+      if (!this.productId) throw Error("Reviews must have a product id to be loaded");
+      // if(!this.page) throw Error("Reviews must have a page parameter to be loaded");
+      if (!this.page) this.page = 1;
+      return `${globals.DATABASE}/api/v1/products/${this.productId}/reviews?page=${this.page}`;
    }
    constructor() {
       super();
    }
    setLoadedObject(data) {
-      if (data) cache.ReviewsLoaded = data;
-      console.log("setter");
       console.log(data);
+      const page = data.page;
+      const results = data.results;
+      const reviews = data.data.reviews;
+
+      let ReviewsLoaded = cache.ReviewsLoaded;
+
+      if (this.productId !== data.productId) return;
+
+      ReviewsLoaded.setCount(results);
+      ReviewsLoaded.pages[page] = reviews;
+      cache.ReviewsLoaded = ReviewsLoaded;
    }
 }
 

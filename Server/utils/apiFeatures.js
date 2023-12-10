@@ -29,30 +29,30 @@ class APIFeatures {
     return this;
   }
 
-  filterBySpecification() {
-    const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el) => delete queryObj[el]);
+  // filterBySpecification() {
+  //   const queryObj = { ...this.queryString };
+  //   const excludedFields = ['page', 'sort', 'limit', 'fields'];
+  //   excludedFields.forEach((el) => delete queryObj[el]);
 
-    //Advanced filtering
-    let queryString = JSON.stringify(queryObj);
-    queryString = queryString.replace(
-      /\b(gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`
-    );
-    console.log('4', queryString);
+  //   //Advanced filtering
+  //   let queryString = JSON.stringify(queryObj);
+  //   queryString = queryString.replace(
+  //     /\b(gte|gt|lte|lt)\b/g,
+  //     (match) => `$${match}`
+  //   );
+  //   console.log('4', queryString);
 
-    // {difficulty: 'easy', duration: {$gte: 5}}
-    // {difficulty: 'easy', duration: {gte: '5'}}
-    // gte, gt, lte, lt
+  //   // {difficulty: 'easy', duration: {$gte: 5}}
+  //   // {difficulty: 'easy', duration: {gte: '5'}}
+  //   // gte, gt, lte, lt
 
-    console.log('Filter:', queryString);
-    //Build query
-    this.query = this.query.find(JSON.parse(queryString));
-    //let query = Tour.find(queryString);
+  //   console.log('Filter:', queryString);
+  //   //Build query
+  //   this.query = this.query.find(JSON.parse(queryString));
+  //   //let query = Tour.find(queryString);
 
-    return this;
-  }
+  //   return this;
+  // }
 
   sort() {
     if (this.queryString.sort) {

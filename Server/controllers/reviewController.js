@@ -1,18 +1,31 @@
 const catchAsync = require('../utils/catchAsync');
 const Review = require('../models/reviewModel');
 const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.getAllReviews = catchAsync (async(req, res, next) => {
   const productId = req.params.productId;
-  if(!productId) {
-    return next(new AppError('This route (get all reviews) requires a product id!', 404));
-  }
+
+  if(!req.query.page) req.query.page = 1;
+  if(!req.query.limit) req.query.limit = 2;
+  console.log(req.query.limit);
+
+  if(req.query.limit && req.query.limit > 10) return next(new AppError('Only 10 reviews can be requested for one page', 401));
+  if(!productId) return next(new AppError('This route (get all reviews) requires a product id!', 404));
 
   const filter = {product: productId};
 
-  const reviews = await Review.find(filter);
+  const totalReviews = await Review.countDocuments(filter);
+
+  const features = new APIFeatures(Review.find(filter), req.query)
+    .paginate();
+  
+  const reviews = await features.query;
   res.status(200).json({
     status: 'success',
+    productId: productId,
+    results: totalReviews,
+    page: req.query.page,
     data: {
       reviews
     }

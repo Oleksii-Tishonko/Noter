@@ -239,6 +239,31 @@ table {
     font-size: 17pt;
     margin-bottom: 10px;
 }
+.ReviewsPage .goToOtherPage{
+    text-align: center;
+    margin-top: 10px;
+}
+.ReviewsPage .goToOtherPage .goToPage{
+    width: 100px;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15pt;
+    border-radius: 6px;
+    border: none;
+    padding: 3px;
+    margin: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.ReviewsPage .goToOtherPage .enabled{
+    background-color: #00aa4a;
+}
+
+.ReviewsPage .goToOtherPage .disabled{
+    background-color: #a8a8a8;
+    pointer-events: none;
+    cursor: not-allowed;
+}
 
 
 .navbar{

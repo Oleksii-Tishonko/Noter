@@ -96,13 +96,14 @@ const ProductPage = () => {
             cache.CurrentProduct = productsFiltered[0];
          }
       }
-      if(cache.CurrentProduct && cache.CurrentProduct._id === id){
+      if(!dataLoaded && cache.CurrentProduct && cache.CurrentProduct._id === id){
          setProduct(cache.CurrentProduct);
          setIsPending(false);
          setError(false);
 
          dataLoaded = true;
       }
+
       //loading data from server
       if (!dataLoaded) {
          console.log("loading from server");
@@ -111,6 +112,13 @@ const ProductPage = () => {
          loader.id = id;
          loader.Load(OnDataLoaded);
       }
+
+      if (dataLoaded) LoadReviews();
+   }
+   function LoadReviews(){
+      const reviewsLoader = cache.LoadingManager.Reviews;
+      reviewsLoader.productId = id;
+      reviewsLoader.Load();
    }
 
    function OnDataLoaded(data, status, err) {
@@ -120,7 +128,10 @@ const ProductPage = () => {
       setError(err);
       setIsPending(false);
 
+      // Loading products
       cache.LoadingManager.Products.Load();
+      
+      LoadReviews();
    }
 };
 
@@ -129,6 +140,12 @@ export default ProductPage;
 //Components
 
 const ProductPreview = ({ product }) => {
+   const [mainImage, setMainImage] = useState(product.imageCover);
+
+   const handleImageClick = (imageId) => {
+      setMainImage(imageId);
+   };
+
    const database = globals.DATABASE;
 
    const photosLink = `${database}/api/v1/products/photo`;
@@ -142,6 +159,7 @@ const ProductPreview = ({ product }) => {
                   src={`${photosLink}/${imageId}`}
                   width="39px"
                   height="45px"
+                  onMouseOver={() => handleImageClick(imageId)}
                />
             ))}
             {/* <img src={img4} width="39px" />
@@ -150,7 +168,7 @@ const ProductPreview = ({ product }) => {
          </div>
          <img
             className="productImage"
-            src={`${photosLink}/${product.imageCover}`}
+            src={`${photosLink}/${mainImage}`}
             height="300px"
          />
       </div>
