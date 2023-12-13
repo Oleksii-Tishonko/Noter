@@ -12,6 +12,7 @@ mongoose.connect(database)
     console.log('Database connected!');
 });
 
+//#region  Tablets
 const product1 = new Product({
     name: "Apple iPad 2018 32GB - WiFi Only",
     price: 200,
@@ -169,10 +170,37 @@ const review4 = new Review({
     text: "The Noter package arrived quickly and was as ordered. The four handset phone system works well in our home. Good sound. Ergonomic. We have had good success with similar Panasonic phones in the past and are hopeful that these will be equally good.",
     product: product1._id,
 });
+//#endregion Tablets
+
+//#region Laptops
+
+const product9 = new Product({
+    name: "ACEMAGIC Laptop 16GB DDR4 512GB SSD, Quad-Core Intel N95 Processor(Up to 3.4GHz), Windows 11 Ordinateur Portable, 15.6 inch FHD Laptop",
+    price: 649,
+    category: '6563eded264bc5e56b3e415f',
+    description: "ACEMAGIC AX15 Windows 11 laptop is powered by a faster Intel 12th generation Alder Lake N95 Quad-Core processor (Frequency 1.7GHz-3.4GHz). The performance of N95 (Intel 7) is 30% higher than N5095 (10nm). Besides, it will also release the performance of the 12th generation small core more thoroughly than N100 (15W vs 6W). Built-in 16GB RAM and 512GB SSD large capacity, fast response to your daily tasks.【1920×1080 Bright View】 The 15.6 inch laptop features an innovative thin-bezel IPS display that provides more usable onscreen space for immersive Full HD viewing while giving you a laptop with a more compact footprint. Equipped with a flat hinge that can unfold the laptop to 180° and a wide-angle webcam centered above the screen frame, allowing you to expand more usage scenarios.",
+    imageCover: '8lzN4L2DRd5Nh1xM',
+    images: ['8lzN4L2DRd5Nh1xM', 'zV0d1QRYzV5Ij7Ez', 'BlIBbs8yKCdO51ho', 'dBEbksMf6sfhUWzN'],
+    specifications: {
+        "Brand": "ACEMAGIC",
+        "Model": "AX15",
+        "Screen size": "15.6 Inches",
+        "Colour": "Gray",
+        "Hard disk size": "512 GB",
+        "CPU model": "Intel Mobile CPU",
+        "RAM size": "16 GB",
+        "Operating system": "Windows 11",
+        "Graphics card":  "Intel UHD Graphics",
+        "Graphics card frequency": "1200MHz",
+        "Graphics card type": "Integrated",
+    },
+});
+
+//#endregion Laptops
 
 const reviews = [review1, review2, review3, review4];
 
-const products = [product1, product2, product3, product4, product5, product6, product7, product8];
+const products = [product1, product2, product3, product4, product5, product6, product7, product8, product9];
 
 const importData = async () => {
     try{

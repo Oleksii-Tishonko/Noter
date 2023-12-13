@@ -1,0 +1,106 @@
+.Authentificate{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25vh;
+    background-color: #f5f5f5;
+}
+
+.Authentificate .authForm{
+    background-color: rgba(0, 0, 0, 0.034);
+    padding: 3vh;
+    align-items: center;
+    margin-top: 6vh;
+    margin-bottom: 10vh;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.Authentificate .authForm .header{
+    text-align: center;
+    margin-bottom: 4vh;
+}
+.Authentificate .authForm .subheader{
+    margin-bottom: 4vh;
+    text-align: center;
+}
+.userStatusCheckBar{
+    justify-content: center;
+    align-items: center;
+    padding-left: 2vh;
+    padding-right: 2vh;
+    border-radius: 5px;
+}
+.userStatusCheckBar .header{
+    text-align: center;
+}
+.userStatusCheckBar .subheader{
+    text-align: center;
+}
+
+.loading-bar {
+  width: 40vw;
+  height: 5px;
+  background-color: #ddd;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-line1 {
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  background-color: #3498db;
+  animation: slide 2.3s ease-in-out infinite;
+}
+
+.loading-line2 {
+  position: absolute;
+  width: 5%;
+  height: 100%;
+  background-color: #3498db;
+  animation-delay: 10s;
+  animation: slide2 2.3s ease-in-out infinite;
+}
+
+@keyframes slide {
+  0% {
+    left: -30%;
+  }
+  100% {
+    left: 100%;
+  }
+  
+}
+
+@keyframes slide2 {
+  70% {left: -5%;}
+  100% {left: -2.5%}
+  0% {left: -2.5%;}
+  30% {left: 0%;}
+  35% {left: -5%;}
+  
+}
+.logout{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2vh;
+    padding: 1vh;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+
+}
+
+/* @keyframes slide2 {
+  30% {
+    left: -30%;
+  }
+  70% {
+    left: -100%;
+  }
+  
+} */

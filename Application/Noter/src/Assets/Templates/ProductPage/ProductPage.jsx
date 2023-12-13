@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import globals from "../../../globals";
 import { Link } from "react-router-dom";
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
 
 const ProductPage = () => {
    const { id } = useParams();
@@ -141,10 +141,33 @@ export default ProductPage;
 
 const ProductPreview = ({ product }) => {
    const [mainImage, setMainImage] = useState(product.imageCover);
+   const [windowSize, setWindowSize] = useState({
+      width: window.innerWidth,
+      height: window.innerHeight,
+   });
 
    const handleImageClick = (imageId) => {
       setMainImage(imageId);
    };
+
+   useEffect(() => {
+      resizeMainImage();
+   }, [mainImage, windowSize]);
+
+   useEffect(() => {
+      const handleResize = () => {
+         setWindowSize({
+            width: window.innerWidth,
+            height: window.innerHeight,
+         });
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+         window.removeEventListener("resize", handleResize);
+      };
+   }, []);
 
    const database = globals.DATABASE;
 
@@ -154,29 +177,45 @@ const ProductPreview = ({ product }) => {
       <div className="productPreview">
          <div className="imageBar">
             {product.images.map((imageId) => (
-               <img
-                  key={imageId}
-                  src={`${photosLink}/${imageId}`}
-                  width="39px"
-                  height="45px"
-                  onMouseOver={() => handleImageClick(imageId)}
-               />
+               <img key={imageId} src={`${photosLink}/${imageId}`} width="39px" height="45px" onMouseOver={() => handleImageClick(imageId)} />
             ))}
             {/* <img src={img4} width="39px" />
           <img src={img3} width="33.4px" />
           <img src={img4} width="39px" /> */}
          </div>
-         <img
-            className="productImage"
-            src={`${photosLink}/${mainImage}`}
-            height="300px"
-         />
+         <div className="productImageContainer">
+            <img className="productImage" src={`${photosLink}/${mainImage}`} onLoad={() => resizeMainImage()} />
+         </div>
       </div>
    );
+
+   function resizeMainImage(){
+      const image = document.querySelector(".productImage");
+      const imageContainer = document.querySelector(".productImageContainer");
+
+      const imageWidth = image.width;
+      const imageHeight = image.height;
+      const imagewidth = image.offsetWidth;
+
+      const imageContainerWidth = imageContainer.offsetWidth;
+      const imageContainerHeight = imageContainer.offsetHeight;
+
+      console.log(`imageContainerWidth: ${imageContainerWidth}`);
+      console.log(`imageWidth: ${imageWidth}`);
+      console.log(`imagewidth: ${imagewidth}`);
+      console.log(`imageContainerHeight: ${imageContainerHeight}`);
+      console.log(`imageHeight: ${imageHeight}`);
+
+      if (imageWidth >= imageContainerWidth && imageHeight < imageContainerHeight) {
+         //move using transform translate (y = 55%)
+         image.style.transform = "translate(-50%, -56%)";
+      } else image.style.transform = "translate(-50%, -50%)";
+   }
 };
 
 import starImg from "./../../Images/Yellow_Star.svg";
 import cache from "../../../Сache/cache";
+import { set } from "lodash";
 const ActionPanel = ({ product }) => {
    return (
       <div className="ActionPanel">
@@ -228,7 +267,7 @@ const Specifications = ({ product }) => {
       <div className="specs">
          <p id="header">Specifications</p>
          <table className="listOfSpecs">
-            {Object.entries(product.specifications).map(([property, value]) => (
+            {Object.entries(product.specifications).slice(0, 5).map(([property, value]) => (
                <tr key={property}>
                   <th>{property}</th>
                   <td>{value}</td>

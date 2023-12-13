@@ -81,7 +81,7 @@ exports.getProductImage = catchAsync(async (req, res, next) => {
     res.setHeader('Content-type', 'image/jpg');
 
     const imageId = req.params.id;
-    let ImagePath = `${__dirname}/../public/image/products/${imageId}/photo.jpg`;
+    let ImagePath = `${__dirname}/../public/image/products/${imageId}.jpg`;
 
     ImagePath = path.normalize(ImagePath);
 

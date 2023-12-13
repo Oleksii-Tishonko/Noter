@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema(
             trim: true,
             required: [true, 'Product must have a name!'],
             // unique: true,
-            maxlength: 40,
+            maxlength: 150,
             minlength: 7,
         },
         ratingsAverage:{

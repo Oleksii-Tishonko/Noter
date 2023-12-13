@@ -191,13 +191,24 @@ const Product = ({ product }) => {
          <div className="item-data-holder">
             <div className="nameContainer">
                <Link to={linkToProduct} className="itemLink">
-                  <span className="itemName">{product.name}</span>
+                  <span className="itemName">{trimProductName(product.name)}</span>
                </Link>
             </div>
             <div className="itemPrice">{product.price}$</div>
          </div>
       </div>
    );
+
+   function trimProductName(productName) {
+      let name = productName;
+      if (name.length > 40) {
+         name = name.slice(0, 37);
+         name = name.trim();
+         name += "...";
+      }
+      
+      return name;
+   }
 };
 
 const ProductsList = ({ products }) => {
