@@ -14,9 +14,11 @@ const useFetch = (url, pathToData=null) => {
                 if(!res.ok){
                     throw Error('could not fetch the data for this resource');
                 }
+                console.log(res);
                 return res.json();
             })
             .then((data) => {
+                console.log(data);
                 if(data && pathToData){
                     data = extractData(data, pathToData);
                 }

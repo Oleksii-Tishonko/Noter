@@ -68,6 +68,9 @@ const cache = {
    set ReviewsLoaded(value) {
       ReviewsLoaded = getCopyOfObject(value);
    },
+   get RestAPI(){
+      return new RestAPI();
+   }
 };
 
 function getCopyOfObject(obj) {
@@ -309,6 +312,37 @@ class RestAPI {
       }, 1000);
       console.log("outside");
    }
+   async WriteData(url, data, callback) {
+      console.log(url);
+      console.log(JSON.stringify(data));
+      setTimeout(() => {
+         fetch(url, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+         })
+            .then((res) => {
+               if (!res.ok) {
+                  throw Error("could not fetch the data for this resource");
+               }
+               return res.json();
+            })
+            .then((data) => {
+               callback(data, this.StatusCode.OK, null);
+            })
+            .catch((err) => {
+               if (err.name === "AbortError") {
+                  console.log("fetch aborted");
+                  callback(null, this.StatusCode.CANCELLED, "fetch aborted");
+               } else {
+                  callback(null, this.StatusCode.ERROR, err.message);
+               }
+            });
+      }, 1000);
+   }
+
    extractData(data, path) {
       const properties = path.split(".");
 

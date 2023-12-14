@@ -9,7 +9,6 @@
     "start:prod": "env NODE_ENV=production nodemon server.js",
     "delete-data": "node dev-data/data/import-dev-data --delete",
     "import-data": "node dev-data/data/import-dev-data --import"
-
   },
   "author": "Oleksii Tishonko",
   "license": "ISC",
@@ -18,6 +17,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^8.0.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "validator": "^13.11.0"
   }
 }
