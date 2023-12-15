@@ -1,11 +1,12 @@
 import "./SearchResultsStyles.css";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import cache from "../../../Сache/cache";
 import { Link, useParams } from "react-router-dom";
 import searchIcon from "./../../Images/search.svg";
 import { useNavigate } from "react-router-dom";
 import globals from "../../../globals";
 import Filter from "../../Scripts/filter";
+import { set } from "lodash";
 
 let pageParams = null;
 let pageNavigation;
@@ -25,7 +26,7 @@ const SearchResults = () => {
    // console.log('params');
    // console.log(params);
 
-   console.log(cache.ProductsLoaded);
+   // console.log(cache.ProductsLoaded);
 
    //Start
    useLayoutEffect(() => {
@@ -36,16 +37,8 @@ const SearchResults = () => {
    return (
       <div className="searchResultsPage">
          <h1 id="header">Noter Shop</h1>
-         <div className="navBar">
-            <div className="searchbar">
-               <div className="searchImage">
-                  <img src={searchIcon} />
-               </div>
-               <input className="searchInput" type="text"></input>
-               <button className="deleteInput">X</button>
-               <button className="searchButton">Find</button>
-            </div>
-         </div>
+         <NavBar />
+         
          <div className="pageContent">
             <FiltersTab />
 
@@ -346,3 +339,39 @@ const FiltersTab = () => {
 
    }
 };
+
+const NavBar = () => {
+   const [userName, setUserName] = useState(null);
+   const [accountLink, setAccountLink] = useState("");
+
+   useLayoutEffect(() => {
+      setUserName(cache.UserName);
+
+   }, []);
+
+   useEffect(() => {
+      const username = cache.UserName;
+
+      if(!userName) {setUserName(cache.UserName);} //setter not working instantly
+
+      if (!username || username === "null") setUserName("Login");
+
+      if (username && username !== "null") setAccountLink("/userAccount");
+      else setAccountLink("/authentificate");
+   }, [userName]);
+
+   return (
+      <div className="navBar">
+         <div className="dummyDiv"></div>
+         <div className="searchbar">
+            <div className="searchImage">
+               <img src={searchIcon} />
+            </div>
+            <input className="searchInput" type="text"></input>
+            <button className="deleteInput">X</button>
+            <button className="searchButton">Find</button>
+         </div>
+         <Link to={accountLink} className="userAccount">{userName}</Link>
+      </div>
+   );
+}

@@ -8,6 +8,7 @@ import QuestionsPage from "./Assets/Templates/QuestionsPage/QuestionsPage";
 import Categories from "./Assets/Templates/Categories/Categories";
 import { Authentificate, LoadingUserData, CreateUserAccount } from "./Assets/Templates/Authentificate/Authentificate";
 import { AuthContextProvider } from "./Assets/Templates/Authentificate/AuthContext";
+import UserAccount from "./Assets/Templates/Account/UserAccount";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                <Route path="/authentificate" element={<Authentificate />} />
                <Route path="authentificate/loadUserData" element={<LoadingUserData />} />
                <Route path="authentificate/createUser" element={<CreateUserAccount />} />
+               <Route path="/userAccount" element={<UserAccount />} />
             </Routes>
          </Router>
       </AuthContextProvider>

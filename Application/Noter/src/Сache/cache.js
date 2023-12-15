@@ -34,6 +34,8 @@ let ProductsLoaded = null;
 let CurrentProduct = null;
 let CategoryLoaded = null;
 let ReviewsLoaded = new ReviewsObject();
+let UserAccountLoaded = null;
+let UserName = null;
 
 const cache = {
    get ProductsLoaded() {
@@ -70,7 +72,25 @@ const cache = {
    },
    get RestAPI(){
       return new RestAPI();
-   }
+   },
+   get UserName() {
+      if(!UserName || UserName === 'null' || UserName === 'undefined'){
+         const username = localStorage.getItem("UserName");
+         UserName = username ? username : null;
+      }
+      return UserName;
+   },
+   set UserName(value) {
+      console.warn('username changed: ' + value);
+      localStorage.setItem("UserName", value);
+      UserName = value;
+   },
+   get UserAccountLoaded(){
+      return getCopyOfObject(UserAccountLoaded);
+   },
+   set UserAccountLoaded(value){
+      UserAccountLoaded = getCopyOfObject(value);
+   },
 };
 
 function getCopyOfObject(obj) {
@@ -84,6 +104,7 @@ class LoadingManager {
    Products = new Products();
    Category = new Category();
    Reviews = new Reviews();
+   UserAccount = new UserAccount();
 
    constructor() {
       console.log("creating loading manager");
@@ -253,6 +274,20 @@ class Reviews extends LoadableObject {
       ReviewsLoaded.setCount(results);
       ReviewsLoaded.pages[page] = reviews;
       cache.ReviewsLoaded = ReviewsLoaded;
+   }
+}
+class UserAccount extends LoadableObject {
+   uid;
+   extractDataPath = ".data.user";
+   get requestPath() {
+      if(!this.uid) throw Error("UserAccount must have a uid to be loaded");
+      return `${globals.DATABASE}/api/v1/users?uid=${this.uid}`;
+   }
+   constructor() {
+      super();
+   }
+   setLoadedObject(data) {
+      cache.UserAccount = data;
    }
 }
 
