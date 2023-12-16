@@ -13,6 +13,7 @@ const ProductPage = () => {
 
    //Start
    useLayoutEffect(() => {
+      window.scrollTo(0, 0);
       LoadData(id);
    }, []);
 
@@ -177,7 +178,9 @@ const ProductPreview = ({ product }) => {
       <div className="productPreview">
          <div className="imageBar">
             {product.images.map((imageId) => (
-               <img key={imageId} src={`${photosLink}/${imageId}`} width="39px" height="45px" onMouseOver={() => handleImageClick(imageId)} />
+               <div className="imageContainer" id={imageId === mainImage ? 'selected' : ''} onMouseOver={() => handleImageClick(imageId)}>
+                  <img key={imageId} src={`${photosLink}/${imageId}`} width="39px" height="45px"/>
+               </div>
             ))}
             {/* <img src={img4} width="39px" />
           <img src={img3} width="33.4px" />

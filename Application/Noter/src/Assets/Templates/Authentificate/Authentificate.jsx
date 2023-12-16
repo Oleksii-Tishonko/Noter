@@ -112,7 +112,9 @@ const LoadingUserData = () => {
    useEffect(() => {
       // Go to authentificate page if user not logged in
       if (!user || !user.uid) navigate("/authentificate");
+      setTimeout(() => {
       LoadData();
+      }, 2000);
    }, []);
 
    useEffect(() => {

@@ -14,28 +14,37 @@
 }
 
 .item {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
    border: 1px solid gray;
    text-align: center;
-   width: 170px;
+   width: 18vw;
 }
 .itemLink {
    text-decoration: none;
    /* color: black; */
 }
 .item-image-holder {
+   display: flex;
+   justify-content: center;
+   align-items: center;
    text-align: center;
    background-color: lightgray;
    width: 100%;
-   /* cursor: pointer; */
+   height: 20vw;
 }
 /* .item-image-holder:hover{
     background-color: white;
 } */
 .item-image-holder #itemImage {
-   text-align: center;
-   margin: 10px;
+   width: 90%;
+   height: 90%;
+   max-width: 90%;
+   max-height: 90%;
+   object-fit: contain;
 }
-.itemPrice {
+.item-data-holder .itemPrice {
    font-size: 18pt;
    text-align: left;
    margin-left: 10px;
@@ -48,6 +57,11 @@
    color: black !important;
 }
 .item .item-data-holder {
+   margin-top: 0.3vh;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
    text-align: left;
 }
 .nameContainer {
@@ -55,8 +69,8 @@
 }
 .results-list {
    display: grid;
-   gap: 9px;
-   grid-template-columns: 170px 170px 170px 170px;
+   gap: 1vw;
+   grid-template-columns: 18vw 18vw 18vw 18vw;
 }
 
 .searchResultsPage .pageContent {

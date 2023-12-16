@@ -9,6 +9,7 @@ import Filter from "../../Scripts/filter";
 import { set } from "lodash";
 
 let pageParams = null;
+let categoryId = null;
 let pageNavigation;
 
 const SearchResults = () => {
@@ -173,6 +174,8 @@ function checkCurrentFilters(){
 export default SearchResults;
 
 const Product = ({ product }) => {
+   
+
    const linkToProduct = `/product/${product._id}`;
    return (
       <div className="item">
@@ -316,7 +319,7 @@ const FiltersTab = () => {
       else {
          setIsPending(true);
          let loader = cache.LoadingManager.Category;
-         loader.id = "6563eded264bc5e56b3e415e";
+         loader.id = "657e0d29c1cb6b530d5a1203";
          loader.Load(OnDataLoaded);
       }
    }
