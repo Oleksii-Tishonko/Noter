@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import globals from "../../../globals";
 import { Link } from "react-router-dom";
 import { useState, useLayoutEffect, useEffect } from "react";
@@ -10,6 +10,7 @@ const ProductPage = () => {
    const [product, setProduct] = useState(null);
    const [isPending, setIsPending] = useState(true);
    const [error, setError] = useState(null);
+   const navigate = useNavigate();
 
    //Start
    useLayoutEffect(() => {
@@ -17,6 +18,18 @@ const ProductPage = () => {
       LoadData(id);
    }, []);
 
+   function handleBackToResults(){
+      if(!product) return;
+      const filters = cache.Filters;
+      const category = product.category;
+
+      const productParams = new URLSearchParams();
+
+      productParams.set("category", category);
+      productParams.set("filters", filters);
+
+      navigate(`/products?${productParams.toString()}`);
+   }
    
 
    
@@ -54,7 +67,7 @@ const ProductPage = () => {
             </Link>
          </div>
          <div class="backToResults">
-            <Link to="/">{"< Back to results"}</Link>
+            <div onClick={() => handleBackToResults()}>{"< Back to results"}</div>
          </div>
 
          <div className="aboutProduct">
@@ -130,7 +143,9 @@ const ProductPage = () => {
       setIsPending(false);
 
       // Loading products
-      cache.LoadingManager.Products.Load();
+      const loader = cache.LoadingManager.Products;
+      loader.filters = cache.Filters;
+      loader.Load();
       
       LoadReviews();
    }

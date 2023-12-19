@@ -15,6 +15,18 @@ class APIFeatures {
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`
     );
+    
+
+    let queryObjModified = JSON.parse(queryString);
+
+    Object.keys(queryObjModified).forEach((key) => {
+      if (typeof queryObjModified[key] === 'string' && queryObjModified[key].includes(',')) {
+        queryObjModified[key] = { $in: queryObjModified[key].split(',') };
+      }
+    });
+
+    queryString = JSON.stringify(queryObjModified);
+    
     console.log('4', queryString);
 
     // {difficulty: 'easy', duration: {$gte: 5}}
@@ -22,6 +34,7 @@ class APIFeatures {
     // gte, gt, lte, lt
 
     console.log('Filter:', queryString);
+    
     //Build query
     this.query = this.query.find(JSON.parse(queryString));
     //let query = Tour.find(queryString);

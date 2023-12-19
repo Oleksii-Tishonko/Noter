@@ -99,9 +99,14 @@ const LoadingUserData = () => {
       if (!user || !user.uid) return;
 
       console.log(data);
-      if (data !== 'notExist') {
+      if (data !== "notExist") {
          cache.UserName = data.firstName;
-         navigate("/products");
+         console.log(`pageInvoked: ${cache.PageInvokedSignIn}`);
+         if (cache.PageInvokedSignIn && cache.PageInvokedSignIn !== "null") {
+            navigate(cache.PageInvokedSignIn);
+            cache.PageInvokedSignIn = null;
+         }
+         else navigate("/products?category=657e0d29c1cb6b530d5a1203&filters=%7B%7D");
       } else {
          navigate("/authentificate/createUser");
       }
@@ -113,7 +118,7 @@ const LoadingUserData = () => {
       // Go to authentificate page if user not logged in
       if (!user || !user.uid) navigate("/authentificate");
       setTimeout(() => {
-      LoadData();
+         LoadData();
       }, 2000);
    }, []);
 
@@ -143,7 +148,6 @@ const LoadingUserData = () => {
    );
 
    function LoadData() {
-      
       const loader = cache.LoadingManager.UserAccount;
       loader.uid = user.uid;
       loader.Load(OnDataLoaded);

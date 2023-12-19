@@ -16,7 +16,7 @@ function App() {
       <AuthContextProvider>
          <Router>
             <Routes>
-               <Route exact path="/" element={<SearchResults />} />
+               <Route exact path="/" element={<Categories />} />
                <Route path="/:params" element={<SearchResults />} />
                <Route path="/products" element={<SearchResults />} />
                <Route path="/products/:params" element={<SearchResults />} />

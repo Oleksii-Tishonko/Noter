@@ -1,12 +1,12 @@
 import "./SearchResultsStyles.css";
 import { useEffect, useLayoutEffect, useState } from "react";
 import cache from "../../../Сache/cache";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import searchIcon from "./../../Images/search.svg";
 import { useNavigate } from "react-router-dom";
 import globals from "../../../globals";
 import Filter from "../../Scripts/filter";
-import { set } from "lodash";
+import _, { add, set } from "lodash";
 
 let pageParams = null;
 let categoryId = null;
@@ -19,10 +19,11 @@ const SearchResults = () => {
    const navigation = useNavigate();
    pageNavigation = navigation;
 
-   let { params } = useParams();
-   if(params) params = params.replace(/%20/g, " ");
-   console.log(params);
-   pageParams = params;
+   const location = useLocation();
+   pageParams = new URLSearchParams(location.search);
+   console.log(pageParams);
+   // if (pageParams) pageParams = pageParams.replace(/%20/g, " ");
+   categoryId = pageParams.get("category");
 
    // console.log('params');
    // console.log(params);
@@ -31,15 +32,17 @@ const SearchResults = () => {
 
    //Start
    useLayoutEffect(() => {
-      console.log("useLayoutEffect");
+      cache.Filters = getFilters();
+
+      if (!categoryId || categoryId.length < 16) navigation("/404");
       LoadData();
-   }, [pageParams]);
+   }, [location.search]);
 
    return (
       <div className="searchResultsPage">
          <h1 id="header">Noter Shop</h1>
          <NavBar />
-         
+
          <div className="pageContent">
             <FiltersTab />
 
@@ -65,9 +68,29 @@ const SearchResults = () => {
          console.log("data not exists");
          setIsPending(true);
          let loader = cache.LoadingManager.Products;
-         if (params) loader.params = params;
+         console.warn(filtersToQuery(getFilters()));
+         loader.filters = getFilters();
+         console.log(loader.params);
+         loader.requestPath;
+         console.log(loader.params);
          loader.Load(OnDataLoaded);
       }
+
+      
+   }
+
+   function filtersToQuery(filters) {
+      if (!filters) return "";
+      const keys = Object.keys(filters);
+      let query = "";
+      for (let i = 0; i < keys.length; i++) {
+         const key = keys[i];
+         const value = filters[key];
+         query += `&specifications.${key}=${value}`;
+      }
+      query = query.slice(1);
+
+      return query;
    }
 
    function OnDataLoaded(data, status, err) {
@@ -78,42 +101,6 @@ const SearchResults = () => {
       setIsPending(false);
    }
 };
-
-function addFilter(specification, optionValue) {
-   console.log(pageParams);
-   console.warn(specification);
-   console.warn(optionValue);
-   let newParams = "";
-
-   if (pageParams){
-      
-      newParams += pageParams + "&";
-   }
-
-   const filter = new Filter(specification, optionValue);
-   console.log(filter);
-
-   if(filter.containsFilter(filter, newParams)) return;
-   newParams = filter.addFilter(filter, newParams);
-
-   // newParams += `specifications.${specification}=${optionValue}`;
-   console.log(newParams);
-   cache.ProductsLoaded = [];
-   pageNavigation(`/${newParams}`);
-}
-
-function removeFilter(specification, optionValue) {
-   console.log(pageParams);
-   console.warn(specification);
-   console.warn(optionValue);
-   
-   const filter = new Filter(specification, optionValue);
-
-   if(!filter.containsFilter(filter, pageParams)) return;
-   const newParams = filter.removeFilter(filter, pageParams);
-   cache.ProductsLoaded = [];
-   pageNavigation(`/${newParams}`);
-}
 
 function TestFilter() {
    let filter = new Filter("specName2", "SpecOption2");
@@ -151,31 +138,39 @@ function Test(str, res, filter, n) {
    }
 }
 
-function checkCurrentFilters(){
-   const filters = Filter.extractFilters(pageParams);
-   
-   if(!cache.ProductsLoaded || cache.ProductsLoaded.length === 0) return false;
+function checkCurrentFilters() {
+   const filters = getFilters();
+
+   if (!cache.ProductsLoaded || cache.ProductsLoaded.length === 0) return false;
+   if (!filters) return true;
    const products = cache.ProductsLoaded;
 
-   filters.forEach((filter) => {
-      for (let i = 0; i < products.length; i++) {
-         const product = products[i];
-         const specs = product.specifications;
-         const spec = specs[filter.name];
-         if (spec !== filter.value) {
-            return false;
+   const keys = Object.keys(filters);
+
+   for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const options = parseOptions(filters[key]);
+      for (let j = 0; j < options.length; j++) {
+         const option = options[j];
+
+         let isOptionFound = false;
+         
+         for (let k = 0; k < products.length; k++) {
+            const product = products[k];
+            const productOption = product.specifications[key];
+            if(productOption === option) isOptionFound = true;
          }
+         
+         if(!isOptionFound) return false;
       }
-   });
-   
+   }
+
    return true;
 }
 
 export default SearchResults;
 
 const Product = ({ product }) => {
-   
-
    const linkToProduct = `/product/${product._id}`;
    return (
       <div className="item">
@@ -202,7 +197,7 @@ const Product = ({ product }) => {
          name = name.trim();
          name += "...";
       }
-      
+
       return name;
    }
 };
@@ -238,19 +233,23 @@ const FiltersTab = () => {
 
    //Start
    useLayoutEffect(() => {
+      // const newFilters = {"name":"blue", "type":"red"}
+      // pageParams.set("filters", JSON.stringify(newFilters));
+      // console.log(pageParams.toString());
+      // const filters = pageParams.get("filters");
+      // console.warn(JSON.parse(filters));
+      // console.warn(JSON.parse(filters)["name"]);
+      // console.warn(Object.keys(JSON.parse(filters)));
+
+      setFilters(getFilters());
       LoadData();
    }, []);
 
    //if filters updated
    useLayoutEffect(() => {
       //setting filters
-      if (pageParams) {
-         const filters = Filter.extractFilters(pageParams);
-         if (filters) setFilters(filters);
-         else setFilters([]);
-      }
-      else setFilters([]);
-   }, [pageParams])
+      setFilters(getFilters());
+   }, [location.search]);
 
    return (
       <>
@@ -319,7 +318,7 @@ const FiltersTab = () => {
       else {
          setIsPending(true);
          let loader = cache.LoadingManager.Category;
-         loader.id = "657e0d29c1cb6b530d5a1203";
+         loader.id = categoryId;
          loader.Load(OnDataLoaded);
       }
    }
@@ -333,15 +332,105 @@ const FiltersTab = () => {
    }
 
    function isFilterSelected(name, option) {
-      if(!filters) return false;
-      for (let i = 0; i < filters.length; i++) {
-         const filter = filters[i];
-         if (filter.specName === name && filter.specOption === option) return true;
-      }
-      return false;
+      if (!filters) return false;
 
+      let keys = Object.keys(filters);
+
+      for (let i = 0; i < keys.length; i++) {
+         const key = keys[i];
+         if (key === name) {
+            const options = parseOptions(filters[key]);
+            if (isOptionInOptions(options, option)) return true;
+         }
+      }
+
+      // for (let i = 0; i < keys.length; i++) {
+      //    const key = keys[i];
+      //    if (key === name) {
+      //       const value = filters[key];
+      //       if (value === option) return true;
+      //    }
+      // }
+      return false;
+   }
+
+   function updateFilters(_filters) {
+      if (!_filters) _filters = filters;
+
+      pageParams.set("filters", JSON.stringify(_filters));
+   }
+
+   function addFilter(specification, optionValue) {
+      //add filter to filters
+      let _filters = filters;
+      if (!_filters) _filters = {};
+      //add option to options
+      const newOptions = addOption(_filters[specification], optionValue);
+      //set new options to filter
+      _filters[specification] = newOptions;
+      console.warn(_filters);
+      // setFilters(_filters);
+      //update params
+      updateFilters(_filters);
+
+      //navigate to new page
+      cache.ProductsLoaded = [];
+      pageNavigation(`/products?${pageParams.toString()}`);
+   }
+
+   function removeFilter(specification, optionValue) {
+      //remove filter from filters
+      if (!filters) return;
+      const options = filters[specification];
+      const newOptions = removeOption(options, optionValue);
+      let _filters = filters;
+      _filters[specification] = newOptions;
+      if(filters[specification] === "") delete _filters[specification];
+      
+      setFilters(_filters);
+      //update params
+      updateFilters(_filters);
+
+      //navigate to new page
+      cache.ProductsLoaded = [];
+      pageNavigation(`/products?${pageParams.toString()}`);
+   }
+
+   function addOption(options, option) {
+      options = parseOptions(options);
+      //if already selected, return
+      if (isOptionInOptions(options, option)) return options;
+      //else add option
+      options.push(option);
+      return options.join(",");
+   }
+   function removeOption(options, option) {
+      options = parseOptions(options);
+      //if not selected, return
+      if (!isOptionInOptions(options, option)) return options;
+      //else remove option
+      options = options.filter((opt) => opt !== option);
+      return options.join(",");
+   }
+   function isOptionInOptions(options, option) {
+      for (let i = 0; i < options.length; i++) {
+         if (options[i] === option) return true;
+      }
    }
 };
+
+function getFilters() {
+   let filters = pageParams.get("filters");
+   if (filters) filters = JSON.parse(filters);
+
+   if (filters && filters.length !== 0) return filters;
+   return null;
+}
+function parseOptions(options) {
+   if (!options) return [];
+   options = options.split(",");
+   return options;
+}
 
 const NavBar = () => {
    const [userName, setUserName] = useState(null);
@@ -349,13 +438,14 @@ const NavBar = () => {
 
    useLayoutEffect(() => {
       setUserName(cache.UserName);
-
    }, []);
 
    useEffect(() => {
       const username = cache.UserName;
 
-      if(!userName) {setUserName(cache.UserName);} //setter not working instantly
+      if (!userName) {
+         setUserName(cache.UserName);
+      } //setter not working instantly
 
       if (!username || username === "null") setUserName("Login");
 
@@ -374,7 +464,9 @@ const NavBar = () => {
             <button className="deleteInput">X</button>
             <button className="searchButton">Find</button>
          </div>
-         <Link to={accountLink} className="userAccount">{userName}</Link>
+         <Link to={accountLink} className="userAccount">
+            {userName}
+         </Link>
       </div>
    );
-}
+};

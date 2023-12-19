@@ -5,6 +5,7 @@ import { useLayoutEffect } from "react";
 import cache from "../../../Сache/cache";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import ReviewEditor from "./ReviewEditor";
 
 let page;
 let productId;
@@ -18,6 +19,8 @@ const ReviewsPage = () => {
    const [reviews, setReviews] = useState(null);
    const [isPending, setIsPending] = useState(true);
    const [error, setError] = useState(null);
+   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
+   const [reviewEditorOpen, setReviewEditorOpen] = useState(false);
 
    const location = useLocation();
    const queryParams = new URLSearchParams(location.search);
@@ -30,8 +33,21 @@ const ReviewsPage = () => {
       console.log(productId);
       LoadData(productId);
    }, [page]);
-   
 
+   function handleWriteReview() {
+      if (cache.UserName && cache.UserName !== "null") setReviewEditorOpen(true);
+      else setLoginPopupOpen(true);
+   }
+
+   const closePopup = () => {
+      setLoginPopupOpen(false);
+   };
+
+   function handleSignIn() {
+      cache.PageInvokedSignIn = location.pathname;
+      console.log(cache.PageInvokedSignIn);
+      navigator("/authentificate");
+   }
 
    return (
       <div class="ReviewsPage">
@@ -58,40 +74,60 @@ const ReviewsPage = () => {
             <div className="noReviews">
                <div className="header">No reviews yet</div>
                <div className="text">Be the first one to leave a review on this product!</div>
+               {!reviewEditorOpen && (
+                  <div className="leaveReview" onClick={() => handleWriteReview()}>
+                     Write a review
+                  </div>
+               )}
+               {loginPopupOpen && (
+                  <div className="modal">
+                     <div className="modal-content">
+                        <h2>Write a review</h2>
+                        <p>To continue, please sign in or create an account</p>
+                        <button onClick={() => handleSignIn()}>Sign in</button>
+                        <button onClick={closePopup}>Close</button>
+                     </div>
+                  </div>
+               )}
+               {reviewEditorOpen && (
+                  <ReviewEditor/>
+               )}
             </div>
          )}
-         {!isPending &&
-            reviews &&
-            reviews.length > 0 &&
-            reviews.map((review) => (
-               <div className="review">
-                  <div className="name">Expert</div>
-                  <div className="date">November 13, 2030</div>
-                  <div className="rating">
-                     <img src={startImg} width="14.4px" />
-                     <img src={startImg} width="14.4px" />
-                     <img src={startImg} width="14.4px" />
-                     <img src={startImg} width="14.4px" />
-                     <img src={startImg} width="14.4px" />
+         {!isPending && reviews && reviews.length > 0 && (
+            <div>
+               {reviews.map((review) => (
+                  <div className="review">
+                     <div className="name">Expert</div>
+                     <div className="date">November 13, 2030</div>
+                     <div className="rating">
+                        <img src={startImg} width="14.4px" />
+                        <img src={startImg} width="14.4px" />
+                        <img src={startImg} width="14.4px" />
+                        <img src={startImg} width="14.4px" />
+                        <img src={startImg} width="14.4px" />
+                     </div>
+                     <div className="header">{review.header}</div>
+                     <div className="text">{review.text}</div>
                   </div>
-                  <div className="header">{review.header}</div>
-                  <div className="text">{review.text}</div>
+               ))}
+
+               <div className="goToOtherPage">
+                  <button className={`goToPage ${isPreviousPageExist() ? "enabled" : "disabled"}`} onClick={() => previousPage()}>
+                     Previous
+                  </button>
+                  <button className={`goToPage ${isNextPageExist() ? "enabled" : "disabled"}`} onClick={() => nextPage()}>
+                     Next
+                  </button>
                </div>
-            ))}
-         <div className="goToOtherPage">
-            <button className={`goToPage ${isPreviousPageExist() ? "enabled" : "disabled"}`} onClick={() => previousPage()}>
-               Previous
-            </button>
-            <button className={`goToPage ${isNextPageExist() ? "enabled" : "disabled"}`} onClick={() => nextPage()}>
-               Next
-            </button>
-         </div>
+            </div>
+         )}
       </div>
    );
 
    function LoadData(productId) {
-    cache.ReviewsLoaded.updateProduct(productId);
-    
+      cache.ReviewsLoaded.updateProduct(productId);
+
       //checking if data exists in memory
       if (cache.ReviewsLoaded.isPageLoaded(page)) {
          console.log("data exists");
@@ -126,10 +162,10 @@ const ReviewsPage = () => {
       loader.Load();
    }
 
-   function LoadNextPage(){
+   function LoadNextPage() {
       // Loading next page of reviews
-      if(cache.ReviewsLoaded.isPageLoaded(Math.floor(page) + 1)) return;
-      if(!cache.ReviewsLoaded.isPageExist(Math.floor(page) + 1)) return;
+      if (cache.ReviewsLoaded.isPageLoaded(Math.floor(page) + 1)) return;
+      if (!cache.ReviewsLoaded.isPageExist(Math.floor(page) + 1)) return;
 
       const reviewsLoader = cache.LoadingManager.Reviews;
       reviewsLoader.productId = productId;

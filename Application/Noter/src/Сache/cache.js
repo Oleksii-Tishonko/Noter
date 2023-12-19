@@ -36,6 +36,8 @@ let CategoryLoaded = null;
 let ReviewsLoaded = new ReviewsObject();
 let UserAccountLoaded = null;
 let UserName = null;
+let filters = null;
+let pageInvokedSignIn = null;
 
 const cache = {
    get ProductsLoaded() {
@@ -91,6 +93,24 @@ const cache = {
    set UserAccountLoaded(value){
       UserAccountLoaded = getCopyOfObject(value);
    },
+   get Filters(){
+      filters = sessionStorage.getItem("filters");
+      return filters;
+      
+      
+   },
+   set Filters(value){
+      sessionStorage.setItem('filters', JSON.stringify(value));
+      filters = value;
+   },
+   get PageInvokedSignIn(){
+      pageInvokedSignIn = sessionStorage.getItem("pageInvokedSignIn");
+      return pageInvokedSignIn;
+   },
+   set PageInvokedSignIn(value){
+      sessionStorage.setItem('pageInvokedSignIn', value);
+      pageInvokedSignIn = value;
+   }
 };
 
 function getCopyOfObject(obj) {
@@ -177,12 +197,18 @@ class LoadableObject {
 
 class Products extends LoadableObject {
    extractDataPath = ".data.products";
+   filters;
 
    /**
     * @returns {string}  request string to load obj.
     */
    get requestPath() {
-      return `${globals.DATABASE}/api/v1/products`;
+      let params;
+      if(this.filters){
+         params = this.filtersToQuery(this.filters);
+      }
+      
+      return `${globals.DATABASE}/api/v1/products?${params}`;
    }
    getRequestPath() {
       return this.requestPath;
@@ -196,6 +222,22 @@ class Products extends LoadableObject {
 
    constructor() {
       super();
+   }
+
+   filtersToQuery(filters) {
+      if (!filters) return "";
+      if (typeof filters === "string") filters = JSON.parse(filters);
+      
+      const keys = Object.keys(filters);
+      let query = "";
+      for (let i = 0; i < keys.length; i++) {
+         const key = keys[i];
+         const value = filters[key];
+         query += `&specifications.${key}=${value}`;
+      }
+      query = query.slice(1);
+
+      return query;
    }
 }
 
