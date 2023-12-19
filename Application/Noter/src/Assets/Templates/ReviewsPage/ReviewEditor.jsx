@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SelectRatingBar from "./SelectRatingBar";
 import { set } from "lodash";
+import cache from "../../../Сache/cache";
+import globals from "../../../globals";
 
-const ReviewEditor = () => {
+const ReviewEditor = ({onReviewSubmitted}) => {
    const [title, setTitle] = useState("");
    const [pros, setPros] = useState("");
    const [cons, setCons] = useState("");
@@ -116,7 +118,7 @@ const ReviewEditor = () => {
                <div className="validationError">{textValidationError}</div>
             </div>
          </div>
-         <button className="submit" disabled={!readyToSubmit}>
+         <button onClick={() => onReviewSubmitted(title, pros, cons, text, rating)} className="submit" disabled={!readyToSubmit}>
             Submit
          </button>
       </div>

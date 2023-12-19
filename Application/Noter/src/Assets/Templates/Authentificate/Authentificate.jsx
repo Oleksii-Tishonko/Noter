@@ -3,11 +3,9 @@ import GoogleButton from "./Google Button/GoogleButton";
 import { AuthContext } from "./AuthContext";
 import { useState, useContext } from "react";
 import "./AuthentificateStyles.css";
-import useFetch from "../../Scripts/useFetch";
-import { setUserId } from "firebase/analytics";
+// import { setUserId } from "firebase/analytics";
 import { useNavigate } from "react-router-dom";
 import cache from "../../../Сache/cache";
-import { set } from "lodash";
 import globals from "../../../globals";
 
 let ErrorCreatingUser = false;
@@ -36,6 +34,7 @@ const Authentificate = () => {
    useEffect(() => {
       setRenderer((x) => x + 1);
       console.log("user changed");
+      console.log(user);
       if (user && user.uid) {
          console.log(user.displayName);
          navigate("/authentificate/loadUserData");

@@ -22,11 +22,13 @@ const ProductPage = () => {
       if(!product) return;
       const filters = cache.Filters;
       const category = product.category;
+      const page = cache.ProductsPage;
 
       const productParams = new URLSearchParams();
 
       productParams.set("category", category);
       productParams.set("filters", filters);
+      if(page) productParams.set("page", page);
 
       navigate(`/products?${productParams.toString()}`);
    }
@@ -94,20 +96,26 @@ const ProductPage = () => {
    function LoadData(id) {
       let dataLoaded = false;
       //checking if data exists in memory
-      if (cache.ProductsLoaded && cache.ProductsLoaded.length !== 0) {
+      if (cache.ProductsLoaded && cache.ProductsLoaded.pages.length > 0) {
          console.log('global set');
          //checking if products loaded in memmory contain this product
-         const productsFiltered = cache.ProductsLoaded.filter((product) => {
-            return product._id === id;
-         });
+         for(let i = 1; i < cache.ProductsLoaded.pages.length; i++){
+            if(!cache.ProductsLoaded.pages[i]) continue;
+            console.log(cache.ProductsLoaded.pages[i]);
+            for(let j = 0; j < cache.ProductsLoaded.pages[i].length; j++){
+               if(cache.ProductsLoaded.pages[i][j]._id === id){
+                  console.log('product found');
+                  console.log(cache.ProductsLoaded.pages[i][j]);
+                  cache.CurrentProduct = cache.ProductsLoaded.pages[i][j];
+                  dataLoaded = true;
 
-         if (productsFiltered.length > 0) {
-            setProduct(productsFiltered[0]);
-            setIsPending(false);
-            setError(false);
-
-            dataLoaded = true;
-            cache.CurrentProduct = productsFiltered[0];
+                  setProduct(cache.CurrentProduct);
+                  setIsPending(false);
+                  setError(false);
+                  break;
+               }
+            }
+            if(dataLoaded) break;
          }
       }
       if(!dataLoaded && cache.CurrentProduct && cache.CurrentProduct._id === id){
@@ -145,6 +153,7 @@ const ProductPage = () => {
       // Loading products
       const loader = cache.LoadingManager.Products;
       loader.filters = cache.Filters;
+      if(cache.ProductsPage) loader.page = cache.ProductsPage;
       loader.Load();
       
       LoadReviews();
@@ -232,6 +241,8 @@ const ProductPreview = ({ product }) => {
 };
 
 import starImg from "./../../Images/Yellow_Star.svg";
+import halfStarImg from "./../../Images/Half_Star.svg";
+import grayStarImg from "./../../Images/Gray_Star1.svg";
 import cache from "../../../Сache/cache";
 import { set } from "lodash";
 const ActionPanel = ({ product }) => {
@@ -239,14 +250,8 @@ const ActionPanel = ({ product }) => {
       <div className="ActionPanel">
          <h2 className="productName">{product.name}</h2>
          <div className="reviews">
-            <div className="rating">
-               <img src={starImg} width="17px" />
-               <img src={starImg} width="17px" />
-               <img src={starImg} width="17px" />
-               <img src={starImg} width="17px" />
-               <img src={starImg} width="17px" />
-            </div>
-            <a className="reviewsLink">148 reviews</a>
+            <Rating ratingAverage={product.ratingsAverage} />
+            <a className="reviewsLink">{product.ratingsQuantity} reviews</a>
          </div>
          <div className="productActions">
             <div className="sellerSection">
@@ -268,6 +273,29 @@ const ActionPanel = ({ product }) => {
       </div>
    );
 };
+const Rating = ({ratingAverage}) => {
+   if(!ratingAverage) ratingAverage = 0;
+   const stars = [];
+
+   for(let i = 0; i < 5; i++){
+      if(ratingAverage >= 1){
+         stars.push(<img src={starImg} width="17px" />);
+      }
+      else if(ratingAverage > 0){
+         stars.push(<img src={halfStarImg} width="17px" />);
+      }
+      else{
+         stars.push(<img src={grayStarImg} width="17px" />);
+      }
+      ratingAverage--;
+   }
+
+   return(
+      <div className="rating">
+         {stars}
+      </div>
+   )
+}
 
 const Summary = ({product}) =>{
    return(
@@ -285,19 +313,23 @@ const Specifications = ({ product }) => {
       <div className="specs">
          <p id="header">Specifications</p>
          <table className="listOfSpecs">
-            {Object.entries(product.specifications).slice(0, 5).map(([property, value]) => (
-               <tr key={property}>
-                  <th>{property}</th>
-                  <td>{value}</td>
-               </tr>
-            ))}
+            {Object.entries(product.specifications)
+               .slice(0, 5)
+               .map(([property, value]) => (
+                  <tr key={property}>
+                     <th>{property}</th>
+                     <td>{value}</td>
+                  </tr>
+               ))}
 
             {/* <tr>
           <th>Model</th>
           <td>Galaxy A32 5G</td>
         </tr> */}
          </table>
-         <div className="specsLink">More...</div>
+         <Link className="specsLink" to={`/product/${product._id}/specifications`}>
+            More...
+         </Link>
       </div>
    );
 };

@@ -1,7 +1,10 @@
 const catchAsync = require('../utils/catchAsync');
 const Review = require('../models/reviewModel');
+const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
+const mongoose = require('mongoose');
+const Product = require('../models/productModel');
 
 exports.getAllReviews = catchAsync (async(req, res, next) => {
   const productId = req.params.productId;
@@ -33,8 +36,31 @@ exports.getAllReviews = catchAsync (async(req, res, next) => {
 });
 
 exports.createReview = catchAsync (async(req, res, next) => {
+  console.log(req.body);
+  if(!req.body.user) next(new AppError('Review must belong to a user!', 404));
+  const user = await User.findOne({uid: req.body.user});
+  if(!user) next(new AppError('User not found!', 404));
+  const product = await Product.findById(req.body.product);
+  if(!product) next(new AppError('Product not found!', 404));
 
-  const newReview = await Review.create(req.body);
+  //check whether the user has already reviewed the product
+  const review = await Review.findOne({user: user._id, product: product._id});
+  if(review) return next(new AppError('You have already reviewed this product!', 401));
+  
+  console.log(user._id, product._id);
+
+  const newReview = await Review.create({
+    title: req.body.title,
+    text: req.body.text,
+    pros: req.body.pros,
+    cons: req.body.cons,
+    product: product._id,
+    user: user._id,
+    rating: req.body.rating
+  });
+
+  await product.addReview(newReview.rating);
+
   res.status(201).json({
     status: 'success',
     data: {

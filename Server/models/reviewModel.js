@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = mongoose.Schema({
-    header:{
+    title:{
         type: String,
+        required: [true, 'Review must have a title'],
     },
 
     text:{
         type: String,
-        required: true, 
                 
     },
     pros:{
@@ -20,6 +20,12 @@ const reviewSchema = mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    rating:{
+        type: Number,
+        min: 1,
+        max: 5,
+        required: [true, 'Review must have a rating'],
+    },
     product:{
         type: mongoose.Schema.ObjectId,
         ref: 'Product',
@@ -28,7 +34,7 @@ const reviewSchema = mongoose.Schema({
     user:{
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        // required: [true, 'Review must belong to a user'], --changed to false for development 
+        required: [true, 'Review must belong to a user'],
     }
     
 })

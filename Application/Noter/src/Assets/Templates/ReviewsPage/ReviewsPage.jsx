@@ -1,16 +1,20 @@
 import { useNavigate, useParams } from "react-router-dom";
 import startImg from "./../../Images/Yellow_Star.svg";
 import { Link } from "react-router-dom";
-import { useLayoutEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import cache from "../../../Сache/cache";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ReviewEditor from "./ReviewEditor";
+import globals from "../../../globals";
+import { AuthContext } from "../Authentificate/AuthContext";
 
 let page;
 let productId;
+let uid;
 
 const ReviewsPage = () => {
+   const { user } = useContext(AuthContext);
    const params = useParams();
    productId = params.productId;
 
@@ -28,6 +32,13 @@ const ReviewsPage = () => {
 
    if (!pageParam) page = 1;
    else page = pageParam;
+
+   useEffect(() => {
+      if (user) {
+         uid = user.uid;
+      }
+      console.warn(user);
+   }, [user]);
 
    useLayoutEffect(() => {
       console.log(productId);
@@ -89,9 +100,7 @@ const ReviewsPage = () => {
                      </div>
                   </div>
                )}
-               {reviewEditorOpen && (
-                  <ReviewEditor/>
-               )}
+               {reviewEditorOpen && <ReviewEditor onReviewSubmitted={OnReviewSubmitted} />}
             </div>
          )}
          {!isPending && reviews && reviews.length > 0 && (
@@ -107,7 +116,18 @@ const ReviewsPage = () => {
                         <img src={startImg} width="14.4px" />
                         <img src={startImg} width="14.4px" />
                      </div>
-                     <div className="header">{review.header}</div>
+                     <div className="header">{review.title}</div>
+                     {review.pros && (
+                        <div className="pros">
+                           <a className="inlineHeader">Pros:</a> {review.pros}
+                        </div>
+                     )}
+                     {review.cons && (
+                        <div className="cons">
+                           <a className="inlineHeader">Cons:</a>
+                           {review.cons}
+                        </div>
+                     )}
                      <div className="text">{review.text}</div>
                   </div>
                ))}
@@ -192,6 +212,36 @@ const ReviewsPage = () => {
    }
    function isPreviousPageExist() {
       return Math.floor(page) !== 1;
+   }
+
+   function OnReviewSubmitted(title, pros, cons, text, rating) {
+      writeReview(title, pros, cons, text, rating);
+   }
+
+   function writeReview(title, pros, cons, text, rating) {
+      if (!uid) console.warn("User uid not loaded");
+
+      const review = {
+         product: productId,
+         title: title,
+         pros: pros,
+         cons: cons,
+         text: text,
+         rating: rating,
+         user: uid,
+      };
+
+      console.log(`Review: ${review}`);
+      // send review to server
+      const ReastAPI = cache.RestAPI;
+      const url = `${globals.DATABASE}/api/v1/reviews`;
+      ReastAPI.WriteData(url, review, OnReviewWritten);
+   }
+
+   function OnReviewWritten(data, status, err) {
+      if (status === "OK") console.log("Review written");
+      else console.log("Error writing review");
+      console.log(`data: ${JSON.stringify(data)}`);
    }
 };
 

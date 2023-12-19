@@ -6,10 +6,10 @@ import searchIcon from "./../../Images/search.svg";
 import { useNavigate } from "react-router-dom";
 import globals from "../../../globals";
 import Filter from "../../Scripts/filter";
-import _, { add, set } from "lodash";
 
 let pageParams = null;
 let categoryId = null;
+let page = 1;
 let pageNavigation;
 
 const SearchResults = () => {
@@ -21,8 +21,8 @@ const SearchResults = () => {
 
    const location = useLocation();
    pageParams = new URLSearchParams(location.search);
-   console.log(pageParams);
    // if (pageParams) pageParams = pageParams.replace(/%20/g, " ");
+   
    categoryId = pageParams.get("category");
 
    // console.log('params');
@@ -34,7 +34,11 @@ const SearchResults = () => {
    useLayoutEffect(() => {
       cache.Filters = getFilters();
 
-      if (!categoryId || categoryId.length < 16) navigation("/404");
+      if(pageParams.has("page")) page = pageParams.get("page");
+      if(page) cache.ProductsPage = page;
+      
+
+      if (!pageParams.has("category") || categoryId.length < 16) navigation("/404");
       LoadData();
    }, [location.search]);
 
@@ -49,19 +53,62 @@ const SearchResults = () => {
             <div className="searchResults">
                {isPending && <div>Loading...</div>}
                {error && <div className="error">error: {error}</div>}
-               {!isPending && products && <ProductsList products={products} />}
+               {!isPending && products && (
+                  <div>
+                     <ProductsList products={products} />
+                     <div className="goToOtherPage">
+                        <button className={`goToPage ${isPreviousPageExist() ? "enabled" : "disabled"}`} onClick={() => previousPage()}>
+                           Previous
+                        </button>
+                        <button className={`goToPage ${isNextPageExist() ? "enabled" : "disabled"}`} onClick={() => nextPage()}>
+                           Next
+                        </button>
+                     </div>
+                  </div>
+               )}
             </div>
          </div>
       </div>
    );
 
+   function isPreviousPageExist() {
+      return Math.floor(page) !== 1;
+   }
+   function isNextPageExist() {
+      try {
+         return cache.ProductsLoaded.isPageExist(Math.floor(page) + 1);
+      }
+      catch(err) {
+         console.log(err);
+         return false;
+      }
+   }
+   function nextPage() {
+      if (!page) page = 1;
+      page++;
+      pageParams.set("page", page);
+      window.scrollTo(0, 0);
+      pageNavigation(`/products?${pageParams.toString()}`);
+   }
+   function previousPage() {
+      if (!page) page = 1;
+      if (Math.floor(page) === 1) return;
+      page--;
+      pageParams.set("page", page);
+      window.scrollTo(0, 0);
+      pageNavigation(`/products?${pageParams.toString()}`);
+   }
+
    function LoadData() {
       //checking if data exists in memory
-      if (checkCurrentFilters() && cache.ProductsLoaded && cache.ProductsLoaded.length !== 0) {
+      
+      if (cache.ProductsLoaded.isPageLoaded(page) && cache.ProductsLoaded.compareFilters(cache.ProductsLoaded.filters, getFilters())) {
          console.log("data exists");
          setIsPending(false);
          setError(false);
-         setProducts(cache.ProductsLoaded);
+         setProducts(cache.ProductsLoaded.pages[page]);
+
+         LoadOtherData();
       }
       //loading data from server
       else {
@@ -72,6 +119,7 @@ const SearchResults = () => {
          loader.filters = getFilters();
          console.log(loader.params);
          loader.requestPath;
+         if (page) loader.page = page;
          console.log(loader.params);
          loader.Load(OnDataLoaded);
       }
@@ -95,10 +143,33 @@ const SearchResults = () => {
 
    function OnDataLoaded(data, status, err) {
       if (status === "OK") {
-         setProducts(data);
+         console.log('status: OK');
+         if(cache.ProductsLoaded.isPageLoaded(page)) setProducts(cache.ProductsLoaded.pages[page]);
       }
       setError(err);
       setIsPending(false);
+
+      LoadOtherData();
+   }
+
+   function LoadOtherData(){
+      if (isPreviousPageExist() && !cache.ProductsLoaded.isPageLoaded(Math.floor(page) - 1)) LoadPreviousPage();
+      if (isNextPageExist() && !cache.ProductsLoaded.isPageLoaded(Math.floor(page) + 1)) LoadNextPage();
+   }
+
+   function LoadNextPage(){
+      if(!isNextPageExist()) return;
+      const productsLoader = cache.LoadingManager.Products;
+      productsLoader.filters = getFilters();
+      productsLoader.page = Math.floor(page) + 1;
+      productsLoader.Load();
+   }
+   function LoadPreviousPage(){
+      if(page === 1) return;
+      const productsLoader = cache.LoadingManager.Products;
+      productsLoader.filters = getFilters();
+      productsLoader.page = Math.floor(page) - 1;
+      productsLoader.Load();
    }
 };
 
@@ -138,12 +209,14 @@ function Test(str, res, filter, n) {
    }
 }
 
+
+
 function checkCurrentFilters() {
    const filters = getFilters();
 
-   if (!cache.ProductsLoaded || cache.ProductsLoaded.length === 0) return false;
+   if (!cache.ProductsLoaded.isPageLoaded(page)) return false;
    if (!filters) return true;
-   const products = cache.ProductsLoaded;
+   const products = cache.ProductsLoaded.pages[page];
 
    const keys = Object.keys(filters);
 
@@ -374,7 +447,7 @@ const FiltersTab = () => {
       updateFilters(_filters);
 
       //navigate to new page
-      cache.ProductsLoaded = [];
+      pageParams.set("page", 1);
       pageNavigation(`/products?${pageParams.toString()}`);
    }
 
@@ -392,7 +465,7 @@ const FiltersTab = () => {
       updateFilters(_filters);
 
       //navigate to new page
-      cache.ProductsLoaded = [];
+      pageParams.set("page", 1);
       pageNavigation(`/products?${pageParams.toString()}`);
    }
 

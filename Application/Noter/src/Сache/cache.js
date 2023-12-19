@@ -21,23 +21,64 @@ class ReviewsObject {
    isPageExist(page) {
       return page <= this.count;
    }
-   updateProduct(productId){
-      if(this.productId === productId) return;
+   updateProduct(productId) {
+      if (this.productId === productId) return;
       this.count = 0;
       this.pages = [];
       this.productId = productId;
    }
 }
+class ProductsObject {
+   filters;
+   count;
+   pages;
+   constructor() {
+      this.pages = [];
+   }
 
+   setCount(results) {
+      const limit = 16;
+      this.count = Math.floor((results + limit - 1) / limit);
+   }
+   isPageLoaded(page) {
+      return this.pages[page] ? true : false;
+   }
 
-let ProductsLoaded = null;
+   isPageExist(page) {
+      return page <= this.count;
+   }
+
+   updateFilters(filters) {
+      if (this.compareFilters(this.filters, filters)) return;
+      this.count = 0;
+      this.pages = [];
+      this.filters = filters;
+   }
+
+   compareFilters(filters1, filters2) {
+      if (!filters1 || filters1 == "null" || filters1 == "undefined") filters1 = {};
+      if (!filters2 || filters2 == "null" || filters2 == "undefined") filters2 = {};
+
+      if (typeof filters1 == "string") filters1 = JSON.parse(filters1);
+      if (typeof filters2 == "string") filters2 = JSON.parse(filters2);
+      console.log(`filter1: ${JSON.stringify(filters1)}`);
+      console.log(`filter2: ${JSON.stringify(filters2)}`);
+      console.log(`same: ${JSON.stringify(filters1) === JSON.stringify(filters2)}`);
+
+      return JSON.stringify(filters1) === JSON.stringify(filters2);
+   }
+}
+
+let ProductsLoaded = new ProductsObject();
 let CurrentProduct = null;
 let CategoryLoaded = null;
 let ReviewsLoaded = new ReviewsObject();
 let UserAccountLoaded = null;
 let UserName = null;
 let filters = null;
+let productsPage = null;
 let pageInvokedSignIn = null;
+let userUID = null;
 
 const cache = {
    get ProductsLoaded() {
@@ -72,45 +113,67 @@ const cache = {
    set ReviewsLoaded(value) {
       ReviewsLoaded = getCopyOfObject(value);
    },
-   get RestAPI(){
+   get RestAPI() {
       return new RestAPI();
    },
    get UserName() {
-      if(!UserName || UserName === 'null' || UserName === 'undefined'){
+      if (!UserName || UserName === "null" || UserName === "undefined") {
          const username = localStorage.getItem("UserName");
          UserName = username ? username : null;
       }
       return UserName;
    },
    set UserName(value) {
-      console.warn('username changed: ' + value);
+      console.warn("username changed: " + value);
       localStorage.setItem("UserName", value);
       UserName = value;
    },
-   get UserAccountLoaded(){
+   get UserAccountLoaded() {
       return getCopyOfObject(UserAccountLoaded);
    },
-   set UserAccountLoaded(value){
+   set UserAccountLoaded(value) {
       UserAccountLoaded = getCopyOfObject(value);
    },
-   get Filters(){
+   get Filters() {
       filters = sessionStorage.getItem("filters");
       return filters;
-      
-      
    },
-   set Filters(value){
-      sessionStorage.setItem('filters', JSON.stringify(value));
+   set Filters(value) {
+      sessionStorage.setItem("filters", JSON.stringify(value));
       filters = value;
    },
-   get PageInvokedSignIn(){
+   get PageInvokedSignIn() {
       pageInvokedSignIn = sessionStorage.getItem("pageInvokedSignIn");
       return pageInvokedSignIn;
    },
-   set PageInvokedSignIn(value){
-      sessionStorage.setItem('pageInvokedSignIn', value);
+   set PageInvokedSignIn(value) {
+      sessionStorage.setItem("pageInvokedSignIn", value);
       pageInvokedSignIn = value;
-   }
+   },
+   get UserUID() {
+      if (!userUID || userUID === "null" || userUID === "undefined") {
+         const _userUID = sessionStorage.getItem("userUID");
+         userUID = _userUID ? _userUID : null;
+      }
+      return userUID;
+   },
+   set UserUID(value) {
+      if (!userUID || userUID !== value) {
+         sessionStorage.setItem("userUID", value);
+         userUID = value;
+      }
+   },
+   get ProductsPage() {
+      if (!productsPage || productsPage === "null" || productsPage === "undefined") {
+         productsPage = sessionStorage.getItem("productsPage");
+      }
+
+      return productsPage;
+   },
+   set ProductsPage(value) {
+      sessionStorage.setItem("productsPage", value);
+      productsPage = value;
+   },
 };
 
 function getCopyOfObject(obj) {
@@ -151,24 +214,18 @@ class LoadableObject {
       this.callback = callback;
 
       console.log("Loading");
-      if (!this.extractDataPath)
-         throw Error("An object must have a path for data extraction");
-      if (!this.requestPath)
-         throw Error("An object must have a request string");
+      if (!this.extractDataPath) throw Error("An object must have a path for data extraction");
+      if (!this.requestPath) throw Error("An object must have a request string");
 
       let request = this.requestPath;
-      if(this.params) request = `${request}?${this.params}`
-      console.log('request');
+      if (this.params) request = `${request}?${this.params}`;
+      console.log("request");
       console.log(request);
-      console.log('params');
+      console.log("params");
       console.log(this.params);
 
       const restAPI = new RestAPI();
-      restAPI.ReadData(
-         request,
-         this.extractDataPath,
-         (data, status, err) => this.OnDataLoaded(data, status, err),
-      );
+      restAPI.ReadData(request, this.extractDataPath, (data, status, err) => this.OnDataLoaded(data, status, err));
       this.isPending = true;
       //do something useFetch() //path + params => {data, isPending, error}
    }
@@ -196,28 +253,53 @@ class LoadableObject {
 }
 
 class Products extends LoadableObject {
-   extractDataPath = ".data.products";
-   filters;
+   extractDataPath = ".";
+   _filters;
+   get filters() {
+      return this._filters;
+   }
+   set filters(value) {
+      this._filters = value;
+
+      // update filters in cache
+      const products = cache.ProductsLoaded;
+      products.updateFilters(value);
+      console.log(cache.ProductsLoaded);
+      cache.ProductsLoaded = products;
+      console.log(cache.ProductsLoaded);
+   }
+   page;
 
    /**
     * @returns {string}  request string to load obj.
     */
    get requestPath() {
       let params;
-      if(this.filters){
+      if (this.filters) {
          params = this.filtersToQuery(this.filters);
       }
-      
-      return `${globals.DATABASE}/api/v1/products?${params}`;
+
+      return `${globals.DATABASE}/api/v1/products?${params ? params : ""}&${this.page ? `page=${this.page}` : ""}`;
    }
    getRequestPath() {
       return this.requestPath;
    }
 
    setLoadedObject(data) {
-      if (data) cache.ProductsLoaded = data;
       console.log("setter");
       console.log(data);
+      const page = data.page;
+      const results = data.results;
+      const products = data.data.products;
+
+      let ProductsLoaded = cache.ProductsLoaded;
+
+      // if (this.filters !== data.filters) return;
+
+      ProductsLoaded.setCount(results);
+      ProductsLoaded.pages[page] = products;
+
+      cache.ProductsLoaded = ProductsLoaded;
    }
 
    constructor() {
@@ -227,7 +309,8 @@ class Products extends LoadableObject {
    filtersToQuery(filters) {
       if (!filters) return "";
       if (typeof filters === "string") filters = JSON.parse(filters);
-      
+      if (!filters) return "";
+
       const keys = Object.keys(filters);
       let query = "";
       for (let i = 0; i < keys.length; i++) {
@@ -322,7 +405,7 @@ class UserAccount extends LoadableObject {
    uid;
    extractDataPath = ".data.user";
    get requestPath() {
-      if(!this.uid) throw Error("UserAccount must have a uid to be loaded");
+      if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
       return `${globals.DATABASE}/api/v1/users?uid=${this.uid}`;
    }
    constructor() {
@@ -401,9 +484,9 @@ class RestAPI {
             body: JSON.stringify(data),
          })
             .then((res) => {
-               if (!res.ok) {
-                  throw Error("could not fetch the data for this resource");
-               }
+               // if (!res.ok) {
+               //    throw Error("could not fetch the data for this resource");
+               // }
                return res.json();
             })
             .then((data) => {

@@ -7,15 +7,26 @@ const AppError = require('../utils/appError');
 
 exports.getAllProducts = catchAsync(async (req, res, next) =>{
     console.log(req.query);
+    req.query.sort = 'name';
+    if(!req.query.page) req.query.page = 1;
+    req.query.limit = 16;
+
+    const countAllFiltered = new APIFeatures(Product.find(), req.query).filter();
+    const filteredCount = await Product.find().merge(countAllFiltered.query).countDocuments();
+
     const features = new APIFeatures(Product.find(), req.query)
-        .filter();
+        .filter()
+        .sort()
+        .paginate();
+        
     const products = await features.query;
 
     
 
     res.status(200).json({
         status: 'success',
-        results: products.length,
+        results: filteredCount,
+        page: req.query.page,
         data:{
             products,
         },

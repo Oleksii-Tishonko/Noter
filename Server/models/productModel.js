@@ -1,3 +1,5 @@
+const Review = require('./reviewModel');
+
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
@@ -17,8 +19,7 @@ const productSchema = new mongoose.Schema(
         },
         ratingsQuantity:{
             type: Number,
-            required: false,
-            //change to true
+            default: 0,
         },
         price:{
             type: Number,
@@ -70,6 +71,19 @@ const productSchema = new mongoose.Schema(
 
     }
 )
+
+productSchema.methods.addReview = async function(rating){
+    if(!this.ratingsQuantity) this.ratingsQuantity = 0;
+    this.ratingsQuantity++;
+    
+    this.ratingsAverage = this.ratingsAverage + (rating - this.ratingsAverage)/this.ratingsQuantity;
+    if(!this.ratingsAverage) this.ratingsAverage = rating;
+    
+    console.log(`this.ratingsAverage: ${this.ratingsAverage}`);
+    console.log(`this.ratingsQuantity: ${this.ratingsQuantity}`);
+    await this.save({validateBeforeSave: false});
+};
+
 //reviews
 const Product = mongoose.model('Product', productSchema);
 
