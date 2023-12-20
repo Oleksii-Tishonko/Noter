@@ -7,7 +7,7 @@ import cache from '../../../Сache/cache';
 const UserAccount = () => {
     const [subPage, setSubPage] = React.useState(<></>);
     const [userData, setUserData] = useState(null);
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
 
     const pageComponent = (pageName) => {
         switch(pageName){
@@ -16,7 +16,7 @@ const UserAccount = () => {
             case 'theme':
                 return <Theme/>
             case 'data':
-                return <Data userdata={userData} />;
+                return <Data userdata={userData} logout={logout} />;
             default:
                 return <Main/>
         }
@@ -86,13 +86,18 @@ const Theme = () => {
     );
 }
 
-const Data = ({userdata}) => {
+const Data = ({userdata, logout}) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         console.log('data changed');
         setUserData(userdata);
     }, [userdata]);
+
+    async function handleLogout() {
+      await logout();
+      cache.UserName = null;
+    }
 
     return (
        <>
@@ -116,6 +121,7 @@ const Data = ({userdata}) => {
                    <td>{userData.email}</td>
                 </tr>
              </table>
+             <div className='logoutButton' onClick={() => handleLogout()}>Logout</div>
           </div>}
        </>
     );

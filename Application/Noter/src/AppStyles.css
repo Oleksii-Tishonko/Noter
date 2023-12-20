@@ -20,7 +20,7 @@
     font-size: 20px;
 
 }
-.noReviews .selectRatingBar .list li{
+.writeReview .selectRatingBar .list li{
     width: 90px;
     align-items: center;
 }
@@ -46,7 +46,7 @@
     /* background-color: black; */
 }
 
-.noReviews .reviewEditor .rating .header{
+.writeReview .reviewEditor .rating .header{
     font-size: 2.45vw;
 }
 
@@ -112,7 +112,7 @@
   background-color: #3498db;
 }
 
-.noReviews .modal {
+.writeReview .modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -124,7 +124,7 @@
   align-items: center;
 }
 
-.noReviews .modal-content {
+.writeReview .modal-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
@@ -245,7 +245,7 @@
     font-size: 14pt;
     font-weight: bold;
 }
-.noReviews .leaveReview{
+.writeReview .leaveReview{
     margin-top: 1.4vh;
     text-align: center;
     width: 17vw;
@@ -256,8 +256,20 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.writeReview .leaveReviewLeft{
+    margin-top: 1.4vh;
+    text-align: center;
+    width: 17vw;
+    margin-left: 1vw;
+    margin-right: auto;
+    border: 2px solid rgba(201, 201, 201, 0.68);
+    padding: 1vw;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-.noReviews .leaveReview:hover{
+
+.writeReview .leaveReview:hover{
     background-color: rgba(201, 201, 201, 0.68);
     border-radius: 0px;
 }
@@ -432,7 +444,8 @@ table {
 }
 .ReviewsPage .noReviews{
     text-align: center;
-    margin-top: 4vw;
+    /* margin-top: 4vw; */
+    margin-top: 6vw;
 }
 .ReviewsPage .noReviews .header{
     font-size: 25pt;

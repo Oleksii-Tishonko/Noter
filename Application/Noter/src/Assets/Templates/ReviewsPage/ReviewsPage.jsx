@@ -78,7 +78,7 @@ const ReviewsPage = () => {
             </Link>
          </div>
 
-         <button class="filters">Filters</button>
+         {/* <button class="filters">Filters</button> */}
          <div className="reviewList"></div>
          {isPending && <div>Loading...</div>}
          {!isPending && error && <div className="error">Error: {error}</div>}
@@ -86,26 +86,46 @@ const ReviewsPage = () => {
             <div className="noReviews">
                <div className="header">No reviews yet</div>
                <div className="text">Be the first one to leave a review on this product!</div>
-               {!reviewEditorOpen && (
-                  <div className="leaveReview" onClick={() => handleWriteReview()}>
-                     Write a review
-                  </div>
-               )}
-               {loginPopupOpen && (
-                  <div className="modal">
-                     <div className="modal-content">
-                        <h2>Write a review</h2>
-                        <p>To continue, please sign in or create an account</p>
-                        <button onClick={() => handleSignIn()}>Sign in</button>
-                        <button onClick={closePopup}>Close</button>
+               <div className="writeReview">
+                  {!reviewEditorOpen && (
+                     <div className="leaveReview" onClick={() => handleWriteReview()}>
+                        Write a review
                      </div>
-                  </div>
-               )}
-               {reviewEditorOpen && <ReviewEditor onReviewSubmitted={OnReviewSubmitted} />}
+                  )}
+                  {loginPopupOpen && (
+                     <div className="modal">
+                        <div className="modal-content">
+                           <h2>Write a review</h2>
+                           <p>To continue, please sign in or create an account</p>
+                           <button onClick={() => handleSignIn()}>Sign in</button>
+                           <button onClick={closePopup}>Close</button>
+                        </div>
+                     </div>
+                  )}
+                  {reviewEditorOpen && <ReviewEditor onReviewSubmitted={OnReviewSubmitted} />}
+               </div>
             </div>
          )}
          {!isPending && reviews && reviews.length > 0 && (
             <div>
+               <div className="writeReview">
+                  {!reviewEditorOpen && (
+                     <div className="leaveReviewLeft" onClick={() => handleWriteReview()}>
+                        Write a review
+                     </div>
+                  )}
+                  {loginPopupOpen && (
+                     <div className="modal">
+                        <div className="modal-content">
+                           <h2>Write a review</h2>
+                           <p>To continue, please sign in or create an account</p>
+                           <button onClick={() => handleSignIn()}>Sign in</button>
+                           <button onClick={closePopup}>Close</button>
+                        </div>
+                     </div>
+                  )}
+                  {reviewEditorOpen && <ReviewEditor onReviewSubmitted={OnReviewSubmitted} />}
+               </div>
                {reviews.map((review) => (
                   <div className="review">
                      <div className="name">{review.user.firstName}</div>
