@@ -14,6 +14,31 @@ exports.getAllProducts = catchAsync(async (req, res, next) =>{
     const countAllFiltered = new APIFeatures(Product.find(), req.query).filter();
     const filteredCount = await Product.find().merge(countAllFiltered.query).countDocuments();
 
+    let query = Product.find();
+    if (req.query.keywords) {
+        const products = await query.find({ $text: { $search: req.query.keywords } });
+
+        return res.status(200).json({
+            status: 'success',
+            results: filteredCount,
+            page: req.query.page,
+            data:{
+                products,
+            },
+        });
+    }
+    if(req.query.keywords) {
+        const products = await query;
+        return res.status(200).json({
+            status: 'success',
+            results: products.length,
+            page: req.query.page,
+            data:{
+                products,
+            },
+        });
+    }
+
     const features = new APIFeatures(Product.find(), req.query)
         .filter()
         .sort()

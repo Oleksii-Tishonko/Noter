@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import startImg from "./../../Images/Yellow_Star.svg";
+import starImg from "./../../Images/Yellow_Star.svg";
+import GrayStarImg from "./../../Images/Gray_Star1.svg";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useLayoutEffect } from "react";
 import cache from "../../../Сache/cache";
@@ -107,14 +108,11 @@ const ReviewsPage = () => {
             <div>
                {reviews.map((review) => (
                   <div className="review">
-                     <div className="name">Expert</div>
-                     <div className="date">November 13, 2030</div>
+                     <div className="name">{review.user.firstName}</div>
+                     <div className="date">{review.dateCreated}</div>
                      <div className="rating">
-                        <img src={startImg} width="14.4px" />
-                        <img src={startImg} width="14.4px" />
-                        <img src={startImg} width="14.4px" />
-                        <img src={startImg} width="14.4px" />
-                        <img src={startImg} width="14.4px" />
+                        {LoadStarsForRating(review.rating)}
+                        {/* <div className="ratingNumber">{review.rating}</div> */}
                      </div>
                      <div className="header">{review.title}</div>
                      {review.pros && (
@@ -144,6 +142,14 @@ const ReviewsPage = () => {
          )}
       </div>
    );
+   function LoadStarsForRating(rating) {
+      let stars = [];
+      for (let i = 0; i < 5; i++) {
+         if (i < rating) stars.push(<img src={starImg} width="14.4px" />);
+         else stars.push(<img src={GrayStarImg} width="14.4px" />);
+      }
+      return stars;
+   }
 
    function LoadData(productId) {
       cache.ReviewsLoaded.updateProduct(productId);
@@ -171,6 +177,7 @@ const ReviewsPage = () => {
       if (status === "OK") {
          if (cache.ReviewsLoaded.isPageLoaded(page)) setReviews(cache.ReviewsLoaded.pages[page]);
       }
+      else console.log(data);
       setError(err);
       setIsPending(false);
 

@@ -72,6 +72,8 @@ const productSchema = new mongoose.Schema(
     }
 )
 
+productSchema.index({ name: 'text', description: 'text', specifications: 'text' });
+
 productSchema.methods.addReview = async function(rating){
     if(!this.ratingsQuantity) this.ratingsQuantity = 0;
     this.ratingsQuantity++;
@@ -81,7 +83,7 @@ productSchema.methods.addReview = async function(rating){
     
     console.log(`this.ratingsAverage: ${this.ratingsAverage}`);
     console.log(`this.ratingsQuantity: ${this.ratingsQuantity}`);
-    await this.save({validateBeforeSave: false});
+    await this.save({validateBeforeSave: true});
 };
 
 //reviews

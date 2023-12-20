@@ -68,6 +68,56 @@ class ProductsObject {
       return JSON.stringify(filters1) === JSON.stringify(filters2);
    }
 }
+class CartObject{
+   items;
+   constructor(){
+
+   }
+   addItem(productId){
+      if(!this.items[productId]) this.items[productId] = 1;
+      else this.items[productId] += 1;
+      this.saveCart();
+   }
+   removeItem(productId){
+      if(!this.items[productId]) return;
+      else this.items[productId] -= 1;
+      this.saveCart();
+   }
+   getItems(){
+      return this.items;
+   }
+   getItemsCount(){
+      if(!this.isLoaded()) this.loadCart();
+      let count = 0;
+      const keys = Object.keys(this.items);
+      for(let i = 0; i < keys.length; i++){
+         const key = keys[i];
+         count += this.items[key];
+      }
+      return count;
+   }
+   clear(){
+      this.items = {};
+   }
+   saveCart(){
+      if(!this.items) this.items = {};
+      const cart = JSON.stringify(this.items);
+      localStorage.setItem("cart", cart);
+      console.log(`saving data: ${cart}`);
+   }
+   loadCart(){
+      const cart = localStorage.getItem("cart");
+      console.log(`loading data: ${cart}`);
+      if(cart) this.items = JSON.parse(cart);
+   }
+   isLoaded(){
+      return this.items;
+   }
+   setCart(items){
+      this.items = items;
+      this.saveCart();
+   }
+}
 
 let ProductsLoaded = new ProductsObject();
 let CurrentProduct = null;
@@ -79,6 +129,7 @@ let filters = null;
 let productsPage = null;
 let pageInvokedSignIn = null;
 let userUID = null;
+let cart = new CartObject();
 
 const cache = {
    get ProductsLoaded() {
@@ -167,12 +218,14 @@ const cache = {
       if (!productsPage || productsPage === "null" || productsPage === "undefined") {
          productsPage = sessionStorage.getItem("productsPage");
       }
-
       return productsPage;
    },
    set ProductsPage(value) {
       sessionStorage.setItem("productsPage", value);
       productsPage = value;
+   },
+   get Cart() {
+      return cart;
    },
 };
 
@@ -188,6 +241,7 @@ class LoadingManager {
    Category = new Category();
    Reviews = new Reviews();
    UserAccount = new UserAccount();
+   Cart = new Cart();
 
    constructor() {
       console.log("creating loading manager");
@@ -415,6 +469,20 @@ class UserAccount extends LoadableObject {
       cache.UserAccount = data;
    }
 }
+class Cart extends LoadableObject {
+   uid;
+   extractDataPath = ".data.cart";
+   get requestPath() {
+      if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
+      return `${globals.DATABASE}/api/v1/carts/${this.uid}`;
+   }
+   constructor() {
+      super();
+   }
+   setLoadedObject(data) {
+      
+   }
+}
 
 // call const LM = LoadingManager()
 // const lloadingInstance = LM.Products.Load()
@@ -472,12 +540,12 @@ class RestAPI {
       }, 1000);
       console.log("outside");
    }
-   async WriteData(url, data, callback) {
+   async WriteData(url, data, callback, method="POST" ) {
       console.log(url);
       console.log(JSON.stringify(data));
       setTimeout(() => {
          fetch(url, {
-            method: "POST",
+            method: method,
             headers: {
                "Content-Type": "application/json",
             },
@@ -501,6 +569,17 @@ class RestAPI {
                }
             });
       }, 1000);
+   }
+
+   async DeleteData(url, data, callback) {
+      this.WriteData(url, data, callback, "DELETE");
+   }
+
+   async UpdateData(url, data, callback) {
+      this.WriteData(url, data, callback, "PATCH");
+   }
+   async PostData(url, data, callback) {
+      this.WriteData(url, data, callback, "POST");
    }
 
    extractData(data, path) {

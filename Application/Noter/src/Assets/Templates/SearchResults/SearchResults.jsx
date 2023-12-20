@@ -505,12 +505,17 @@ function parseOptions(options) {
    return options;
 }
 
+import shoppingCartImg from './../../Images/shopping_cart2.svg';
+
 const NavBar = () => {
    const [userName, setUserName] = useState(null);
    const [accountLink, setAccountLink] = useState("");
 
+
    useLayoutEffect(() => {
       setUserName(cache.UserName);
+      if(!cache.Cart.isLoaded()) cache.Cart.loadCart();
+      else console.log(`cart is loaded: ${JSON.stringify(cache.Cart)}`);
    }, []);
 
    useEffect(() => {
@@ -528,7 +533,6 @@ const NavBar = () => {
 
    return (
       <div className="navBar">
-         <div className="dummyDiv"></div>
          <div className="searchbar">
             <div className="searchImage">
                <img src={searchIcon} />
@@ -539,6 +543,10 @@ const NavBar = () => {
          </div>
          <Link to={accountLink} className="userAccount">
             {userName}
+         </Link>
+         <Link to={`/cart`} className="cart">
+            <img src={shoppingCartImg} width="35px"/>
+            <a className="cartSize">{cache.Cart.getItemsCount()}</a>
          </Link>
       </div>
    );

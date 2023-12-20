@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const reviewSchema = mongoose.Schema({
     title:{
         type: String,
@@ -35,9 +36,41 @@ const reviewSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: [true, 'Review must belong to a user'],
-    }
+    },
     
-})
+    
+},
+{
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+}
+
+)
+
+reviewSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'user',
+        select: 'firstName photo',
+    });
+    next();
+});
+
+reviewSchema.virtual('dateCreated').get(function() {
+  if(!this.createdAt) {
+    console.log('no createdAt');
+    return null;
+  }
+
+  const date = new Date(this.createdAt);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const result = date.toLocaleDateString('en-US', options);
+
+  console.log(result);
+  return result;
+});
+
+
+
 
 const Review = mongoose.model('Review', reviewSchema);
 

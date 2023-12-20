@@ -9,6 +9,8 @@ import Categories from "./Assets/Templates/Categories/Categories";
 import { Authentificate, LoadingUserData, CreateUserAccount } from "./Assets/Templates/Authentificate/Authentificate";
 import { AuthContextProvider } from "./Assets/Templates/Authentificate/AuthContext";
 import UserAccount from "./Assets/Templates/Account/UserAccount";
+import PageNotFound from "./Assets/Templates/404/PageNotFound";
+import Cart from "./Assets/Templates/Cart/Cart";
 
 function App() {
 
@@ -29,6 +31,9 @@ function App() {
                <Route path="authentificate/loadUserData" element={<LoadingUserData />} />
                <Route path="authentificate/createUser" element={<CreateUserAccount />} />
                <Route path="/userAccount" element={<UserAccount />} />
+               <Route path="cart" element={<Cart/>}/>
+               <Route path="/404" element={<PageNotFound />} />
+               <Route path="*" element={<PageNotFound />} />
             </Routes>
          </Router>
       </AuthContextProvider>

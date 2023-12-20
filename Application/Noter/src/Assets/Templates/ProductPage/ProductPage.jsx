@@ -2,9 +2,16 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import globals from "../../../globals";
 import { Link } from "react-router-dom";
 import { useState, useLayoutEffect, useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../Authentificate/AuthContext";
+
+let productId;
+let uid;
 
 const ProductPage = () => {
    const { id } = useParams();
+   const { user } = useContext(AuthContext);
+   productId = id;
 
    console.log(cache.ProductsLoaded);
    const [product, setProduct] = useState(null);
@@ -17,6 +24,13 @@ const ProductPage = () => {
       window.scrollTo(0, 0);
       LoadData(id);
    }, []);
+
+   useEffect(() => {
+      if (user) {
+         cache.UserUID = user.uid;
+         uid = user.uid;
+      }
+   }, [user]);
 
    function handleBackToResults(){
       if(!product) return;
@@ -266,12 +280,35 @@ const ActionPanel = ({ product }) => {
                <div className="priceBox">
                   <a className="price">{`${product.price} $`}</a>
                </div>
-               <button className="addToCart">Add To Cart</button>
+               <button className="addToCart" onClick={() => addToCart()}>Add To Cart</button>
                <button className="buyProduct">Buy now</button>
             </div>
          </div>
       </div>
    );
+
+   function addToCart() {
+      const product = productId;
+      if(!product) console.warn('Product id is not defined');
+      console.log(uid);
+
+      const RestAPI = cache.RestAPI;
+      const url = `${globals.DATABASE}/api/v1/carts/${uid}`;
+      const data = {
+         product: product,
+      };
+      RestAPI.UpdateData(url, data, OnProductAddedToCart);
+
+      cache.Cart.addItem(productId);
+   }
+   function OnProductAddedToCart(data, status, err) {
+      if (status === "OK") console.log("Product added to cart");
+      else console.log("Error adding product to cart");
+      console.log(`data: ${JSON.stringify(data)}`);
+   }
+   function removeFromCart() {
+      
+   }
 };
 const Rating = ({ratingAverage}) => {
    if(!ratingAverage) ratingAverage = 0;
