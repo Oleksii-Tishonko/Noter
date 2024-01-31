@@ -1,7 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import globals from "../../../globals";
-import useFetch from "../../Scripts/useFetch";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import cache from "../../../Сache/cache";
 
 const Specifications = () => {
@@ -48,31 +46,7 @@ const Specifications = () => {
                      <td>{value}</td>
                   </tr>
                ))}
-               {/* To make a normal page */}
-               {Object.entries(specifications).map(([property, value]) => (
-                  <tr key={property}>
-                     <th>{property}</th>
-                     <td>{value}</td>
-                  </tr>
-               ))}
-               {Object.entries(specifications).map(([property, value]) => (
-                  <tr key={property}>
-                     <th>{property}</th>
-                     <td>{value}</td>
-                  </tr>
-               ))}
-               {Object.entries(specifications).map(([property, value]) => (
-                  <tr key={property}>
-                     <th>{property}</th>
-                     <td>{value}</td>
-                  </tr>
-               ))}
-               {Object.entries(specifications).map(([property, value]) => (
-                  <tr key={property}>
-                     <th>{property}</th>
-                     <td>{value}</td>
-                  </tr>
-               ))}
+               
             </table>
          </div>
       </div>

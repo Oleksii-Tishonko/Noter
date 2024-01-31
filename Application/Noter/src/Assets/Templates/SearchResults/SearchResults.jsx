@@ -509,6 +509,7 @@ import shoppingCartImg from './../../Images/shopping_cart2.svg';
 
 const NavBar = () => {
    const [userName, setUserName] = useState(null);
+   const [isAuthentificated, setIsAuthentificated] = useState(false);
    const [accountLink, setAccountLink] = useState("");
 
 
@@ -531,6 +532,16 @@ const NavBar = () => {
       else setAccountLink("/authentificate");
    }, [userName]);
 
+   useEffect(() => {
+      if (userName !== "Login" && userName) setIsAuthentificated(true);
+      else setIsAuthentificated(false);
+   }, [userName]);
+
+   useEffect(() => {
+      console.warn(`isAuthentificated: ${isAuthentificated}`);
+      console.log(userName)
+   }, [isAuthentificated]);
+
    return (
       <div className="navBar">
          <div className="searchbar">
@@ -546,7 +557,7 @@ const NavBar = () => {
          </Link>
          <Link to={`/cart`} className="cart">
             <img src={shoppingCartImg} width="35px"/>
-            <a className="cartSize">{cache.Cart.getItemsCount()}</a>
+            <a className="cartSize">{isAuthentificated ? cache.Cart.getItemsCount() : 0}</a>
          </Link>
       </div>
    );

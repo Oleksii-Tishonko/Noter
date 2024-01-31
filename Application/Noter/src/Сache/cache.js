@@ -1,7 +1,7 @@
-import useFetch from "../Assets/Scripts/useFetch";
 import globals from "../globals";
 import { useEffect } from "react";
 import cloneDeep from "lodash/cloneDeep";
+import RestAPI from "../Assets/Scripts/RestAPI";
 
 class ReviewsObject {
    productId;
@@ -503,95 +503,4 @@ class Cart extends LoadableObject {
 //  console.log(loadingInstance.error)
 // }
 
-class RestAPI {
-   constructor() {}
 
-   StatusCode = {
-      OK: "OK",
-      ERROR: "ERROR",
-      CANCELLED: "CANCELLED",
-   };
-
-   async ReadData(url, pathToData, callback) {
-      setTimeout(() => {
-         console.log("inside");
-         fetch(url)
-            .then((res) => {
-               if (!res.ok) {
-                  throw Error("could not fetch the data for this resource");
-               }
-               return res.json();
-            })
-            .then((data) => {
-               if (data && pathToData) {
-                  data = this.extractData(data, pathToData);
-               }
-
-               callback(data, this.StatusCode.OK, null);
-            })
-            .catch((err) => {
-               if (err.name === "AbortError") {
-                  console.log("fetch aborted");
-                  callback(null, this.StatusCode.CANCELLED, "fetch aborted");
-               } else {
-                  callback(null, this.StatusCode.ERROR, err.message);
-               }
-            });
-      }, 1000);
-      console.log("outside");
-   }
-   async WriteData(url, data, callback, method="POST" ) {
-      console.log(url);
-      console.log(JSON.stringify(data));
-      setTimeout(() => {
-         fetch(url, {
-            method: method,
-            headers: {
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-         })
-            .then((res) => {
-               // if (!res.ok) {
-               //    throw Error("could not fetch the data for this resource");
-               // }
-               return res.json();
-            })
-            .then((data) => {
-               callback(data, this.StatusCode.OK, null);
-            })
-            .catch((err) => {
-               if (err.name === "AbortError") {
-                  console.log("fetch aborted");
-                  callback(null, this.StatusCode.CANCELLED, "fetch aborted");
-               } else {
-                  callback(null, this.StatusCode.ERROR, err.message);
-               }
-            });
-      }, 1000);
-   }
-
-   async DeleteData(url, data, callback) {
-      this.WriteData(url, data, callback, "DELETE");
-   }
-
-   async UpdateData(url, data, callback) {
-      this.WriteData(url, data, callback, "PATCH");
-   }
-   async PostData(url, data, callback) {
-      this.WriteData(url, data, callback, "POST");
-   }
-
-   extractData(data, path) {
-      const properties = path.split(".");
-
-      let res = data;
-      for (let i = 0; i < properties.length; i++) {
-         if (properties[i]) res = res && res[properties[i]];
-      }
-
-      console.log(res);
-
-      return res;
-   }
-}
