@@ -31,7 +31,7 @@ class ReviewsObject {
 class ProductsObject {
    filters;
    count;
-   pages;
+    pages;
    constructor() {
       this.pages = [];
    }
@@ -88,7 +88,9 @@ class CartObject{
    }
    getItemsCount(){
       if(!this.isLoaded()) this.loadCart();
-      let count = 0;
+       let count = 0;
+       if (!this.items) return count;
+      
       const keys = Object.keys(this.items);
       for(let i = 0; i < keys.length; i++){
          const key = keys[i];
@@ -308,7 +310,8 @@ class LoadableObject {
 
 class Products extends LoadableObject {
    extractDataPath = ".";
-   _filters;
+    _filters;
+    keywords;
    get filters() {
       return this._filters;
    }
@@ -333,7 +336,7 @@ class Products extends LoadableObject {
          params = this.filtersToQuery(this.filters);
       }
 
-      return `${globals.DATABASE}/api/v1/products?${params ? params : ""}&${this.page ? `page=${this.page}` : ""}`;
+      return `${globals.DATABASE}/api/v1/products?${params ? params : ""}${this.page ? `&page=${this.page}` : ""}${this.keywords ? `&keywords=${this.keywords}` : ""}`;
    }
    getRequestPath() {
       return this.requestPath;

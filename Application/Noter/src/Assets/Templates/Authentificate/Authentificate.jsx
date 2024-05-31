@@ -105,7 +105,7 @@ const LoadingUserData = () => {
             navigate(cache.PageInvokedSignIn);
             cache.PageInvokedSignIn = null;
          }
-         else navigate("/products?category=657e0d29c1cb6b530d5a1203&filters=%7B%7D");
+         else navigate(`/products?category=${globals.Category}&filters=%7B%7D`);
       } else {
          navigate("/authentificate/createUser");
       }

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Product = require('./../../models/productModel');
 const Review = require('./../../models/reviewModel');
+const Category = require('./../../models/categoryModel');
 
 dotenv.config({path: './config.env'});
 
@@ -309,7 +310,7 @@ const product13 = new Product({
     specifications: {
         "Standing screen display size": "15.6 Inches",
         "Display Resolution": "1920 x 1080",
-        "Max screen resolution": "1920x1080 Pixels",
+        "Max screen resolution": "1920 x 1080 Pixels",
         "Processor": "2.8 GHz celeron_n",
         "RAM": "16 GB",
         "Memory Speed": "1.1 GHz",
@@ -417,7 +418,7 @@ const product16 = new Product({
     specifications: {
         "Standing screen display size": "15.6 Inches",
         "Display Resolution": "1920 x 1080",
-        "Max screen resolution": "1920x1080 Pixels",
+        "Max screen resolution": "1920 x 1080 Pixels",
         "Processor": "2.7 GHz apple_ci5",
         "RAM": "8 GB",
         "Hard Drive": "512 GB",
@@ -560,7 +561,7 @@ const product20 = new Product({
     specifications: {
         "Standing screen display size": "14 Inches",
         "Display Resolution": "1920 x 1080",
-        "Max screen resolution": "1920x1080 Pixels",
+        "Max screen resolution": "1920 x 1080 Pixels",
         "Processor": "1.7 GHz apple_ci7",
         "RAM": "16 GB",
         "Memory Speed": "3200 GHz",
@@ -593,7 +594,7 @@ const product21 = new Product({
     specifications: {
         "Standing screen display size": "15.6 Inches",
         "Display Resolution": "1920 x 1080",
-        "Max screen resolution": "1920x1080 Pixels",
+        "Max screen resolution": "1920 x 1080 Pixels",
         "Processor": "1.7 GHz apple_ci7",
         "RAM": "16 GB",
         "Hard Drive": "1 TB",
@@ -1165,10 +1166,184 @@ const reviews = [];
 
 const products = [product9, product10, product11, product12, product13, product14, product15, product16, product17, product18, product19, product20, product21, product22, product23, product24, product25, product26, product27, product28, product29, product30, product31, product32, product33, product34, product35, product36, product37, product38];
 
+const category = new Category({
+    name: 'Laptops',
+    filters: [
+        {
+            name: 'Brand',
+            variants: [
+                'ACEMAGIC', 'Lenovo',
+                'Acer', 'OTVOC',
+                'ASUS', 'HP',
+                'Dell'
+            ]
+        },
+        {
+            name: 'Colour',
+            variants: [
+                'Gray',
+                'Blue',
+                undefined,
+                'Silver',
+                'Star Black',
+                'Graphite Black',
+                'Jet Black',
+                'Black'
+            ]
+        },
+        {
+            name: 'Display Resolution',
+            variants: ['1920 x 1080 Pixels', '1920 x 1080', '1366 x 768']
+        },
+        {
+            name: 'Average Battery Life (in hours)',
+            variants: ['8 Hours', undefined, '10 Hours', '12.5 Hours']
+        },
+        { name: 'Processor Brand', variants: ['Intel', 'MediaTek'] },
+        {
+            name: 'Number of Processors',
+            variants: ['4', '8', '1', '2', '6', undefined]
+        },
+        {
+            name: 'Item model number',
+            variants: [
+                'AX15',
+                'Lenovo Slim 3',
+                'TravelMate P449-G3',
+                'CB315-3H-C0UU',
+                'N1',
+                'L510MA-DS09-CA',
+                'X515MA-AH09-CA',
+                'FX506HF-AS51-CA',
+                '15-fd0000ca',
+                undefined
+            ]
+        },
+        { name: 'Hardware Platform', variants: ['PC', undefined] },
+        {
+            name: 'Memory Type',
+            variants: ['DDR4', undefined, 'SDRAM', 'Unknown']
+        },
+        {
+            name: 'Standing screen display size',
+            variants: [undefined, '14 Inches', '15.6 Inches', '11.6 Inches']
+        },
+        {
+            name: 'Max screen resolution',
+            variants: [
+                undefined,
+                '1920 x 1080 Pixels',
+                '1366 x 768 Pixels',
+                '1920x1080 Pixels'
+            ]
+        },
+        {
+            name: 'Processor',
+            variants: [
+                '2.05 GHz mediatek_mt8183',
+                '2.4 GHz core_i5_6200u',
+                '1.1 GHz celeron_n4020',
+                '2.8 GHz celeron_n',
+                '1.1 GHz none',
+                '2.7 GHz apple_ci5',
+                '3.4 GHz none',
+                '1.6 GHz 8032'
+            ]
+        },
+        {
+            name: 'RAM',
+            variants: ['2 GB', '4 GB', '8 GB', '16 GB', '64 GB']
+        },
+        {
+            name: 'Hard Drive',
+            variants: ['64 GB', '512 GB', '128 GB']
+        },
+        {
+            name: 'Graphics coprocessor',
+            variants: [
+                'MediaTek Integrated Graphics',
+                'Intel UHD Graphics 600',
+                'Intel UHD Graphics',
+                'Intel UHD Graphics 605',
+                'NVIDIA® GeForce RTX™ 2050 4GB GDDR6',
+                'Intel HD Graphics 400'
+            ]
+        },
+        {
+            name: 'Card description',
+            variants: ['Integrated', 'Dedicated']
+        },
+        {
+            name: 'Wireless Standard',
+            variants: [
+                undefined,
+                '802.11ax',
+                'Bluetooth, 801.11ac',
+                'Bluetooth, 802.11a/b/g/n/ac',
+                'Bluetooth, 802.11ac',
+                'Bluetooth, 802.11ax',
+                '802.11ac',
+                '802.11n, 802.11b, 802.11g'
+            ]
+        },
+        {
+            name: 'Operating System',
+            variants: [
+                'Chrome OS',
+                'Windows 10 Pro',
+                'Windows 11',
+                'Windows 11 Home'
+            ]
+        },
+        {
+            name: 'Hard Disk Interface',
+            variants: ['Solid State', 'eSATA']
+        },
+        { name: 'Chipset brand', variants: ['Intel', 'NVIDIA'] },
+        {
+            name: 'Series',
+            variants: [
+                undefined,
+                'Acer TravelMate P449-G3',
+                'Chromebook CB315-3H',
+                'VocBook 15',
+                'ASUS Laptop L510 Ultra Thin Laptop',
+                'ASUS VivoBook 15 X515 Thin and Light Laptop',
+                'ASUS TUF Gaming F15 Gaming Laptop',
+                'HP 15.6 inch Laptop PC 15-fd0000ca',
+                'Dell Chromebook 11 3180 D44PV'
+            ]
+        },
+        {
+            name: 'Optical Storage Device Type',
+            variants: ['No', 'DVD']
+        },
+        {
+            name: 'Flash memory size',
+            variants: ['16 GB', '64 GB', '128 GB', '512 GB']
+        },
+        {
+            name: 'Batteries',
+            variants: [
+                undefined,
+                '1 Lithium Ion batteries required. (included)',
+                '2 Lithium Polymer batteries required. (included)'
+            ]
+        },
+        {
+            name: 'Graphics Memory Size',
+            variants: ['2 GB', '4 GB', '16 GB']
+        },
+        { name: 'Number_of_Processors', variants: ['4', '2'] }
+    ]
+});
+
 const importData = async () => {
     try{
-      await Product.create(products);
-      await Review.create(reviews);
+       await Product.create(products);
+       await Review.create(reviews);
+       await Category.create(category);
+
       console.log('Data successfully loaded.');
     } catch (err) {
         console.log(err);

@@ -1,1 +1,6 @@
 Server/node_modules
+Application/node_modules
+Application/.prettierrc
+Application/package-lock.json
+Application/.vs
+Server/.vs
