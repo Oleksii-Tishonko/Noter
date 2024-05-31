@@ -4,12 +4,13 @@ import cache from "../../../Сache/cache";
 import { Link, useLocation, useParams } from "react-router-dom";
 import searchIcon from "./../../Images/search.svg";
 import { useNavigate } from "react-router-dom";
-import globals from "../../../globals";
+import globals, { ProductsLoaded } from "../../../globals";
 import Filter from "../../Scripts/filter";
 
 let pageParams = null;
 let categoryId = null;
 let page = 1;
+let keywords = "";
 let pageNavigation;
 
 const SearchResults = () => {
@@ -35,7 +36,9 @@ const SearchResults = () => {
       cache.Filters = getFilters();
 
       if(pageParams.has("page")) page = pageParams.get("page");
-      if(page) cache.ProductsPage = page;
+       if (page) cache.ProductsPage = page;
+
+       if (pageParams.has("keywords")) keywords = pageParams.get("keywords")
       
 
       if (!pageParams.has("category") || categoryId.length < 16) navigation("/404");
@@ -102,7 +105,7 @@ const SearchResults = () => {
    function LoadData() {
       //checking if data exists in memory
       
-      if (cache.ProductsLoaded.isPageLoaded(page) && cache.ProductsLoaded.compareFilters(cache.ProductsLoaded.filters, getFilters())) {
+      if (cache.ProductsLoaded.isPageLoaded(page) && cache.ProductsLoaded.compareFilters(cache.ProductsLoaded.filters, getFilters()) && cache.ProductsLoaded.keywords == keywords) {
          console.log("data exists");
          setIsPending(false);
          setError(false);
@@ -116,12 +119,14 @@ const SearchResults = () => {
          setIsPending(true);
          let loader = cache.LoadingManager.Products;
          console.warn(filtersToQuery(getFilters()));
-         loader.filters = getFilters();
+          loader.filters = getFilters();
          console.log(loader.params);
          loader.requestPath;
-         if (page) loader.page = page;
+          if (page) loader.page = page;
+         if(keywords) loader.keywords = keywords;
          console.log(loader.params);
-         loader.Load(OnDataLoaded);
+          loader.Load(OnDataLoaded);
+          
       }
 
       
@@ -510,7 +515,8 @@ import shoppingCartImg from './../../Images/shopping_cart2.svg';
 const NavBar = () => {
    const [userName, setUserName] = useState(null);
    const [isAuthentificated, setIsAuthentificated] = useState(false);
-   const [accountLink, setAccountLink] = useState("");
+    const [accountLink, setAccountLink] = useState("");
+   const [searchInput, setSearchInput] = useState("");
 
 
    useLayoutEffect(() => {
@@ -542,15 +548,33 @@ const NavBar = () => {
       console.log(userName)
    }, [isAuthentificated]);
 
+    function SearchForResults() {
+        console.log('Searching for results');
+        pageParams.set("keywords", searchInput);
+
+        console.log(searchInput);
+        console.log(pageParams.toString());
+        pageNavigation(`/products?${pageParams.toString()}`);
+    }
+
+    function ClearKeywords() {
+        console.log("Clearing keywords");
+        setSearchInput("");
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === "Enter") SearchForResults();
+    }
+
    return (
       <div className="navBar">
          <div className="searchbar">
             <div className="searchImage">
                <img src={searchIcon} />
             </div>
-            <input className="searchInput" type="text"></input>
-            <button className="deleteInput">X</button>
-            <button className="searchButton">Find</button>
+               <input className="searchInput" value={searchInput} type="text" onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => handleKeyDown(e)}></input>
+               <button className="deleteInput" onClick={() => ClearKeywords() }>X</button>
+               <button className="searchButton" onClick={() => SearchForResults() }>Find</button>
          </div>
          <Link to={accountLink} className="userAccount">
             {userName}
