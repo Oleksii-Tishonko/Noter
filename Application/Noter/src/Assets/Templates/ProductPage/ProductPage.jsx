@@ -295,7 +295,8 @@ const ActionPanel = ({ product }) => {
       const RestAPI = cache.RestAPI;
       const url = `${globals.DATABASE}/api/v1/carts/${uid}`;
       const data = {
-         product: product,
+          productId: product,
+         quantity: "increment",
       };
       RestAPI.UpdateData(url, data, OnProductAddedToCart);
 

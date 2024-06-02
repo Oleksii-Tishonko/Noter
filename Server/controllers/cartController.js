@@ -46,14 +46,16 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
     //if cart contain product, increase quantity
     let productFound = false;
     for(let i = 0; i < cart.products.length; i++){
-        if(cart.products[i].product.equals(product)){
+        if (cart.products[i].product.equals(product)) {
+            console.log(`incrementing quantity of product ${product}`)
             productFound = true;
             cart.products[i].quantity += quantity;
             break;
         }
     }
 
-    if(!productFound){
+    if (!productFound) {
+        console.log(`adding product ${product} to cart`);
         cart.products.push({product, quantity});
     }
     
@@ -67,6 +69,33 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
     });
 
 });
+
+exports.changeProductQuantity = catchAsync(async (req, res, next) => {
+    console.log('request to change product quantity');
+
+    const user = await User.findOne({ uid: req.params.userUID });
+    if (!user) return next(new AppError('No user found with that UID', 404));
+    const cart = await Cart.findById(user.cart);
+    if (!cart) return next(new AppError('No cart found with that ID', 404));
+
+    const productId = req.body.productId;
+    let quantity = req.body.quantity;
+
+    if (!productId) return next(new AppError('No product ID provided', 400));
+
+    //if quantity doesn't exist or is negative, set it to 1
+    if (quantity < 0 || !quantity && quantity != 0) quantity = 1;
+
+    console.log(`changing quantity of product ${productId} to ${quantity}`);
+    await cart.changeProductQuantity(productId, quantity);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            cart,
+        },
+    });
+})
 
 exports.removeProductFromCart = catchAsync(async (req, res, next) => {
     const user = await User.findOne({uid: req.params.userUID});

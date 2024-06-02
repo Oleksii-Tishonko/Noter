@@ -43,6 +43,32 @@ cartSchema.methods.removeProduct = async function(productId) {
     await this.save();
 };
 
+cartSchema.methods.changeProductQuantity = async function (productId, quantity) {
+    let productFound = false;
+
+    //change quantity of product
+    for(let i = 0; i < this.products.length; i++){
+        if (this.products[i].product.equals(productId)) {
+            console.log(`quantity: ${quantity}`);
+            console.log(`product quantity: ${this.products[i].quantity}`);
+            if(quantity == 'increment') quantity = this.products[i].quantity + 1;
+            if (quantity == 0) this.products.splice(i, 1);
+            else this.products[i].quantity = quantity;
+            productFound = true;
+            
+            break;
+        }
+    }
+
+    //if product not found, add product to cart
+    if (!productFound && quantity != 0) {
+        console.log(`adding product ${productId} to cart`);
+        this.products.push({product: productId, quantity: 1});
+    }
+
+    await this.save();
+}
+
 cartSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'products.product',

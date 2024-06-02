@@ -72,7 +72,10 @@ class CartObject{
    items;
    constructor(){
 
-   }
+    }
+    getProductQuantity(productId) {
+        return this.getItems()[productId];
+    }
    addItem(productId){
       if(!this.items[productId]) this.items[productId] = 1;
       else this.items[productId] += 1;

@@ -38,6 +38,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    position: relative;
 }
 .cartPage .productList .product .productInfo .productValues{
     margin-left: 20px;
@@ -80,3 +81,12 @@
 .cartPage .removeProduct:hover{
     color: red;
 }
+
+    .cartPage .productList .product .productInfo .deleteProduct {
+        background-color: red;
+        position: absolute; /* Add this line */
+        top: 0; /* Add this line */
+        right: 0; /* Add this line */
+        margin-right: 10px; /* Optional: Add margin to the right */
+        margin-top: -15px;
+    }

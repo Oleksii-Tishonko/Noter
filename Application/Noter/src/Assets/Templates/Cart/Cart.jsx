@@ -26,7 +26,7 @@ const Cart = () => {
                <div className="productList">
                   {/* `${globals.DATABASE}/api/v1/products/photo/${product.imageCover}` */}
                   {cart.products.map((product) => (
-                     <Product key={product.product._id} product={product.product} quantity={product.quantity} removeProduct={removeProduct} />
+                      <Product key={product.product._id} product={product.product} quantity={product.quantity} deleteProduct={deleteProduct} removeOneProduct={removeOneProduct} />
                   ))}
                </div>
                <div className="totalPrice">
@@ -67,31 +67,41 @@ const Cart = () => {
       }
    }
 
-   function removeProduct(productId) {
-      const RestAPI = cache.RestAPI;
-      const data = { productId: productId };
-      const url = `${globals.DATABASE}/api/v1/carts/${uid}`;
-      RestAPI.DeleteData(url, data, OnProductRemoved);
-   }
+   function deleteProduct(productId) {
+       setProductQuantity(productId, 0);
+    }
 
-   function OnProductRemoved(data, status, error) {
-      console.log("product removed");
-      console.log(data);
-   }
+    function removeOneProduct(productId) {
+        let quantity = cache.Cart.getProductQuantity(productId);
+        setProductQuantity(productId, quantity-1);
+    }
+    function setProductQuantity(productId, quantity) {
+        const RestAPI = cache.RestAPI;
+        const data = { productId: productId, quantity: quantity };
+        const url = `${globals.DATABASE}/api/v1/carts/${uid}`;
+        RestAPI.UpdateData(url, data, OnProductQuantityUpdated);
+    }
+
+    function OnProductQuantityUpdated(data, status, error) {
+        console.log("product quantity changed");
+        console.log(data);
+    }
+
 };
 
-const Product = ({ product, quantity, removeProduct }) => {
+const Product = ({ product, quantity, removeOneProduct, deleteProduct }) => {
    return (
       <div className="product">
          <div className="productImage">
             <img src={`${globals.DATABASE}/api/v1/products/photo/${product.imageCover}`} alt="product" />
          </div>
-         <div className="productInfo">
+           <div className="productInfo">
+               <button className="deleteProduct" onClick={() => deleteProduct(product._id) }>X</button>
             <h3 className="productName">{product.name}</h3>
             <div className="productValues">
                <p className="productPrice">Price: ${product.price}</p>
                <p className="productQuantity">Quantity: {quantity}</p>
-               <button className="removeProduct" onClick={() => removeProduct(product._id)}>
+               <button className="removeProduct" onClick={() => removeOneProduct(product._id)}>
                   Remove one
                </button>
             </div>

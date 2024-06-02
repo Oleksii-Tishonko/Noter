@@ -10,7 +10,7 @@ router
 router
     .route('/:userUID')
     .get(cartController.getCart)
-    .patch(cartController.addProductToCart)
-    .delete(cartController.removeProductFromCart);
+    .delete(cartController.removeProductFromCart)
+    .patch(cartController.changeProductQuantity);
 
 module.exports = router;
