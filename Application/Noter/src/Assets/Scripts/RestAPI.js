@@ -24,7 +24,10 @@ class RestAPI {
                }
                return res.json();
             })
-            .then((data) => {
+             .then((data) => {
+                 const status = data.status;
+                 console.log(`responce status: ${status}`);
+                 if (status !== "success") throw Error(data);
                if (data && pathToData) {
                   data = ExtractData(data, pathToData);
                }
@@ -59,7 +62,10 @@ class RestAPI {
                // }
                return res.json();
             })
-            .then((data) => {
+             .then((data) => {
+                 const status = data.status;
+                 console.log(`responce status: ${status}`);
+                 if (status !== "success") throw Error(data);
                callback(data, this.StatusCode.OK, null);
             })
             .catch((err) => {
