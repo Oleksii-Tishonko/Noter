@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
+
+.dropdown{ 
+    position: relative;
+    .selectedOption {
+    width: 10vw;
+    height: 3.5vw;
+    background-color: lightgray;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+ }
+.selectedOption::after {
+    font-family: Material Symbols Outlined;
+    content: "keyboard_arrow_down";
+    color: rgba(0, 0, 0, 0.952);
+    font-weight: 2000;
+    display: inline-block;
+    font-size: 22px;
+    margin-left: 4px;
+    margin-top: 2px;
+}
+
+/*a[href^="https://"]::after {
+    font-family: Material Symbols Outlined;
+    content: "open_in_new";
+    color: rgba(0, 0, 0, 0.952);
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 1px;
+}*/
+
+.optionList {
+    /*left: 41vw;*/
+    padding-top: 5px;
+    background-color: white;
+    z-index: 299;
+    display: block;
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding-bottom: 5px;
+
+    .dropdownOption
+    {
+        padding-top: 3px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        cursor: pointer;
+
+        &:hover
+        {
+            background-color: lightgray;
+        }
+    }
+ }
+}
