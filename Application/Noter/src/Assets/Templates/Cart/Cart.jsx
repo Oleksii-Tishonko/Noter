@@ -1,8 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./CartStyles.css";
 import cache from "../../../Сache/cache";
 import { AuthContext } from "../../Templates/Authentificate/AuthContext";
 import globals from "../../../globals";
+import DropDown from "../../Scripts/Components/Dropdown/dropdown";
 
 let uid;
 
@@ -19,14 +21,15 @@ const Cart = () => {
    }, [user]);
 
    return (
-      <div className="cartPage">
+       <div className="cartPage">
+      <Link to="/" className="HomeLink">Noter</Link>
          <h1>Shopping Cart</h1>
          {!loading && cart.products.length > 0 && (
             <>
                <div className="productList">
                   {/* `${globals.DATABASE}/api/v1/products/photo/${product.imageCover}` */}
                   {cart.products.map((product) => (
-                      <Product key={product.product._id} product={product.product} quantity={product.quantity} deleteProduct={deleteProduct} removeOneProduct={removeOneProduct} />
+                      <Product key={product.product._id} setProductQuantity={setProductQuantity} product={product.product}  productQuantity={product.quantity} deleteProduct={deleteProduct} removeOneProduct={removeOneProduct} />
                   ))}
                </div>
                <div className="totalPrice">
@@ -40,7 +43,8 @@ const Cart = () => {
                <div className="message">Browse the website and add products to your cart.</div>
             </>
          )}
-         {loading && <div className="loading">Loading...</div>}
+           {loading && <div className="loading">Loading...</div>}
+           {/*<DropDown options={[1, 2, 3, 4]} label="Qty: " />*/}
       </div>
    );
 
@@ -89,7 +93,15 @@ const Cart = () => {
 
 };
 
-const Product = ({ product, quantity, removeOneProduct, deleteProduct }) => {
+const Product = ({ product, productQuantity, removeOneProduct, deleteProduct, setProductQuantity }) => {
+    const [quantity, setQuantity] = useState(productQuantity);
+
+    useEffect(() => {
+        console.log(`Product ${product._id} quantity changed to ${quantity}`);
+        setProductQuantity(product._id, quantity);
+        //cache.Cart.setProductQuantity(product._id, quantity);
+    }, [quantity]);
+
    return (
       <div className="product">
          <div className="productImage">
@@ -100,7 +112,9 @@ const Product = ({ product, quantity, removeOneProduct, deleteProduct }) => {
             <h3 className="productName">{product.name}</h3>
             <div className="productValues">
                <p className="productPrice">Price: ${product.price}</p>
-               <p className="productQuantity">Quantity: {quantity}</p>
+                   <DropDown value={quantity} setValue={setQuantity} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label={"Qty: "}/>
+                   
+
                <button className="removeProduct" onClick={() => removeOneProduct(product._id)}>
                   Remove one
                </button>
@@ -109,5 +123,6 @@ const Product = ({ product, quantity, removeOneProduct, deleteProduct }) => {
       </div>
    );
 };
+
 
 export default Cart;
