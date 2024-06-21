@@ -39,6 +39,17 @@
             {
                 margin-bottom: 0px;
                 margin-top: 15px;
+
+                .optionList
+                {
+                    .dropdownOption
+                        {
+                             font-size: 13pt;
+                             display: flex;
+                             justify-content: start;
+                             padding-left: 13px;
+                        }
+                }
             }
     }
     .cartPage .productList .product .productImage {

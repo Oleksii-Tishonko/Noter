@@ -98,7 +98,9 @@ const Product = ({ product, productQuantity, removeOneProduct, deleteProduct, se
 
     useEffect(() => {
         console.log(`Product ${product._id} quantity changed to ${quantity}`);
-        setProductQuantity(product._id, quantity);
+        if (quantity == '0 (Delete)') setProductQuantity(product._id, 0);
+        else setProductQuantity(product._id, quantity);
+        
         //cache.Cart.setProductQuantity(product._id, quantity);
     }, [quantity]);
 
@@ -112,12 +114,12 @@ const Product = ({ product, productQuantity, removeOneProduct, deleteProduct, se
             <h3 className="productName">{product.name}</h3>
             <div className="productValues">
                <p className="productPrice">Price: ${product.price}</p>
-                   <DropDown value={quantity} setValue={setQuantity} options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label={"Qty: "}/>
+                   <DropDown value={quantity} setValue={setQuantity} options={['0 (Delete)', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label={"Qty: "}/>
                    
 
-               <button className="removeProduct" onClick={() => removeOneProduct(product._id)}>
-                  Remove one
-               </button>
+               {/*<button className="removeProduct" onClick={() => removeOneProduct(product._id)}>*/}
+               {/*   Remove one*/}
+               {/*</button>*/}
             </div>
          </div>
       </div>
