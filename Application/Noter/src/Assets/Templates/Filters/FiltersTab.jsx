@@ -50,29 +50,7 @@ const FiltersTab = () => {
                             <Filter filter={filter} isFilterSelected={isFilterSelected} addFilter={addFilter} removeFilter={removeFilter} />
 
                         ))}
-
-                    <ul className="specification">
-                        <div className="sectionHeader">Processor Type</div>
-                        <li className="option">
-                            <a className="optionName">AMD Ryzen 7</a>
-                        </li>
-                        <li className="option">
-                            <a className="optionName">Intel Xeon</a>
-                        </li>
-                        <li className="option">
-                            <a className="optionName">Intel Core i5</a>
-                        </li>
-                    </ul>
-
-                    <div className="specification">
-                        <div className="sectionHeader">Hard Drive Sizer</div>
-                        <li className="option">
-                            <a className="optionName">4 TB</a>
-                        </li>
-                        <li className="option">
-                            <a className="optionName">2 TB</a>
-                        </li>
-                    </div>
+                    
                 </div>
             )}
         </>
