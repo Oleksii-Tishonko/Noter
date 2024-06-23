@@ -3,6 +3,7 @@ import './UserAccountStyles.css';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { AuthContext } from '../Authentificate/AuthContext';
 import cache from '../../../Сache/cache';
+import Payments from './Payments/Payments';
 
 const UserAccount = () => {
     const [subPage, setSubPage] = React.useState(<></>);
@@ -12,9 +13,15 @@ const UserAccount = () => {
     const pageComponent = (pageName) => {
         switch(pageName){
             case 'main':
-                return <Main/>
-            case 'theme':
-                return <Theme/>
+                return <Main />
+            case 'settings':
+                return <Settings />
+            case 'payments':
+                return <Payments userdata={userData} />
+            case 'messages':
+                return <Messages />
+            case 'customerservice':
+                return <CustomerService />
             case 'data':
                 return <Data userdata={userData} logout={logout} />;
             default:
@@ -38,9 +45,12 @@ const UserAccount = () => {
           <h1>User Account</h1>
           <div className="selectorWindow">
              <div className="subPageList">
-                <Link to='/userAccount?page=main' className="subpage">main</Link>
-                <Link to='/userAccount?page=theme' className="subpage">theme</Link>
-                <Link to='/userAccount?page=data' className="subpage">data</Link>
+                <Link to='?page=main' className="subpage">Orders & Returns</Link>
+                <Link to='?page=settings' className="subpage">Settings</Link>
+                <Link to='?page=payments' className="subpage">Payments</Link>
+                <Link to='?page=messages' className="subpage">Messages</Link>
+                <Link to='?page=customerservice' className="subpage">Customer service</Link>
+                <Link to='?page=data' className="subpage">Data</Link>
              </div>
              <div className="content">{subPage}</div>
           </div>
@@ -78,10 +88,28 @@ const Main = () => {
     );
 }
 
-const Theme = () => {
+const Settings = () => {
     return (
-       <div className="theme">
-          <div>This is the theme page content. There you can change the theme of the website</div>
+       <div className="settings">
+          <div>This is the settings page content. There you can change your password, email, phone number and other personal information</div>
+       </div>
+    );
+}
+
+
+
+const Messages = () => {
+    return (
+       <div className="messages">
+          <div>This is the messages page content. There you can find all your messages from the customer service</div>
+       </div>
+    );
+}
+
+const CustomerService = () => {
+    return (
+       <div className="customerService">
+          <div>This is the customer service page content. There you can find all your messages to the customer service</div>
        </div>
     );
 }
@@ -128,4 +156,5 @@ const Data = ({userdata, logout}) => {
 
     
 }
+
 

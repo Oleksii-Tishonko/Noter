@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
         select: false,
     },
 
+    creditCards: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'CreditCard',
+    }],
+
     photo:{
         type: String,
         default: 'defaultUserPhoto',
@@ -49,7 +54,20 @@ const userSchema = new mongoose.Schema({
         ref: 'Cart',
     }
 
-})
+},
+{
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+}
+);
+
+userSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'creditCards',
+        select: 'cardName',
+    });
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
 

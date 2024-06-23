@@ -16,6 +16,12 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(cors());
 
+const corsOptions = {
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Allow these methods
+};
+
+app.use(cors(corsOptions));
+
 app.use('/api/v1/test', (req, res) => {
     res.json({
         status:200,

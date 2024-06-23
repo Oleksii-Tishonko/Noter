@@ -317,7 +317,8 @@
     letter-spacing: 0.33px;
     word-spacing: -2px;
 }
-.addToCart{
+.addToCart {
+    color: white;
     border: none;
     background-color: #00aa4a;
     margin-left: 30px;
@@ -326,6 +327,12 @@
     height: 34px;
     border-radius: 8px;
 }
+
+    .addToCart:hover {
+        background-color: #008037;
+        /*add animation*/
+    }
+
 .buyProduct{
     border: none;
     background-color: #00aa4a;
