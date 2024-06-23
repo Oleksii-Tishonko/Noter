@@ -54,21 +54,30 @@ class RestAPI {
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+             body: method === "DELETE" ? null : JSON.stringify(data),
          })
             .then((res) => {
                // if (!res.ok) {
                //    throw Error("could not fetch the data for this resource");
-               // }
+                // }
+                if (res.status === 204) {
+                    console.log("no content");
+                    callback(null, this.StatusCode.OK, null);
+                    return null;
+                }
+
                return res.json();
             })
              .then((data) => {
+                 console.log(data);
+                 if (!data) return null;
+
                  const status = data.status;
                  console.log(`responce status: ${status}`);
                  if (status !== "success") throw Error(data);
                callback(data, this.StatusCode.OK, null);
             })
-            .catch((err) => {
+             .catch((err) => {
                if (err.name === "AbortError") {
                   console.log("fetch aborted");
                   callback(null, this.StatusCode.CANCELLED, "fetch aborted");
@@ -79,9 +88,9 @@ class RestAPI {
       }, 1000);
    }
 
-   async DeleteData(url, data, callback) {
-      this.WriteData(url, data, callback, "DELETE");
-   }
+    async DeleteData(url, callback) {
+      this.WriteData(url, null, callback, "DELETE");
+    }
 
    async UpdateData(url, data, callback) {
       this.WriteData(url, data, callback, "PATCH");
