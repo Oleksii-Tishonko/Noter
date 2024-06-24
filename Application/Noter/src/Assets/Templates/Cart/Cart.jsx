@@ -34,8 +34,11 @@ const Cart = () => {
                             <Product key={product.product._id} setProductQuantity={setProductQuantity} product={product.product} productQuantity={product.quantity} deleteProduct={deleteProduct} removeOneProduct={removeOneProduct} />
                         ))}
                     </div>
-                    <div className="totalPrice">
-                        <p>Total: ${cart.totalPrice}</p>
+                    <div className="ActionPanel">
+                        <div className="totalPrice">
+                            <p>Total: ${cart.totalPrice}</p>
+                        </div>
+                        <button className="checkoutButton">Checkout</button>
                     </div>
                 </>
             )}

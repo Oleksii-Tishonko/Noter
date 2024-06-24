@@ -29,9 +29,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 240px;
+    height: 192px;
     width: 100%;
-    margin-bottom: 2vh;
+    padding: 5px;
+    margin-bottom: 7px;
 }
 .cartPage .productList .product {
     .dropdown {
@@ -64,6 +65,7 @@
     align-items: flex-start;
     justify-content: center;
     position: relative;
+    height: 100%;
 }
 .cartPage .productList .product .productInfo .productValues {
     margin-left: 20px;
@@ -71,9 +73,10 @@
     gap: 40px;
 }
 .cartPage .productList .product .productInfo .productName {
-    font-size: 16pt;
+    font-size: 15pt;
     font-weight: bold;
     margin-bottom: 1vh;
+    width: 90%;
 }
 .cartPage .productList .product .productInfo .productPrice {
     font-size: 14pt;
@@ -106,12 +109,37 @@
 .cartPage .removeProduct:hover {
     color: red;
 }
+.cartPage .ActionPanel {
+    display: flex;
+    justify-content: start;
+    width: 80%;
+
+    .checkoutButton {
+        margin-left: 5%;
+        width: 15%;
+        height: 4.7vw;
+        background-color: lightblue;
+        border-radius: 5px;
+        border: 1px solid black;
+    }
+    .checkoutButton:hover {
+        background-color: #76b7f0;
+    }
+    .checkoutButton:active {
+        background-color: #617bb2;
+    }
+    .totalPrice {
+        margin-left: 70%;
+    }
+}
 
 .cartPage .productList .product .productInfo .deleteProduct {
     background-color: red;
-    position: absolute; /* Add this line */
-    top: 0; /* Add this line */
-    right: 0; /* Add this line */
-    margin-right: 10px; /* Optional: Add margin to the right */
-    margin-top: -15px;
+    position: absolute; /* Changed from relative to absolute */
+    top: 0px; /* Adjust the top position as needed */
+    right: 0px;
+    margin-right: 0px; /* Optional: Add margin to the right */
+    margin-left: auto;
+    margin-top: 0px;
+    margin-bottom: auto;
 }
