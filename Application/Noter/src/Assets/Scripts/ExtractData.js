@@ -5,16 +5,16 @@
  * @returns {*} - The extracted data.
  */
 function ExtractData(data, path) {
-   const properties = path.split(".");
+    const properties = path.split(".");
 
-   let res = data;
-   for (let i = 0; i < properties.length; i++) {
-      if (properties[i]) res = res && res[properties[i]];
-   }
+    let res = data;
+    for (let i = 0; i < properties.length; i++) {
+        if (properties[i]) res = res && res[properties[i]];
+    }
 
-   //console.log(res);
+    //console.log(res);
 
-   return res;
+    return res;
 }
 
 export default ExtractData;

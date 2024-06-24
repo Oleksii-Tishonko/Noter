@@ -1,5 +1,4 @@
-
-.cartPage{
+.cartPage {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,23 +7,23 @@
     padding-bottom: 90px;
 }
 
-    .cartPage .HomeLink {
-        margin-top: 0vh;
-        font-size: 18pt;
-        align-self: flex-start;
-        padding: 10px 20px;
-        background-color: #0D3B66;
-        color: white;
-        text-decoration: none;
-    }
-.cartPage .productList{
+.cartPage .HomeLink {
+    margin-top: 0vh;
+    font-size: 18pt;
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #0d3b66;
+    color: white;
+    text-decoration: none;
+}
+.cartPage .productList {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 80%;
 }
-.cartPage .productList .product{
+.cartPage .productList .product {
     border: 1px solid black;
     display: flex;
     flex-direction: row;
@@ -34,34 +33,31 @@
     width: 100%;
     margin-bottom: 2vh;
 }
-    .cartPage .productList .product{
-        .dropdown
-            {
-                margin-bottom: 0px;
-                margin-top: 15px;
+.cartPage .productList .product {
+    .dropdown {
+        margin-bottom: 0px;
+        margin-top: 15px;
 
-                .optionList
-                {
-                    .dropdownOption
-                        {
-                             font-size: 13pt;
-                             display: flex;
-                             justify-content: start;
-                             padding-left: 13px;
-                        }
-                }
+        .optionList {
+            .dropdownOption {
+                font-size: 13pt;
+                display: flex;
+                justify-content: start;
+                padding-left: 13px;
             }
+        }
     }
-    .cartPage .productList .product .productImage {
-        padding-left: 7px;
-        height: 90%;
-    }
-.cartPage .productList .product .productImage img{
+}
+.cartPage .productList .product .productImage {
+    padding-left: 7px;
+    height: 90%;
+}
+.cartPage .productList .product .productImage img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
-.cartPage .productList .product .productInfo{
+.cartPage .productList .product .productInfo {
     width: 60%;
     display: flex;
     flex-direction: column;
@@ -69,53 +65,53 @@
     justify-content: center;
     position: relative;
 }
-.cartPage .productList .product .productInfo .productValues{
+.cartPage .productList .product .productInfo .productValues {
     margin-left: 20px;
     display: flex;
     gap: 40px;
 }
-.cartPage .productList .product .productInfo .productName{
+.cartPage .productList .product .productInfo .productName {
     font-size: 16pt;
     font-weight: bold;
     margin-bottom: 1vh;
 }
-.cartPage .productList .product .productInfo .productPrice{
+.cartPage .productList .product .productInfo .productPrice {
     font-size: 14pt;
     font-weight: bold;
     margin-bottom: 1vh;
 }
-.cartPage .productList .product .productInfo .productQuantity{
+.cartPage .productList .product .productInfo .productQuantity {
     font-size: 14pt;
     font-weight: bold;
     margin-bottom: 1vh;
 }
-.cartPage .emptyCart{
+.cartPage .emptyCart {
     font-size: 18pt;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.cartPage .message{
+.cartPage .message {
     font-size: 13pt;
     margin-top: 0.2vh;
 }
-.cartPage .removeProduct{
+.cartPage .removeProduct {
     height: 30px;
     text-align: center;
     font-size: 10pt;
     margin-top: 1.6vh;
     cursor: pointer;
 }
-.cartPage .removeProduct:hover{
+.cartPage .removeProduct:hover {
     color: red;
 }
 
-    .cartPage .productList .product .productInfo .deleteProduct {
-        background-color: red;
-        position: absolute; /* Add this line */
-        top: 0; /* Add this line */
-        right: 0; /* Add this line */
-        margin-right: 10px; /* Optional: Add margin to the right */
-        margin-top: -15px;
-    }
+.cartPage .productList .product .productInfo .deleteProduct {
+    background-color: red;
+    position: absolute; /* Add this line */
+    top: 0; /* Add this line */
+    right: 0; /* Add this line */
+    margin-right: 10px; /* Optional: Add margin to the right */
+    margin-top: -15px;
+}

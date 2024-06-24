@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import "./PageNotFoundStyles.css";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from "react-router-dom";
 
 const PageNotFound = () => {
     const navigate = useNavigate();
@@ -8,13 +8,15 @@ const PageNotFound = () => {
         navigate("/");
     }
 
-    return ( 
+    return (
         <div className="pageNotFound">
             <div className="title">404</div>
             <div className="subtitle">Page Not Found</div>
-            <button className="goToHomePage" onClick={() => handleGoToHomePage()}>Go to Home Page</button>
+            <button className="goToHomePage" onClick={() => handleGoToHomePage()}>
+                Go to Home Page
+            </button>
         </div>
-     );
-}
- 
+    );
+};
+
 export default PageNotFound;

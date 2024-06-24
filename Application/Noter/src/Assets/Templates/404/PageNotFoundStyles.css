@@ -1,21 +1,21 @@
-.pageNotFound{
+.pageNotFound {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
 }
-.pageNotFound .title{
+.pageNotFound .title {
     font-size: 10vw;
     font-weight: 700;
     color: #333;
 }
-.pageNotFound .subtitle{
+.pageNotFound .subtitle {
     font-size: 2vw;
     font-weight: 400;
     color: #333;
 }
-.pageNotFound .goToHomePage{
+.pageNotFound .goToHomePage {
     font-size: 1.5vw;
     font-weight: 400;
     background-color: #333;

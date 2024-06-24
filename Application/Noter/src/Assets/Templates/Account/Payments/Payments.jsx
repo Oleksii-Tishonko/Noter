@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
-import './Payments.css';
-import { useEffect } from 'react';
-import RestAPI from '../../../Scripts/RestAPI';
-import globals from '../../../../globals';
+import {useContext, useState} from "react";
+import "./Payments.css";
+import {useEffect} from "react";
+import RestAPI from "../../../Scripts/RestAPI";
+import globals from "../../../../globals";
 
 const Payments = ({userdata}) => {
     const [isEditCardPopupOpen, setIsEditCardPopupOpen] = useState(false);
@@ -14,52 +14,56 @@ const Payments = ({userdata}) => {
         if (userdata) {
             setCreditCards(userdata.creditCards);
         }
-    }
-    , [userdata]);
+    }, [userdata]);
 
     function EditCard(creditCard) {
         setCreditCardEditing(creditCard);
         setIsEditCardPopupOpen(true);
     }
 
-
     return (
         <div className="payments">
             <div>This is the payments page content. There you can find your payment history and add new payment methods</div>
-            {!userdata && <div>Loading...</div> }
-            {userdata && (<div className="creditCards">
-            {creditCards && creditCards.map((creditCard) => (
-                <div className="creditCard" key={creditCard.cardName }>
-                    <div className='name'>{creditCard.cardName}</div>
-                    <div className='edit' onClick={() => EditCard(creditCard) }>Edit</div>
-                </div>))}
-                <div className="addCreditCard" onClick={() => setIsAddCardPopupOpen(true)}>Add Creadit Card</div>
-            </div>)}
-            {isEditCardPopupOpen && (<EditCreditCard userId={userdata._id} creditCard={creditCardEditing} closePopup={() => setIsEditCardPopupOpen(false)} />)}
-            {isAddCardPopupOpen && (<AddCreditCard userId={userdata._id} closePopup={() => setIsAddCardPopupOpen(false)} />)}
+            {!userdata && <div>Loading...</div>}
+            {userdata && (
+                <div className="creditCards">
+                    {creditCards &&
+                        creditCards.map((creditCard) => (
+                            <div className="creditCard" key={creditCard.cardName}>
+                                <div className="name">{creditCard.cardName}</div>
+                                <div className="edit" onClick={() => EditCard(creditCard)}>
+                                    Edit
+                                </div>
+                            </div>
+                        ))}
+                    <div className="addCreditCard" onClick={() => setIsAddCardPopupOpen(true)}>
+                        Add Creadit Card
+                    </div>
+                </div>
+            )}
+            {isEditCardPopupOpen && <EditCreditCard userId={userdata._id} creditCard={creditCardEditing} closePopup={() => setIsEditCardPopupOpen(false)} />}
+            {isAddCardPopupOpen && <AddCreditCard userId={userdata._id} closePopup={() => setIsAddCardPopupOpen(false)} />}
         </div>
     );
-}
+};
 
-const EditCreditCard = ({ userId, creditCard, setCreditCard, closePopup }) => {
+const EditCreditCard = ({userId, creditCard, setCreditCard, closePopup}) => {
     const [_creditCard, _setCreditCard] = useState(creditCard.cardName);
-    function OnCreditCardChange (e) {
+    function OnCreditCardChange(e) {
         const newCreditCard = e.target.value;
         _setCreditCard(newCreditCard);
     }
 
     function SaveChanges() {
         const restAPI = new RestAPI();
-        restAPI.UpdateData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards/${creditCard._id}`,
-            { cardName: _creditCard }, OnCreditCardUpdated);
+        restAPI.UpdateData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards/${creditCard._id}`, {cardName: _creditCard}, OnCreditCardUpdated);
 
         closePopup();
     }
 
     function DeleteCard() {
         const restAPI = new RestAPI();
-        restAPI.DeleteData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards/${creditCard._id}`,
-            OnCreditCardDeleted);
+        restAPI.DeleteData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards/${creditCard._id}`, OnCreditCardDeleted);
 
         closePopup();
     }
@@ -90,16 +94,21 @@ const EditCreditCard = ({ userId, creditCard, setCreditCard, closePopup }) => {
             <div className="popup">
                 <input type="text" value={_creditCard} onChange={(e) => OnCreditCardChange(e)} />
                 <div className="actionButtons">
-                    <div className="save" onClick={() => SaveChanges()}>Save</div>
-                    <div className="delete" onClick={() => DeleteCard()}>Delete</div>
-                    <div className="cancel" onClick={() => closePopup()}>Cancel</div>
+                    <div className="save" onClick={() => SaveChanges()}>
+                        Save
+                    </div>
+                    <div className="delete" onClick={() => DeleteCard()}>
+                        Delete
+                    </div>
+                    <div className="cancel" onClick={() => closePopup()}>
+                        Cancel
+                    </div>
                 </div>
-
             </div>
         </div>
     );
-}
-const AddCreditCard = ({ userId, closePopup }) => {
+};
+const AddCreditCard = ({userId, closePopup}) => {
     const [creditCard, setCreditCard] = useState(null);
 
     function OnCreditCardChange(e) {
@@ -109,9 +118,8 @@ const AddCreditCard = ({ userId, closePopup }) => {
 
     function CreateCard() {
         const restAPI = new RestAPI();
-        restAPI.PostData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards`,
-            { cardName: creditCard }, OnCreditCardCreated);
-        
+        restAPI.PostData(`${globals.DATABASE}/api/v1/users/${userId}/creditCards`, {cardName: creditCard}, OnCreditCardCreated);
+
         closePopup();
     }
 
@@ -130,12 +138,16 @@ const AddCreditCard = ({ userId, closePopup }) => {
             <div className="popup">
                 <input type="text" placeholder="Enter card name..." value={creditCard} onChange={(e) => OnCreditCardChange(e)} />
                 <div className="actionButtons">
-                    <div className="save add" onClick={() => CreateCard()}>Add</div>
-                    <div className="cancel" onClick={() => closePopup()}>Cancel</div>
+                    <div className="save add" onClick={() => CreateCard()}>
+                        Add
+                    </div>
+                    <div className="cancel" onClick={() => closePopup()}>
+                        Cancel
+                    </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Payments;

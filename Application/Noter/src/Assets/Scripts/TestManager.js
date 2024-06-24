@@ -1,4 +1,3 @@
-
 class TestManager {
     constructor() {
         this.totalTests = 0; // Variable to track total number of tests
@@ -19,12 +18,12 @@ class TestManager {
     }
 
     calculateScore() {
-        console.log(`${this.passedTests}/${this.totalTests} Passed`)
+        console.log(`${this.passedTests}/${this.totalTests} Passed`);
         const successPercentage = (this.passedTests / this.totalTests) * 100;
-        if(successPercentage == 100) console.log("100% Success")
-        else if(successPercentage == 0) console.log("0% Failed")
+        if (successPercentage == 100) console.log("100% Success");
+        else if (successPercentage == 0) console.log("0% Failed");
         else console.log(`${successPercentage.toFixed(1)}% Failed`);
     }
 }
 
-export default TestManager
+export default TestManager;

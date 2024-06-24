@@ -1,8 +1,7 @@
-﻿import { useLayoutEffect, useState } from "react";
-import cache from '../../../Сache/cache'
-import { useNavigate } from "react-router-dom";
-import './FiltersTab.css'
-
+﻿import {useLayoutEffect, useState} from "react";
+import cache from "../../../Сache/cache";
+import {useNavigate} from "react-router-dom";
+import "./FiltersTab.css";
 
 const FiltersTab = () => {
     const [category, setCategory] = useState(null);
@@ -43,16 +42,7 @@ const FiltersTab = () => {
         <>
             {isPending && <div>Loading...</div>}
             {error && <div className="error">error: {error}</div>}
-            {category && (
-                <div className="filtersTab">
-                    {category &&
-                        category.filters.map((filter) => (
-                            <Filter filter={filter} isFilterSelected={isFilterSelected} addFilter={addFilter} removeFilter={removeFilter} />
-
-                        ))}
-                    
-                </div>
-            )}
+            {category && <div className="filtersTab">{category && category.filters.map((filter) => <Filter filter={filter} isFilterSelected={isFilterSelected} addFilter={addFilter} removeFilter={removeFilter} />)}</div>}
         </>
     );
 
@@ -182,36 +172,33 @@ const FiltersTab = () => {
     }
 };
 
-const Filter = ({ filter, isFilterSelected, removeFilter, addFilter }) => {
+const Filter = ({filter, isFilterSelected, removeFilter, addFilter}) => {
     const [isExpanded, setIsExpanded] = useState(true);
 
     return (
         <ul className="specification" key={filter.name}>
             <div className="sectionHeader" onClick={() => setIsExpanded(!isExpanded)}>
-                <div className="title">
-                {filter.name}
-                </div>
-                <div className='dropdownIcon material-symbols-outlined'>{isExpanded ? 'stat_1' : 'stat_minus_1'}</div>
+                <div className="title">{filter.name}</div>
+                <div className="dropdownIcon material-symbols-outlined">{isExpanded ? "stat_1" : "stat_minus_1"}</div>
             </div>
-            { isExpanded && filter.variants.map((variant) => (
+            {isExpanded &&
+                filter.variants.map((variant) => (
+                    <li key={variant} className="option">
+                        {isFilterSelected(filter.name, variant) && (
+                            <a className="optionName" id="selected" onClick={() => removeFilter(filter.name, variant)}>
+                                {variant}
+                            </a>
+                        )}
 
-                <li key={variant} className="option">
-                    {isFilterSelected(filter.name, variant) && (
-                        <a className="optionName" id="selected" onClick={() => removeFilter(filter.name, variant)}>
-                            {variant}
-                        </a>
-                    )}
-
-                    {!isFilterSelected(filter.name, variant) && (
-                        <a className="optionName" id="notSelected" onClick={() => addFilter(filter.name, variant)}>
-                            {variant}
-                        </a>
-                    )}
-                </li>
-            ))}
+                        {!isFilterSelected(filter.name, variant) && (
+                            <a className="optionName" id="notSelected" onClick={() => addFilter(filter.name, variant)}>
+                                {variant}
+                            </a>
+                        )}
+                    </li>
+                ))}
         </ul>
-    )
-}
+    );
+};
 
-
-export default FiltersTab
+export default FiltersTab;

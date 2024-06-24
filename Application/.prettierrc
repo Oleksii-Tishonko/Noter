@@ -1,7 +1,8 @@
 {
-   "tabWidth": 4,
-   "useTabs": false,
-   "proseWrap": "never",
-   "printWidth": 10000,
-   "bracketSpacing": false
+    "tabWidth": 4,
+    "useTabs": false,
+    "proseWrap": "preserve",
+    "printWidth": 10000,
+    "bracketSpacing": false,
+    "singleAttributePerLine": false
 }

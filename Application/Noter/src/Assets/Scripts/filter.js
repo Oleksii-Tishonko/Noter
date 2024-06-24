@@ -1,56 +1,55 @@
 class Filter {
-   specName;
-   specOption;
+    specName;
+    specOption;
 
-   constructor(specName, specOption) {
-      this.specName = specName;
-      this.specOption = specOption;
-   }
+    constructor(specName, specOption) {
+        this.specName = specName;
+        this.specOption = specOption;
+    }
 
-   static extractFilters(string) {
-      if(!string || string === "") return [];
-      //let str = "?other_text specifications.Back-Facing Camera=46 MP&specifications.Back-Facing Camera=46 MP";
+    static extractFilters(string) {
+        if (!string || string === "") return [];
+        //let str = "?other_text specifications.Back-Facing Camera=46 MP&specifications.Back-Facing Camera=46 MP";
 
-      // .specifications{any}={any}& ---all matches
-      let matches = string.match(/specifications\.[^=]*=[^&]*/g);
+        // .specifications{any}={any}& ---all matches
+        let matches = string.match(/specifications\.[^=]*=[^&]*/g);
 
-      let filters = [];
+        let filters = [];
 
-      if (matches) {
-         matches.forEach((match) => {
-            let parts = match.split("=");
-            let specName = parts[0].replace("specifications.", "");
-            let specOption = parts[1];
+        if (matches) {
+            matches.forEach((match) => {
+                let parts = match.split("=");
+                let specName = parts[0].replace("specifications.", "");
+                let specOption = parts[1];
 
-            console.log(`specName: ${specName}, specOption: ${specOption}`);
+                console.log(`specName: ${specName}, specOption: ${specOption}`);
 
-            filters.push(new Filter(specName, specOption));
-         });
-      }
-      return filters;
-   }
+                filters.push(new Filter(specName, specOption));
+            });
+        }
+        return filters;
+    }
 
-   addFilter(filter, string) {
-      // if(string !== null && string !== "") string += "&";
-      string += `specifications.${filter.specName}=${filter.specOption}`;
-      return string;
-   }
+    addFilter(filter, string) {
+        // if(string !== null && string !== "") string += "&";
+        string += `specifications.${filter.specName}=${filter.specOption}`;
+        return string;
+    }
 
-   removeFilter(filter, string) {
-      let regex = new RegExp(`specifications.${filter.specName}=${filter.specOption}&?`);
-      string = string.replace(regex, "");
+    removeFilter(filter, string) {
+        let regex = new RegExp(`specifications.${filter.specName}=${filter.specOption}&?`);
+        string = string.replace(regex, "");
 
-      return string;
-   }
+        return string;
+    }
 
-   containsFilter(filter, string) {
-      let regex = new RegExp(`specifications.${filter.specName}=${filter.specOption}`);
-      return regex.test(string);
-   }
+    containsFilter(filter, string) {
+        let regex = new RegExp(`specifications.${filter.specName}=${filter.specOption}`);
+        return regex.test(string);
+    }
 }
 
 export default Filter;
-
 
 //Filter => create (specName, specOption)
 //

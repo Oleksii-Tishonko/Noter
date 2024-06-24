@@ -1,27 +1,26 @@
-#mainHeader{
-
+#mainHeader {
 }
-.aboutProduct{
+.aboutProduct {
     display: grid;
     grid-template-columns: 50% 50%;
 }
-.aboutProductLeft{
+.aboutProductLeft {
     text-align: center;
     width: 100%;
     /* background-color: lightcyan; */
 }
 
-.productPreview{
+.productPreview {
     display: grid;
     grid-template-columns: 15% 75%;
 }
-.productImage{
+.productImage {
     /* display: block;  */
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.imageBar{
+.imageBar {
     text-align: center;
     margin-top: 10px;
     /* background-color: yellow; */
@@ -31,13 +30,13 @@
     align-items: center;
 }
 
-.aboutProductRight{
+.aboutProductRight {
     width: 100%;
     text-align: right;
     margin-left: auto;
     /* background-color: lightblue; */
 }
-.productName{
+.productName {
     font-family: sans-serif;
     text-align: left;
     font-size: 17pt;
@@ -45,62 +44,60 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.reviews{
+.reviews {
     display: flex;
 }
-.reviewsLink{
+.reviewsLink {
     margin-left: 7px;
 }
 
-.rating{
+.rating {
     text-align: left;
     margin-left: 10px;
     /* background-color: black; */
 }
-.productActions{
+.productActions {
     margin-top: 10px;
     margin-bottom: 16px;
     border: 1px solid rgba(201, 201, 201, 0.68);
     border-radius: 8px;
     box-sizing: border-box;
-    
 }
-.sellerSection{
+.sellerSection {
     padding-bottom: 10px;
     width: 100%;
     text-align: left;
     border-bottom: 1px solid rgb(201, 201, 201, 0.68);
 }
-.seller{
+.seller {
     margin: 13px;
 }
-.sellerLink{
-
+.sellerLink {
 }
-.sellerText{
+.sellerText {
     font-size: 16px;
 }
-.sellerName{
+.sellerName {
     font-size: 19.5px;
     margin-left: 2px;
 }
 
-.getProductSection{
+.getProductSection {
     padding: 10px;
     text-align: left;
     display: flex;
     align-items: center;
 }
-.priceBox{
+.priceBox {
     margin: 12px;
     margin-top: 15px;
 }
-.price{
+.price {
     font-size: 24px;
     letter-spacing: 0.33px;
     word-spacing: -2px;
 }
-.addToCart{
+.addToCart {
     border: none;
     background-color: #00aa4a;
     margin-left: 30px;
@@ -109,7 +106,7 @@
     height: 34px;
     border-radius: 8px;
 }
-.buyProduct{
+.buyProduct {
     border: none;
     background-color: #00aa4a;
     margin-left: 10px;
@@ -119,108 +116,103 @@
     border-radius: 8px;
 }
 
-
-th,td {
-  border: 1px solid rgb(197, 197, 197);
-  text-align: center;
-  padding: 10px;
+th,
+td {
+    border: 1px solid rgb(197, 197, 197);
+    text-align: center;
+    padding: 10px;
 }
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
-.summary{
+.summary {
     margin-top: 30px;
     margin-bottom: 30px;
 }
 
-.summaryHeader{
+.summaryHeader {
     font-size: 19px;
     margin: 10px;
-    
 }
-.summaryText{
-
+.summaryText {
 }
 
-.moduleSeparator{
+.moduleSeparator {
     width: 100%;
     margin: 5px;
-    
+
     border-bottom: 0.1px solid rgba(144, 144, 144, 0.867);
 }
 
-.specs{
+.specs {
     text-align: center;
     margin-top: 40px;
     margin-right: 20px;
 }
 
-.specs table{
+.specs table {
     text-align: left;
     width: 100%;
-    
 }
-.specs table th{
+.specs table th {
     width: 40%;
     text-align: left;
 }
 
-.specs table td{
+.specs table td {
     width: 60%;
     text-align: left;
 }
-.specs #header{
+.specs #header {
     font-size: 18pt;
     text-align: center;
 }
-.specsLink{
+.specsLink {
     text-align: left;
     margin: 10px;
     color: blue;
     cursor: pointer;
 }
 
-.description{
+.description {
     margin-top: 20px;
     margin-bottom: 40px;
 }
-.decriptionHeader{
+.decriptionHeader {
     margin: 10px;
     font-size: 16pt;
 }
-.descriptionText{
+.descriptionText {
     font-size: 14pt;
 }
-.reviewsSection{
+.reviewsSection {
     margin: 10px;
     margin-top: 20px;
 }
-.reviewsHeader{
+.reviewsHeader {
     font-size: 18pt;
     margin-bottom: 10px;
 }
-.review{
+.review {
     padding: 10px;
     border: solid rgba(105, 104, 104, 0.212);
     border-radius: 8px;
     margin-top: 15px;
 }
-.review .header{
+.review .header {
     font-size: 15pt;
     margin-bottom: 3px;
 }
-.review .name{
-
+.review .name {
 }
-.review .date{
+.review .date {
     font-size: 10pt;
     margin-bottom: 3px;
 }
-.review .rating{
+.review .rating {
     text-align: left;
     margin-left: 0; /*replace it*/
     /* background-color: black; */
     margin-bottom: 8px;
 }
-

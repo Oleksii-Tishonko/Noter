@@ -1,127 +1,125 @@
 import globals from "../globals";
-import { useEffect } from "react";
+import {useEffect} from "react";
 import cloneDeep from "lodash/cloneDeep";
 import RestAPI from "../Assets/Scripts/RestAPI";
 
 class ReviewsObject {
-   productId;
-   count;
-   pages;
-   constructor() {
-      this.pages = [];
-   }
+    productId;
+    count;
+    pages;
+    constructor() {
+        this.pages = [];
+    }
 
-   setCount(results) {
-      const limit = 2;
-      this.count = Math.floor((results + limit - 1) / limit);
-   }
-   isPageLoaded(page) {
-      return this.pages[page] ? true : false;
-   }
-   isPageExist(page) {
-      return page <= this.count;
-   }
-   updateProduct(productId) {
-      if (this.productId === productId) return;
-      this.count = 0;
-      this.pages = [];
-      this.productId = productId;
-   }
+    setCount(results) {
+        const limit = 2;
+        this.count = Math.floor((results + limit - 1) / limit);
+    }
+    isPageLoaded(page) {
+        return this.pages[page] ? true : false;
+    }
+    isPageExist(page) {
+        return page <= this.count;
+    }
+    updateProduct(productId) {
+        if (this.productId === productId) return;
+        this.count = 0;
+        this.pages = [];
+        this.productId = productId;
+    }
 }
 class ProductsObject {
-   filters;
-   count;
+    filters;
+    count;
     pages;
-   constructor() {
-      this.pages = [];
-   }
-
-   setCount(results) {
-      const limit = 16;
-      this.count = Math.floor((results + limit - 1) / limit);
-   }
-   isPageLoaded(page) {
-      return this.pages[page] ? true : false;
-   }
-
-   isPageExist(page) {
-      return page <= this.count;
-   }
-
-   updateFilters(filters) {
-      if (this.compareFilters(this.filters, filters)) return;
-      this.count = 0;
-      this.pages = [];
-      this.filters = filters;
-   }
-
-   compareFilters(filters1, filters2) {
-      if (!filters1 || filters1 == "null" || filters1 == "undefined") filters1 = {};
-      if (!filters2 || filters2 == "null" || filters2 == "undefined") filters2 = {};
-
-      if (typeof filters1 == "string") filters1 = JSON.parse(filters1);
-      if (typeof filters2 == "string") filters2 = JSON.parse(filters2);
-      console.log(`filter1: ${JSON.stringify(filters1)}`);
-      console.log(`filter2: ${JSON.stringify(filters2)}`);
-      console.log(`same: ${JSON.stringify(filters1) === JSON.stringify(filters2)}`);
-
-      return JSON.stringify(filters1) === JSON.stringify(filters2);
-   }
-}
-class CartObject{
-   items;
-   constructor(){
-
+    constructor() {
+        this.pages = [];
     }
+
+    setCount(results) {
+        const limit = 16;
+        this.count = Math.floor((results + limit - 1) / limit);
+    }
+    isPageLoaded(page) {
+        return this.pages[page] ? true : false;
+    }
+
+    isPageExist(page) {
+        return page <= this.count;
+    }
+
+    updateFilters(filters) {
+        if (this.compareFilters(this.filters, filters)) return;
+        this.count = 0;
+        this.pages = [];
+        this.filters = filters;
+    }
+
+    compareFilters(filters1, filters2) {
+        if (!filters1 || filters1 == "null" || filters1 == "undefined") filters1 = {};
+        if (!filters2 || filters2 == "null" || filters2 == "undefined") filters2 = {};
+
+        if (typeof filters1 == "string") filters1 = JSON.parse(filters1);
+        if (typeof filters2 == "string") filters2 = JSON.parse(filters2);
+        console.log(`filter1: ${JSON.stringify(filters1)}`);
+        console.log(`filter2: ${JSON.stringify(filters2)}`);
+        console.log(`same: ${JSON.stringify(filters1) === JSON.stringify(filters2)}`);
+
+        return JSON.stringify(filters1) === JSON.stringify(filters2);
+    }
+}
+class CartObject {
+    items;
+    constructor() {}
     getProductQuantity(productId) {
         return this.getItems()[productId];
     }
-   addItem(productId){
-      if(!this.items[productId]) this.items[productId] = 1;
-      else this.items[productId] += 1;
-      this.saveCart();
-   }
-   removeItem(productId){
-      if(!this.items[productId]) return;
-      else this.items[productId] -= 1;
-      this.saveCart();
-   }
-   getItems(){
-      return this.items;
-   }
-   getItemsCount(){
-      if(!this.isLoaded()) this.loadCart();
-       let count = 0;
-       if (!this.items) return count;
-      
-      const keys = Object.keys(this.items);
-      for(let i = 0; i < keys.length; i++){
-         const key = keys[i];
-         count += this.items[key];
-      }
-      return count;
-   }
-   clear(){
-      this.items = {};
-   }
-   saveCart(){
-      if(!this.items) this.items = {};
-      const cart = JSON.stringify(this.items);
-      localStorage.setItem("cart", cart);
-      console.log(`saving data: ${cart}`);
-   }
-   loadCart(){
-      const cart = localStorage.getItem("cart");
-      console.log(`loading data: ${cart}`);
-      if(cart) this.items = JSON.parse(cart);
-   }
-   isLoaded(){
-      return this.items;
-   }
-   setCart(items){
-      this.items = items;
-      this.saveCart();
-   }
+    addItem(productId) {
+        if (!this.items[productId]) this.items[productId] = 1;
+        else this.items[productId] += 1;
+        this.saveCart();
+    }
+    removeItem(productId) {
+        if (!this.items[productId]) return;
+        else this.items[productId] -= 1;
+        this.saveCart();
+    }
+    getItems() {
+        return this.items;
+    }
+    getItemsCount() {
+        if (!this.isLoaded()) this.loadCart();
+        let count = 0;
+        if (!this.items) return count;
+
+        const keys = Object.keys(this.items);
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            count += this.items[key];
+        }
+        return count;
+    }
+    clear() {
+        this.items = {};
+    }
+    saveCart() {
+        if (!this.items) this.items = {};
+        const cart = JSON.stringify(this.items);
+        localStorage.setItem("cart", cart);
+        console.log(`saving data: ${cart}`);
+    }
+    loadCart() {
+        const cart = localStorage.getItem("cart");
+        console.log(`loading data: ${cart}`);
+        if (cart) this.items = JSON.parse(cart);
+    }
+    isLoaded() {
+        return this.items;
+    }
+    setCart(items) {
+        this.items = items;
+        this.saveCart();
+    }
 }
 
 let ProductsLoaded = new ProductsObject();
@@ -137,357 +135,355 @@ let userUID = null;
 let cart = new CartObject();
 
 const cache = {
-   get ProductsLoaded() {
-      // console.log("get products loaded:");
-      // console.log(ProductsLoaded);
-      return getCopyOfObject(ProductsLoaded);
-   },
-   set ProductsLoaded(value) {
-      // console.log('set products loaded:');
-      // console.log(value);
-      ProductsLoaded = getCopyOfObject(value);
-   },
+    get ProductsLoaded() {
+        // console.log("get products loaded:");
+        // console.log(ProductsLoaded);
+        return getCopyOfObject(ProductsLoaded);
+    },
+    set ProductsLoaded(value) {
+        // console.log('set products loaded:');
+        // console.log(value);
+        ProductsLoaded = getCopyOfObject(value);
+    },
 
-   get CurrentProduct() {
-      return getCopyOfObject(CurrentProduct);
-   },
-   set CurrentProduct(value) {
-      CurrentProduct = getCopyOfObject(value);
-   },
-   get CategoryLoaded() {
-      return getCopyOfObject(CategoryLoaded);
-   },
-   set CategoryLoaded(value) {
-      CategoryLoaded = getCopyOfObject(value);
-   },
-   get LoadingManager() {
-      return new LoadingManager();
-   },
-   get ReviewsLoaded() {
-      return getCopyOfObject(ReviewsLoaded);
-   },
-   set ReviewsLoaded(value) {
-      ReviewsLoaded = getCopyOfObject(value);
-   },
-   get RestAPI() {
-      return new RestAPI();
-   },
-   get UserName() {
-      if (!UserName || UserName === "null" || UserName === "undefined") {
-         const username = localStorage.getItem("UserName");
-         UserName = username ? username : null;
-      }
-      return UserName;
-   },
-   set UserName(value) {
-      console.warn("username changed: " + value);
-      localStorage.setItem("UserName", value);
-      UserName = value;
-   },
-   get UserAccountLoaded() {
-      return getCopyOfObject(UserAccountLoaded);
-   },
-   set UserAccountLoaded(value) {
-      UserAccountLoaded = getCopyOfObject(value);
-   },
-   get Filters() {
-      filters = sessionStorage.getItem("filters");
-      return filters;
-   },
-   set Filters(value) {
-      sessionStorage.setItem("filters", JSON.stringify(value));
-      filters = value;
-   },
-   get PageInvokedSignIn() {
-      pageInvokedSignIn = sessionStorage.getItem("pageInvokedSignIn");
-      return pageInvokedSignIn;
-   },
-   set PageInvokedSignIn(value) {
-      sessionStorage.setItem("pageInvokedSignIn", value);
-      pageInvokedSignIn = value;
-   },
-   get UserUID() {
-      if (!userUID || userUID === "null" || userUID === "undefined") {
-         const _userUID = sessionStorage.getItem("userUID");
-         userUID = _userUID ? _userUID : null;
-      }
-      return userUID;
-   },
-   set UserUID(value) {
-      if (!userUID || userUID !== value) {
-         sessionStorage.setItem("userUID", value);
-         userUID = value;
-      }
-   },
-   get ProductsPage() {
-      if (!productsPage || productsPage === "null" || productsPage === "undefined") {
-         productsPage = sessionStorage.getItem("productsPage");
-      }
-      return productsPage;
-   },
-   set ProductsPage(value) {
-      sessionStorage.setItem("productsPage", value);
-      productsPage = value;
-   },
-   get Cart() {
-      return cart;
-   },
+    get CurrentProduct() {
+        return getCopyOfObject(CurrentProduct);
+    },
+    set CurrentProduct(value) {
+        CurrentProduct = getCopyOfObject(value);
+    },
+    get CategoryLoaded() {
+        return getCopyOfObject(CategoryLoaded);
+    },
+    set CategoryLoaded(value) {
+        CategoryLoaded = getCopyOfObject(value);
+    },
+    get LoadingManager() {
+        return new LoadingManager();
+    },
+    get ReviewsLoaded() {
+        return getCopyOfObject(ReviewsLoaded);
+    },
+    set ReviewsLoaded(value) {
+        ReviewsLoaded = getCopyOfObject(value);
+    },
+    get RestAPI() {
+        return new RestAPI();
+    },
+    get UserName() {
+        if (!UserName || UserName === "null" || UserName === "undefined") {
+            const username = localStorage.getItem("UserName");
+            UserName = username ? username : null;
+        }
+        return UserName;
+    },
+    set UserName(value) {
+        console.warn("username changed: " + value);
+        localStorage.setItem("UserName", value);
+        UserName = value;
+    },
+    get UserAccountLoaded() {
+        return getCopyOfObject(UserAccountLoaded);
+    },
+    set UserAccountLoaded(value) {
+        UserAccountLoaded = getCopyOfObject(value);
+    },
+    get Filters() {
+        filters = sessionStorage.getItem("filters");
+        return filters;
+    },
+    set Filters(value) {
+        sessionStorage.setItem("filters", JSON.stringify(value));
+        filters = value;
+    },
+    get PageInvokedSignIn() {
+        pageInvokedSignIn = sessionStorage.getItem("pageInvokedSignIn");
+        return pageInvokedSignIn;
+    },
+    set PageInvokedSignIn(value) {
+        sessionStorage.setItem("pageInvokedSignIn", value);
+        pageInvokedSignIn = value;
+    },
+    get UserUID() {
+        if (!userUID || userUID === "null" || userUID === "undefined") {
+            const _userUID = sessionStorage.getItem("userUID");
+            userUID = _userUID ? _userUID : null;
+        }
+        return userUID;
+    },
+    set UserUID(value) {
+        if (!userUID || userUID !== value) {
+            sessionStorage.setItem("userUID", value);
+            userUID = value;
+        }
+    },
+    get ProductsPage() {
+        if (!productsPage || productsPage === "null" || productsPage === "undefined") {
+            productsPage = sessionStorage.getItem("productsPage");
+        }
+        return productsPage;
+    },
+    set ProductsPage(value) {
+        sessionStorage.setItem("productsPage", value);
+        productsPage = value;
+    },
+    get Cart() {
+        return cart;
+    },
 };
 
 function getCopyOfObject(obj) {
-   return cloneDeep(obj);
+    return cloneDeep(obj);
 }
 
 export default cache;
 
 class LoadingManager {
-   Product = new Product();
-   Products = new Products();
-   Category = new Category();
-   Reviews = new Reviews();
-   UserAccount = new UserAccount();
-   Cart = new Cart();
+    Product = new Product();
+    Products = new Products();
+    Category = new Category();
+    Reviews = new Reviews();
+    UserAccount = new UserAccount();
+    Cart = new Cart();
 
-   constructor() {
-      console.log("creating loading manager");
-   }
+    constructor() {
+        console.log("creating loading manager");
+    }
 }
 
 class LoadableObject {
-   // extractDataPath; --throw err if null
-   // get requestPath(){}; --throw err if no function
-   // isPending;
-   //data;
-   // error;
-   callback;
-   params;
+    // extractDataPath; --throw err if null
+    // get requestPath(){}; --throw err if no function
+    // isPending;
+    //data;
+    // error;
+    callback;
+    params;
 
-   // set _isPending(value){
-   //     this.isPending = value;
-   //     console.log('is pending: ' + value);
-   //     this.setLoadedObject();
-   // }
-   constructor() {}
+    // set _isPending(value){
+    //     this.isPending = value;
+    //     console.log('is pending: ' + value);
+    //     this.setLoadedObject();
+    // }
+    constructor() {}
 
-   Load(callback, params) {
-      this.callback = callback;
+    Load(callback, params) {
+        this.callback = callback;
 
-      console.log("Loading");
-      if (!this.extractDataPath) throw Error("An object must have a path for data extraction");
-      if (!this.requestPath) throw Error("An object must have a request string");
+        console.log("Loading");
+        if (!this.extractDataPath) throw Error("An object must have a path for data extraction");
+        if (!this.requestPath) throw Error("An object must have a request string");
 
-      let request = this.requestPath;
-      if (this.params) request = `${request}?${this.params}`;
-      console.log("request");
-      console.log(request);
-      console.log("params");
-      console.log(this.params);
+        let request = this.requestPath;
+        if (this.params) request = `${request}?${this.params}`;
+        console.log("request");
+        console.log(request);
+        console.log("params");
+        console.log(this.params);
 
-      const restAPI = new RestAPI();
-      restAPI.ReadData(request, this.extractDataPath, (data, status, err) => this.OnDataLoaded(data, status, err));
-      this.isPending = true;
-      //do something useFetch() //path + params => {data, isPending, error}
-   }
+        const restAPI = new RestAPI();
+        restAPI.ReadData(request, this.extractDataPath, (data, status, err) => this.OnDataLoaded(data, status, err));
+        this.isPending = true;
+        //do something useFetch() //path + params => {data, isPending, error}
+    }
 
-   OnDataLoaded(data, status, err) {
-      console.log("callback");
-      const restAPI = new RestAPI();
-      if (status === restAPI.StatusCode.ERROR) {
-         if (this.callback) this.callback(null, status, err);
-      }
+    OnDataLoaded(data, status, err) {
+        console.log("callback");
+        const restAPI = new RestAPI();
+        if (status === restAPI.StatusCode.ERROR) {
+            if (this.callback) this.callback(null, status, err);
+        }
 
-      if (status === restAPI.StatusCode.CANCELLED) {
-         if (this.callback) this.callback(null, status, "cancelled");
-      }
+        if (status === restAPI.StatusCode.CANCELLED) {
+            if (this.callback) this.callback(null, status, "cancelled");
+        }
 
-      if (status === restAPI.StatusCode.OK) {
-         //this.data = data;
-         // this.isPending = false;
-         // this.error = null;
-         this.setLoadedObject(data);
+        if (status === restAPI.StatusCode.OK) {
+            //this.data = data;
+            // this.isPending = false;
+            // this.error = null;
+            this.setLoadedObject(data);
 
-         if (this.callback) this.callback(data, status, err);
-      }
-   }
+            if (this.callback) this.callback(data, status, err);
+        }
+    }
 }
 
 class Products extends LoadableObject {
-   extractDataPath = ".";
+    extractDataPath = ".";
     _filters;
     keywords;
-   get filters() {
-      return this._filters;
-   }
-   set filters(value) {
-      this._filters = value;
+    get filters() {
+        return this._filters;
+    }
+    set filters(value) {
+        this._filters = value;
 
-      // update filters in cache
-      const products = cache.ProductsLoaded;
-      products.updateFilters(value);
-      console.log(cache.ProductsLoaded);
-      cache.ProductsLoaded = products;
-      console.log(cache.ProductsLoaded);
-   }
-   page;
+        // update filters in cache
+        const products = cache.ProductsLoaded;
+        products.updateFilters(value);
+        console.log(cache.ProductsLoaded);
+        cache.ProductsLoaded = products;
+        console.log(cache.ProductsLoaded);
+    }
+    page;
 
-   /**
-    * @returns {string}  request string to load obj.
-    */
-   get requestPath() {
-      let params;
-      if (this.filters) {
-         params = this.filtersToQuery(this.filters);
-      }
+    /**
+     * @returns {string}  request string to load obj.
+     */
+    get requestPath() {
+        let params;
+        if (this.filters) {
+            params = this.filtersToQuery(this.filters);
+        }
 
-      return `${globals.DATABASE}/api/v1/products?${params ? params : ""}${this.page ? `&page=${this.page}` : ""}${this.keywords ? `&keywords=${this.keywords}` : ""}`;
-   }
-   getRequestPath() {
-      return this.requestPath;
-   }
+        return `${globals.DATABASE}/api/v1/products?${params ? params : ""}${this.page ? `&page=${this.page}` : ""}${this.keywords ? `&keywords=${this.keywords}` : ""}`;
+    }
+    getRequestPath() {
+        return this.requestPath;
+    }
 
-   setLoadedObject(data) {
-      console.log("setter");
-      console.log(data);
-      const page = data.page;
-      const results = data.results;
-      const products = data.data.products;
+    setLoadedObject(data) {
+        console.log("setter");
+        console.log(data);
+        const page = data.page;
+        const results = data.results;
+        const products = data.data.products;
 
-      let ProductsLoaded = cache.ProductsLoaded;
+        let ProductsLoaded = cache.ProductsLoaded;
 
-      // if (this.filters !== data.filters) return;
+        // if (this.filters !== data.filters) return;
 
-      ProductsLoaded.setCount(results);
-      ProductsLoaded.pages[page] = products;
+        ProductsLoaded.setCount(results);
+        ProductsLoaded.pages[page] = products;
 
-      cache.ProductsLoaded = ProductsLoaded;
-   }
+        cache.ProductsLoaded = ProductsLoaded;
+    }
 
-   constructor() {
-      super();
-   }
+    constructor() {
+        super();
+    }
 
-   filtersToQuery(filters) {
-      if (!filters) return "";
-      if (typeof filters === "string") filters = JSON.parse(filters);
-      if (!filters) return "";
+    filtersToQuery(filters) {
+        if (!filters) return "";
+        if (typeof filters === "string") filters = JSON.parse(filters);
+        if (!filters) return "";
 
-      const keys = Object.keys(filters);
-      let query = "";
-      for (let i = 0; i < keys.length; i++) {
-         const key = keys[i];
-         const value = filters[key];
-         query += `&specifications.${key}=${value}`;
-      }
-      query = query.slice(1);
+        const keys = Object.keys(filters);
+        let query = "";
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            const value = filters[key];
+            query += `&specifications.${key}=${value}`;
+        }
+        query = query.slice(1);
 
-      return query;
-   }
+        return query;
+    }
 }
 
 class Product extends LoadableObject {
-   extractDataPath = ".data.product";
-   id;
+    extractDataPath = ".data.product";
+    id;
 
-   /**
-    * @returns {string}  request string to load obj.
-    */
-   get requestPath() {
-      if (!this.id) throw Error("Product must have an id to be loaded");
-      return `${globals.DATABASE}/api/v1/products/${this.id}`;
-   }
-   constructor() {
-      super();
-   }
-   setLoadedObject(data) {
-      if (data) cache.CurrentProduct = data;
-      console.log("setter");
-      console.log(data);
-   }
+    /**
+     * @returns {string}  request string to load obj.
+     */
+    get requestPath() {
+        if (!this.id) throw Error("Product must have an id to be loaded");
+        return `${globals.DATABASE}/api/v1/products/${this.id}`;
+    }
+    constructor() {
+        super();
+    }
+    setLoadedObject(data) {
+        if (data) cache.CurrentProduct = data;
+        console.log("setter");
+        console.log(data);
+    }
 }
 class Category extends LoadableObject {
-   extractDataPath = ".data.category";
-   id;
+    extractDataPath = ".data.category";
+    id;
 
-   get requestPath() {
-      if (!this.id) throw Error("Category must have an id to be loaded");
-      return `${globals.DATABASE}/api/v1/category/${this.id}`;
-   }
-   constructor() {
-      super();
-   }
-   setLoadedObject(data) {
-      if (data) cache.CategoryLoaded = data;
-      console.log("setter");
-      console.log(data);
-   }
+    get requestPath() {
+        if (!this.id) throw Error("Category must have an id to be loaded");
+        return `${globals.DATABASE}/api/v1/category/${this.id}`;
+    }
+    constructor() {
+        super();
+    }
+    setLoadedObject(data) {
+        if (data) cache.CategoryLoaded = data;
+        console.log("setter");
+        console.log(data);
+    }
 }
 class Reviews extends LoadableObject {
-   extractDataPath = ".";
-   _productId;
-   get productId() {
-      return this._productId;
-   }
-   set productId(value) {
-      this._productId = value;
+    extractDataPath = ".";
+    _productId;
+    get productId() {
+        return this._productId;
+    }
+    set productId(value) {
+        this._productId = value;
 
-      // update product id in cache
-      const reviews = cache.ReviewsLoaded;
-      reviews.updateProduct(value);
-      cache.ReviewsLoaded = reviews;
-   }
-   page;
+        // update product id in cache
+        const reviews = cache.ReviewsLoaded;
+        reviews.updateProduct(value);
+        cache.ReviewsLoaded = reviews;
+    }
+    page;
 
-   get requestPath() {
-      if (!this.productId) throw Error("Reviews must have a product id to be loaded");
-      // if(!this.page) throw Error("Reviews must have a page parameter to be loaded");
-      if (!this.page) this.page = 1;
-      return `${globals.DATABASE}/api/v1/products/${this.productId}/reviews?page=${this.page}`;
-   }
-   constructor() {
-      super();
-   }
-   setLoadedObject(data) {
-      console.log(data);
-      const page = data.page;
-      const results = data.results;
-      const reviews = data.data.reviews;
+    get requestPath() {
+        if (!this.productId) throw Error("Reviews must have a product id to be loaded");
+        // if(!this.page) throw Error("Reviews must have a page parameter to be loaded");
+        if (!this.page) this.page = 1;
+        return `${globals.DATABASE}/api/v1/products/${this.productId}/reviews?page=${this.page}`;
+    }
+    constructor() {
+        super();
+    }
+    setLoadedObject(data) {
+        console.log(data);
+        const page = data.page;
+        const results = data.results;
+        const reviews = data.data.reviews;
 
-      let ReviewsLoaded = cache.ReviewsLoaded;
+        let ReviewsLoaded = cache.ReviewsLoaded;
 
-      if (this.productId !== data.productId) return;
+        if (this.productId !== data.productId) return;
 
-      ReviewsLoaded.setCount(results);
-      ReviewsLoaded.pages[page] = reviews;
-      cache.ReviewsLoaded = ReviewsLoaded;
-   }
+        ReviewsLoaded.setCount(results);
+        ReviewsLoaded.pages[page] = reviews;
+        cache.ReviewsLoaded = ReviewsLoaded;
+    }
 }
 class UserAccount extends LoadableObject {
-   uid;
-   extractDataPath = ".data.user";
-   get requestPath() {
-      if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
-      return `${globals.DATABASE}/api/v1/users?uid=${this.uid}`;
-   }
-   constructor() {
-      super();
-   }
-   setLoadedObject(data) {
-      cache.UserAccount = data;
-   }
+    uid;
+    extractDataPath = ".data.user";
+    get requestPath() {
+        if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
+        return `${globals.DATABASE}/api/v1/users?uid=${this.uid}`;
+    }
+    constructor() {
+        super();
+    }
+    setLoadedObject(data) {
+        cache.UserAccount = data;
+    }
 }
 class Cart extends LoadableObject {
-   uid;
-   extractDataPath = ".data.cart";
-   get requestPath() {
-      if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
-      return `${globals.DATABASE}/api/v1/carts/${this.uid}`;
-   }
-   constructor() {
-      super();
-   }
-   setLoadedObject(data) {
-      
-   }
+    uid;
+    extractDataPath = ".data.cart";
+    get requestPath() {
+        if (!this.uid) throw Error("UserAccount must have a uid to be loaded");
+        return `${globals.DATABASE}/api/v1/carts/${this.uid}`;
+    }
+    constructor() {
+        super();
+    }
+    setLoadedObject(data) {}
 }
 
 // call const LM = LoadingManager()
@@ -508,5 +504,3 @@ class Cart extends LoadableObject {
 // if(loadingInstance .status === Canceled){
 //  console.log(loadingInstance.error)
 // }
-
-

@@ -1,43 +1,43 @@
 .userAccountPage {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .selectorWindow {
-  display: grid;
-  grid-template-columns: 17% 80%;
-  height: 80vh;
+    display: grid;
+    grid-template-columns: 17% 80%;
+    height: 80vh;
 }
 
 .subPageList {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  border-left: 1px solid black;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .subPageList .subpage {
-  font-size: 1.7vw;
-  padding: 0.7vw;
-  border-bottom: 1px solid black;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
+    font-size: 1.7vw;
+    padding: 0.7vw;
+    border-bottom: 1px solid black;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
 }
 
 .userAccountPage .content {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
 }
 
-.userAccountPage .content .data{
+.userAccountPage .content .data {
     display: flex;
     flex-direction: column;
     padding: 1vw;
 }
-.logoutButton{
+.logoutButton {
     width: 5vw;
     text-align: center;
     font-size: 1.5vw;
@@ -49,9 +49,7 @@
     margin-left: 1vw;
     margin-bottom: 1vw;
 }
-.logoutButton:hover{
+.logoutButton:hover {
     background-color: black;
     color: white;
 }
-
-

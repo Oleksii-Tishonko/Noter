@@ -1,12 +1,12 @@
 //
-// stores data (products) 
+// stores data (products)
 // format: {productId: quantity}
 // user can add items to cart, change quantity of the items
 // limit: 10 quantity per product
 //
 // // Server - Local
-// 
-// 
+//
+//
 //
 //
 //
